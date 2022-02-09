@@ -1,9 +1,23 @@
 <?php
 
 $load = new Model_Core_Adapter();
-$categories = $load->fetchAll("SELECT * FROM category");
+$categories = $load->fetchAll("SELECT * FROM `category`");
+function path($categoryId,$categories){
 
+    $len = count($categories);
+
+    for($i = 0;$i< $len;$i++){
+
+        if($categoryId == $categories[$i]["category_id"]){
+            if($categories[$i]["parent_id"] == null){
+                return $categories[$i]["name"];
+            }
+            return path($categories[$i]["parent_id"],$categories)."=>".$categories[$i]["name"];
+        }
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,11 +25,6 @@ $categories = $load->fetchAll("SELECT * FROM category");
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Categories</title>
-    <style>
-        body{
-            text-align : center;
-        }
-    </style>
 </head>
 <body>
     <h1 id="post">Categories</h1>
@@ -38,7 +47,7 @@ $categories = $load->fetchAll("SELECT * FROM category");
             <?php $result = ($category['status'] == 1)? 'active':'inactive'; ?>
             <tr>
                 <td><?php  echo $category['category_id']; ?></td>
-                <td><?php echo $category['name']; ?></td>
+                <td><?php echo path($category['category_id'],$categories); ?></td>
                 <td><?php echo $result; ?></td>
                 <td><?php echo $category['createdDate']; ?></td>
                 <td><?php echo $category['updatedDate']; ?></td>

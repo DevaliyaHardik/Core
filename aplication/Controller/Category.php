@@ -1,5 +1,4 @@
 <?php
-
 class Controller_Category{
 
 	public function gridAction()
@@ -12,6 +11,7 @@ class Controller_Category{
 	{
 		try {
 			if($_SERVER['REQUEST_METHOD'] == 'POST'){
+				$parentId = $_POST['category']['parentId'];
 				$name = $_POST['category']['name'];
 				$status = $_POST['category']['status'];
 				$date = date('y-m-d h:m:s');
@@ -19,9 +19,9 @@ class Controller_Category{
 					throw new Exception("Invalid Request", 1);
 				}
 				if($_POST['submit'] == 'edit'){
-					$category_id = $_GET['id'];
+					$categoryId = $_GET['id'];
 					$edit = new Model_Core_Adapter();
-					$result = $edit->update("UPDATE `category` SET `name` = '$name', `status` = '$status',`updatedDate` = '$date' WHERE `category_id` = '$category_id'");
+					$result = $edit->update("UPDATE `category` SET `name` = '$name', `status` = '$status',`updatedDate` = '$date' WHERE `category_id` = '$categoryId'");
 					if(!$result){
 						throw new Exception("Sysetm is unable to save your data", 1);	
 					}
@@ -29,7 +29,12 @@ class Controller_Category{
 				}
 				else{
 					$add = new Model_Core_Adapter();
-					$result = $add->insert("INSERT INTO `category` (`name`,`status`,`createdDate`) VALUE ('$name','$status','$date')");
+					if(empty($parentId)){
+						$result = $add->insert("INSERT INTO `category` (`name`,`status`,`createdDate`) VALUE ('$name','$status','$date')");
+					}
+					else{
+						$result = $add->insert("INSERT INTO `category` (`parent_id`,`name`,`status`,`createdDate`) VALUE ('$parentId','$name','$status','$date')");
+					}
 					if(!$result){
 						throw new Exception("Sysetm is unable to save your data", 1);	
 					}

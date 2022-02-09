@@ -9,6 +9,23 @@
     } catch (Exception $e) {
         echo $e->getMessage();
     }
+//for path
+$categories = $fetch->fetchAll("SELECT * FROM `category`");
+function path($categoryId,$categories){
+
+    $len = count($categories);
+
+    for($i = 0;$i< $len-1;$i++){
+
+        if($categoryId == $categories[$i]["category_id"]){
+            if($categories[$i]["parent_id"] == null){
+                return $categories[$i]["name"];
+            }
+            return path($categories[$i]["parent_id"],$categories)."=>".$categories[$i]["name"];
+        }
+
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,8 +39,16 @@
 
 <body>
     <div id="form">
-        <form action="index.php?c=category&a=save&id=<?php echo $category_id;?>" method="POST" enctype="multipart/form-data">
+        <form action="index.php?c=category&a=save&id=<?php echo $_GET['id'] ?>" method="POST" enctype="multipart/form-data">
             <table border="1" width="100%" cellspacing="4">
+                <tr>
+                    <td width="10%">Subcategory</td>
+                    <td>
+                        <select name="category[parentId]" id="parentId">
+                            <option value="<?php echo $row['category_id']; ?>"><?php echo path($row['category_id'],$categories); ?></option>
+                        </select>
+                    </td>
+                </tr>
                 <tr>
                     <td width="10%">Category Name</td>
                     <td><input type="text" name="category[name]" value= "<?php echo $row['name']; ?>"> </td>

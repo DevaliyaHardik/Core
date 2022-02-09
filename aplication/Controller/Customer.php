@@ -63,10 +63,9 @@ class Controller_Customer{
 			if(!empty($_POST['address']['shiping'])){
 				$shiping = 1;
 			}
-			if(!isset($_POST['submit'])){
-				throw new Exception("Invalid Request", 1);	
-			}
-			if($_POST['submit'] == 'edit'){
+			$row = new Model_Core_Adapter();
+			$address = $row->fetchRow("SELECT * FROM `address` WHERE `customer_id` = '$customerId'");
+			if($address){
 				$date = date('y-m-d h:m:s');
 				$edit = new Model_Core_Adapter();
 

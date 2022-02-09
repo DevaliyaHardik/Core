@@ -1,12 +1,11 @@
-<?php require_once("Model/Core/Adapter.php"); ?>
-
+<?php Ccc::loadFile("Model/Core/Adapter.php"); ?>
 <?php
 
 class Ccc{
     
     public static function loadFile($path)
     {
-        require_once($path);
+        require_once(getcwd().DIRECTORY_SEPARATOR.$path);
     }
 
     public static function loadClass($className)

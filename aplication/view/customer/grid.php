@@ -12,7 +12,7 @@ $customer = $load->fetchAll("SELECT * FROM `customer`");
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>address</title>
+    <title>Customer</title>
     <style>
         body{
             text-align : center;
@@ -76,7 +76,7 @@ $customer = $load->fetchAll("SELECT * FROM `customer`");
             </tr>
             <?php if(!$address): ?>
                 <tr>
-                    <td colspan="9">No Recored Found</td>
+                    <td colspan="11">No Recored Found</td>
                 </tr>
             <?php else: ?>
             <?php foreach ($address as $address): ?>

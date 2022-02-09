@@ -20,7 +20,6 @@ class Controller_Product{
 					throw new Exception("Invalid Request", 1);	
 				}
 				if($_POST['submit'] == "edit"){
-		
 					$product_id = $_GET['product_id'];			
 					$save = new Model_Core_Adapter();
 					$date = date('Y-m-d h:i:s');
