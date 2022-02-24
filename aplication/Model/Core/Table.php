@@ -43,7 +43,7 @@ class Model_Core_Table{
         return $insertId;
     }
 
-    public function update(array $data,$primaryKey)
+    public function update(array $data,$primaryKey,$coloum=null)
     {
         
 		$adapter = new Model_Core_Adapter();
@@ -52,6 +52,15 @@ class Model_Core_Table{
             $finalData .= $key."='".$value."',"; 
         }
         $finalData = rtrim($finalData,',');
+        if($coloum){
+            $updateQuery = "UPDATE ".$this->getTableName()." SET ". $finalData ." WHERE ".$coloum."=".$primaryKey." ";
+            $result = $adapter->update($updateQuery);
+
+            if(!$result){
+                throw new Exception("System is unable to update your data", 1);
+            }
+            return $result;
+        }
         $updateQuery = "UPDATE ".$this->getTableName()." SET ". $finalData ." WHERE ".$this->getPrimaryKey()."=".$primaryKey." ";
 
         $result = $adapter->update($updateQuery);

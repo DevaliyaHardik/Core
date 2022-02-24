@@ -50,28 +50,36 @@ class Model_Core_View{
         require($this->getTemplate());
     }
 
-    public function getUrl($c=null,$a=null,array $data=null,$reset=null)
-    {
-        $info = [];
-        if($c=null && $a=null && $data=null && $reset=null){
-            $info = Ccc::getFront()->getRequest()->getRequest();
-        }
-        
-        $info['c'] = $c==null ? Ccc::getFront()->getRequest()->getRequest('c') : $c;
-        $info['a'] = $a==null ? Ccc::getFront()->getRequest()->getRequest('a') : $a;
+    public function getUrl($c=null,$a=null,array $data = [],$reset = false)
+	{
 
-        if($reset){
-            if($data){
-                $info = array_merge($info,$data);
-            }
+		$info = [];
+		if($c==null && $a==null && $data==null && $reset==false){
+			$info = Ccc::getFront()->getRequest()->getRequest();
+		}
+		$info['c']= $c==null ?Ccc::getFront()->getRequest()->getRequest('c') : $info['c']=$c ; 
+		$info['a']= $a==null ?Ccc::getFront()->getRequest()->getRequest('a') : $info['a']=$a ; 
+		if($reset){
+			if($data) {
+				$info = array_merge($info,$data);
+			}
+		}
+		else{
+			$info = array_merge(Ccc::getFront()->getRequest()->getRequest(),$info);
+			if($data) {
+				$info = array_merge($info,$data);
+			}	
+		}
+		$url = "index.php?".http_build_query($info);
+		return $url;
+	}
+
+    public function getBaseUrl($subUrl = null)
+    {
+        $url = "C:/php/htdocs/php/Core/aplication";
+        if($subUrl){
+            $url = $url."/".$subUrl;
         }
-        else{
-            $info = array_merge(Ccc::getFront()->getRequest()->getRequest(),$info);
-            if($data){
-                $info = array_merge($info,$data);
-            }
-        }
-        $url = 'index.php?'.http_build_query($info);
         return $url;
     }
 }

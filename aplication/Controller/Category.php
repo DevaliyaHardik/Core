@@ -36,12 +36,12 @@ class Controller_Category extends Controller_Core_Action{
             $request = $this->getRequest();
 			if($request->isPost()){
                 $row = $request->getPost('category');
-				if(!isset($_POST['submit'])){
+				if(!$row['submit']){
 					throw new Exception("Invalid Request", 1);
 				}
-				if($_POST['submit'] == 'edit'){
+				if($row['submit'] == 'edit'){
 					$edit = Ccc::getModel('Category');
-					$categoryId = $_GET['id'];
+					$categoryId = $request->getRequest('id');
                     $row['updatedDate'] = date('y-m-d h:m:s');
 					$result = $edit->update($row,$categoryId);
 					if(!$result){

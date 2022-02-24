@@ -15,6 +15,12 @@ class Model_Core_Request{
         return $_POST[$key];
     }
 
+    public function getFile()
+    {
+        return $_FILES;
+    }
+
+
     public function getActionName()
     {
         return $this->getRequest('a','grid').'Action';
