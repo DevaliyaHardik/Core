@@ -86,4 +86,6 @@ class Model_Core_Adapter{
     }
 }
 
+$adapter = new Model_Core_Adapter();
+
 ?>

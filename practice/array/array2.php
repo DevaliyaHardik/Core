@@ -20,31 +20,28 @@ $same2 = [0];
 $same3 = [0];
 $same4 = [0];
 $same5 = [0];
-$convert = [];
-foreach($data as $data1){
-	if(!in_array($data1['category'],$same)){
-		$convert['category'][$data1['category']] = [];
-		array_push($same,$data1['category']);
+$convert['category'] = [];
+foreach($data as $row){
+	if(!array_key_exists($row['category'],$convert['category'])){
+		$convert['category'][$row['category']] = [];
 	 }
-	if(!in_array($data1['categoryname'],$same1)){
-    	$convert['category'][$data1['category']]['name'] = $data1['categoryname'];
-		array_push($same1,$data1['categoryname']);
+	if(!array_key_exists('name',$convert['category'][$row['category']])){
+    	$convert['category'][$row['category']]['name'] = $row['categoryname'];
+    	$convert['category'][$row['category']]['attribute'] = [];
 	}
-    if(!in_array($data1['attribute'],$same2)){
-        $convert['category'][$data1['category']]['attribute'][$data1['attribute']] = [];
-        array_push($same2,$data1['attribute']);
+    if(!array_key_exists($row['attribute'],$convert['category'][$row['category']]['attribute'])){
+        $convert['category'][$row['category']]['attribute'][$row['attribute']] = [];
     }
-    if(!in_array($data1['attributename'],$same3)){
-        $convert['category'][$data1['category']]['attribute'][$data1['attribute']]['name'] = $data1['attributename'];
-        array_push($same3,$data1['attributename']);
+    if(!array_key_exists('name',$convert['category'][$row['category']]['attribute'][$row['attribute']])){
+        $convert['category'][$row['category']]['attribute'][$row['attribute']]['name'] = $row['attributename'];
+		$convert['category'][$row['category']]['attribute'][$row['attribute']]['option'] = [];
     }
-    if(!in_array($data1['option'],$same4)){
-        $convert['category'][$data1['category']]['attribute'][$data1['attribute']]['option'][$data1['option']] = [];
-        array_push($same4,$data1['option']);
+    if(!array_key_exists($row['option'],$convert['category'][$row['category']]['attribute'][$row['attribute']]['option'])){
+        $convert['category'][$row['category']]['attribute'][$row['attribute']]['option'][$row['option']] = [];
     }
-    if(!in_array($data1['optionname'],$same5)){
-        $convert['category'][$data1['category']]['attribute'][$data1['attribute']]['option'][$data1['option']]['name'] = $data1['optionname'];
-        array_push($same5,$data1['option']);
+    if(!array_key_exists('name',$convert['category'][$row['category']]['attribute'][$row['attribute']]['option'][$row['option']])){
+        $convert['category'][$row['category']]['attribute'][$row['attribute']]['option'][$row['option']]['name'] = $row['optionname'];
+
     }
 
 }
@@ -112,7 +109,7 @@ print_r($convert);
 ];*/
 //echo count($convert['category']);exit;
 $reverce = [];
-$j = 0;
+/*$j = 0;
 for($x=0;$x<count($convert['category']);$x++){
     for($y=0;$y<count($convert['category'][array_keys($convert['category'])[$x]]['attribute']);$y++){
         for($z=0;$z<count($convert['category'][array_keys($convert['category'])[$x]]['attribute'][array_keys($convert['category'][array_keys($convert['category'])[$x]]['attribute'])[$y]]['option']);$z++){
@@ -125,7 +122,23 @@ for($x=0;$x<count($convert['category']);$x++){
 		   $j++;
         }
     }
-}
+}*/
+
+$row = [];
+foreach($convert['category'] as $categoryId => $level1){
+	$row['category'] = $categoryId;
+	$row['categoryname'] = $convert['category'][$categoryId]['name'];
+	foreach($level1['attribute'] as $attributeId => $level2){
+		$row['attribute'] = $attributeId;
+		$row['attributename'] = $convert['category'][$categoryId]['attribute'][$attributeId]['name'];
+		foreach ($level2['option'] as $optionId => $level3) {
+			$row['option'] = $optionId;
+			$row['optionname'] = $convert['category'][$categoryId]['attribute'][$attributeId]['option'][$optionId]['name'];
+			array_push($reverce,$row);
+		}
+	}
+} 
+
 echo "normal structure";
 print_r($reverce);
 ?>

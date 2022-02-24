@@ -1,88 +1,122 @@
+<?php Ccc::loadClass("Controller_Core_Action"); ?>
 <?php
-class Controller_Category{
+class Controller_Category extends Controller_Core_Action{
 
 	public function gridAction()
 	{
-		//echo "111";
-		require_once('view/category/grid.php');
+		Ccc::getBlock('Category_Grid')->toHtml();
+	}
+
+    public function addAction()
+	{
+		Ccc::getBlock('Category_Add')->toHtml();
+	}
+
+    public function editAction()
+	{
+        $categoryModel = Ccc::getModel('Category');
+		$request = $this->getRequest();
+        $categoryId = $request->getRequest('id');
+        if(!$categoryId){
+            throw new Exception("Invalid request", 1);
+        }
+        if(!(int)$categoryId){
+            throw new Exception("Invalid request", 1);
+        }
+        $category = $categoryModel->fetchRow("SELECT * FROM `category` WHERE `category_id` = '$categoryId'");
+        if(!$category){
+            throw new Exception("Invalid request", 1);
+        }
+        Ccc::getBlock('Category_Edit')->addData('category',$category)->toHtml();
 	}
 
 	public function saveAction()
 	{
 		try {
-			if($_SERVER['REQUEST_METHOD'] == 'POST'){
-				$parentId = $_POST['category']['parentId'];
-				$name = $_POST['category']['name'];
-				$status = $_POST['category']['status'];
-				$date = date('y-m-d h:m:s');
+            $request = $this->getRequest();
+			if($request->isPost()){
+                $row = $request->getPost('category');
 				if(!isset($_POST['submit'])){
 					throw new Exception("Invalid Request", 1);
 				}
 				if($_POST['submit'] == 'edit'){
+					$edit = Ccc::getModel('Category');
 					$categoryId = $_GET['id'];
-					$edit = new Model_Core_Adapter();
-					$result = $edit->update("UPDATE `category` SET `name` = '$name', `status` = '$status',`updatedDate` = '$date' WHERE `category_id` = '$categoryId'");
+                    $row['updatedDate'] = date('y-m-d h:m:s');
+					$result = $edit->update($row,$categoryId);
 					if(!$result){
 						throw new Exception("Sysetm is unable to save your data", 1);	
 					}
-					$this->redirect("index.php?c=category&a=grid");
+                    $allPath = $edit->fetchAll("SELECT * FROM `category` WHERE `path` LIKE '%$categoryId%' ");
+                    foreach ($allPath as $path) {
+
+                        $finalPath = explode('/',$path['path']);
+                        foreach ($finalPath as $subPath) {
+                            if($subPath == $categoryId){
+                                if(count($finalPath) != 1){
+                                    array_shift($finalPath);
+                                }    
+                                break;
+                            }
+                            array_shift($finalPath);
+                        }
+                        $parentPath = $edit->fetchRow("SELECT `path` FROM `category` WHERE `category_id` = {$path['parent_id']}");    
+                        $updatedPath['path'] = $parentPath['path']."/".implode('/',$finalPath);
+
+                        $result = $edit->update($updatedPath,$path['category_id']);
+                    }
+                    Ccc::getBlock('Category_Grid')->toHtml();
 				}
 				else{
-					$add = new Model_Core_Adapter();
-					if(empty($parentId)){
-						$result = $add->insert("INSERT INTO `category` (`name`,`status`,`createdDate`) VALUE ('$name','$status','$date')");
+					$add = Ccc::getModel('Category');
+					if(empty($row['parent_id'])){
+                        unset($row['parent_id']);
+                        $insertId = $add->insert($row);
+                        if(!$insertId){
+                            throw new Exception("system is unabel to insert your data", 1);
+                        }
+                        $path['path'] = $insertId;
+						$result = $add->update($path,$insertId);
 					}
 					else{
-						$result = $add->insert("INSERT INTO `category` (`parent_id`,`name`,`status`,`createdDate`) VALUE ('$parentId','$name','$status','$date')");
+                        $insertId = $add->insert($row);
+                        if(!$insertId){
+                            throw new Exception("system is unabel to insert your data", 1);
+                        }
+                        $parentPath = $add->fetchRow("SELECT * FROM `category` WHERE `category_id` = {$row['parent_id']}");
+                        $path['path'] = $parentPath['path']."/". $insertId;
+						$result = $add->update($path,$insertId);
 					}
 					if(!$result){
 						throw new Exception("Sysetm is unable to save your data", 1);	
 					}
-					$this->redirect("index.php?c=category&a=grid");
+                    Ccc::getBlock('Category_Grid')->toHtml();
 				}
 			}
 		} catch (Exception $e) {
 			echo $e->getMessage();
 		}
-	}
-
-	public function editAction()
-	{
-		require_once('view/category/edit.php');
-	}
-
-	public function addAction()
-	{
-		require_once('view/category/add.php');
 	}
 
 	public function deleteAction()
 	{
 		try {
-			if(!isset($_GET['id'])){
+            $request = $this->getRequest();
+			if(!$request->getRequest('id')){
 				throw new Exception("Invalid Request", 1);
 			}
-		    $category_id = $_GET['id'];
-		    $delete = new Model_Core_Adapter();
-		    $result = $delete->delete("DELETE FROM `category` WHERE `category_id`='$category_id'");
+		    $categoryId = $request->getRequest('id');
+		    $delete = Ccc::getModel('Category');
+		    $result = $delete->delete($categoryId);
 		    if(!$result){
 				throw new Exception("System is unable to delete data.", 1);
 		    }
-			$this->redirect("index.php?c=category&a=grid");
+            Ccc::getBlock('Category_Grid')->toHtml();
 		} catch (Exception $e) {
 			echo $e->getMessage();
 		}
 	}
 
-	public function errorAction()
-	{
-		echo "error";
-	}
-
-	public function redirect($location)
-	{
-		header("location: $location");
-	}
 }
 
 ?>

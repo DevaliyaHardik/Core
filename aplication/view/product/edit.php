@@ -1,15 +1,6 @@
 <?php
-try {
-    if(!isset($_GET['product_id'])){ 
-    } 
-    } catch (Exception $e) {
-    echo $e->getMessage();
-} 
-        $product_id = $_GET['product_id'];
-        $fetch = new Model_Core_Adapter();
-       
-        $row =  $fetch->fetchRow("SELECT * FROM `product` WHERE `product_id` = $product_id");   
-    ?>
+$row = $this->getProduct();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,7 +15,7 @@ try {
 
 <body>
     <div id="form">
-        <form action="index.php?c=product&a=save&product_id=<?php echo $product_id;?>" method="POST" enctype="multipart/form-data">
+        <form action="<?php echo $this->getUrl('product','save',['id'=>$row['product_id']],true) ?>" method="POST" enctype="multipart/form-data">
             <table border=1 width="100%" cellspacing=4>
 
                 <tr>
@@ -57,7 +48,7 @@ try {
                     <td width="10%"></td>
                     <td>
                         <input type="submit" name="submit" id="submit" value="edit">
-                        <button><a href="index.php?c=product&a=grid">Cancel</a></button>
+                        <button><a href="<?php echo $this->getUrl('product','grid'); ?>">Cancel</a></button>
                     </td>
                 </tr>
             </table> 

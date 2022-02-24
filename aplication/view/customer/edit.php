@@ -251,16 +251,8 @@ $countryList = array(
         "Åland Islands");
 ?>
 <?php 
-	try {
-                if(!isset($_GET['id'])){
-                        throw new Exception("Invalid Request", 1);
-                }
-                $adapter = new Model_Core_Adapter();
-                $row = $adapter->fetchRow("SELECT * FROM `customer` WHERE `customer_id` = '$_GET[id]' ");
-                $row2 = $adapter->fetchRow("SELECT * FROM `address` WHERE `customer_id` = '$_GET[id]'");
-	} catch (Exception $e) {
-		echo $e->getMessage();	
-	}
+$row = $this->getCustomer();
+$row2 = $this->getAddress();
 ?> 
 <!DOCTYPE html>
 <html lang="en">
@@ -271,7 +263,7 @@ $countryList = array(
 	<title>Customer Edit</title>
 </head>
 <body>
-	<form action="index.php?c=customer&a=save&id=<?php echo $_GET['id'] ?>" method="POST">
+	<form action="<?php echo $this->getUrl('customer','save',['id'=>$row['customer_id']],true) ?>" method="POST">
 		<table border="1" width="100%" cellspacing="4">
 			<tr>
 				<td colspan="2"><b>Personal Information</b></td>
@@ -311,8 +303,8 @@ $countryList = array(
 				<td colspan="2"><b>Address Information</b></td>
 			</tr>
 			<tr>
-				<td width="10%">Address1</td>
-				<td><input type="text" name="address[address1]" value=<?php echo $row2['address1']; ?>></td>
+				<td width="10%">Address</td>
+				<td><input type="text" name="address[address]" value=<?php echo $row2['address']; ?>></td>
 			</tr>
 			
 			<tr>
@@ -352,7 +344,7 @@ $countryList = array(
 				<td width="10%">&nbsp;</td>
 				<td>
 					<input type="submit" name="submit" value="edit">
-					<button type="button"><a href="index.php?c=customer&a=grid">Cancel</a></button>
+					<button type="button"><a href="<?php echo $this->getUrl('customer','grid'); ?>">Cancel</a></button>
 				</td>
 			</tr>
 			

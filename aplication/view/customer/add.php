@@ -258,7 +258,7 @@ $countryList = array(
 	<title>Customer Add</title>
 </head>
 <body>
-	<form action="index.php?c=customer&a=save" method="POST">
+	<form action="<?php echo $this->getUrl('customer','save'); ?>" method="POST">
 		<table border="1" width="100%" cellspacing="4">
 		        <!--Persoanl information -->
 			<tr>
@@ -296,7 +296,7 @@ $countryList = array(
 			</tr>
 			<tr>
 				<td width="10%">Address1</td>
-				<td><input type="text" name="address[address1]"></td>
+				<td><input type="text" name="address[address]"></td>
 			</tr>
 			
 			<tr>
@@ -333,7 +333,7 @@ $countryList = array(
 			     <td width="10%">&nbsp;</td>
         		     <td>
         			<input type="submit" name="submit" value="save">
-        			<button type="button"><a href="index.php?c=customer&a=grid">Cancel</a></button>
+        			<button type="button"><a href="<?php echo $this->getUrl('customer','grid'); ?>">Cancel</a></button>
         		     </td>
 			</tr>			
 		</table>	

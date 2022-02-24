@@ -1,8 +1,6 @@
 <?php
-
-$load = new Model_Core_Adapter();
-$address = $load->fetchAll("SELECT * FROM `address`");
-$customer = $load->fetchAll("SELECT * FROM `customer`");
+$customers = $this->getCustomer();
+$address = $this->getAddress();
 
 
 ?>
@@ -21,7 +19,7 @@ $customer = $load->fetchAll("SELECT * FROM `customer`");
 </head>
 <body>
     <h1 id="post">customer Details</h1>
-    <div id="add"><a href="index.php?c=customer&a=add">Add Customre</a></div>
+    <div id="add"><a href="<?php echo $this->getUrl('customer','add'); ?>">Add Customre</a></div>
     <div id="item">
         <table border=1 width=100%>
             <tr>
@@ -41,7 +39,7 @@ $customer = $load->fetchAll("SELECT * FROM `customer`");
                     <td colspan="10">No Recored Found</td>
                 </tr>
             <?php else: ?>
-            <?php foreach ($customer as $customer): ?>
+            <?php foreach ($customers as $customer): ?>
             <?php $result = ($customer['status'] == 1)? 'active':'inactive'; ?>
             <tr>
                 <td><?php echo $customer['customer_id']; ?></td>
@@ -52,8 +50,8 @@ $customer = $load->fetchAll("SELECT * FROM `customer`");
                 <td><?php echo $result; ?></td>
                 <td><?php echo $customer['createdDate']; ?></td>
                 <td><?php echo $customer['updatedDate']; ?></td>
-                <td><a href='index.php?c=customer&a=edit&id=<?php echo $customer['customer_id']; ?>'>Edit</a></td>
-                <td><a href='index.php?c=customer&a=delete&id=<?php echo $customer['customer_id']; ?>'>Delete</a></td>
+                <td><a href="<?php echo $this->getUrl('customer','edit',['id' => $customer['customer_id']],true); ?>">Edit</a></td>
+                <td><a href="<?php echo $this->getUrl('customer','delete',['id' => $customer['customer_id']],true); ?>">Delete</a></td>
             </tr>
         <?php endforeach; ?>
         <?php endif; ?>
@@ -64,7 +62,7 @@ $customer = $load->fetchAll("SELECT * FROM `customer`");
             <tr>
                 <th>Address Id</th>
                 <th>Customer Id</th>
-                <th>Address1</th>
+                <th>Address</th>
                 <th>City</th>
                 <th>State</th>
                 <th>Postal Code</th>
@@ -85,15 +83,15 @@ $customer = $load->fetchAll("SELECT * FROM `customer`");
             <tr>
                 <td><?php echo $address['address_id']; ?></td>
                 <td><?php echo $address['customer_id']; ?></td>
-                <td><?php echo $address['address1']; ?></td>
+                <td><?php echo $address['address']; ?></td>
                 <td><?php echo $address['city']; ?></td>
                 <td><?php echo $address['state']; ?></td>
                 <td><?php echo $address['postalCode']; ?></td>
                 <td><?php echo $address['country']; ?></td>
                 <td><?php echo $biling; ?></td>
                 <td><?php echo $shiping; ?></td>
-                <td><a href='index.php?c=customer&a=edit&id=<?php echo $address['customer_id']; ?>'>Edit</a></td>
-                <td><a href='index.php?c=customer&a=delete&id=<?php echo $address['customer_id']; ?>'>Delete</a></td>
+                <td><a href="<?php echo $this->getUrl('customer','edit',['id' => $customer['customer_id']],true); ?>">Edit</a></td>
+                <td><a href="<?php echo $this->getUrl('customer','delete',['id' => $customer['customer_id']],true); ?>">Delete</a></td>
             </tr>
         <?php endforeach; ?>
         <?php endif; ?>

@@ -13,19 +13,18 @@ $data = [
 	['category'=>2,'attribute'=>4,'option'=>8]
 ];
 //echo $data[0]['category];
-$same = [0];
+/*$same = [0];
 $same1 = [0];
+*/
 $convert = [];
-foreach($data as $data1){
-	if(!in_array($data1['category'],$same)){
-		$convert[$data1['category']] = [];
-		array_push($same,$data1['category']);
+foreach($data as $row){
+	if(!array_key_exists($row['category'], $convert)){
+		$convert[$row['category']] = [];
 	 }
-	 if(!in_array($data1['attribute'],$same1)){
-		 $convert[$data1['category']][$data1['attribute']] = [];
-		 array_push($same1,$data1['attribute']);
+	 if(!array_key_exists($row['attribute'],$convert[$row['category']])){
+		 $convert[$row['category']][$row['attribute']] = [];
 	 }
-	 $convert[$data1['category']][$data1['attribute']][$data1['option']] = $data1['option'];
+	 $convert[$row['category']][$row['attribute']][$row['option']] = $row['option'];
 }
 /*for($i=0;$i<count($data);$i++){
     if(!in_array($data[$i]['category'],$same)){
@@ -72,7 +71,7 @@ print_r($convert);
 //echo count($array['1']['1']);
 $reverce = [];
 $j = 0;
-for($x=1;$x<=count($convert);$x++){
+/*for($x=1;$x<=count($convert);$x++){
 	for($y=1;$y<=count($convert[array_keys($convert)[$x-1]]);$y++){
 		for($z=1;$z<=count($convert[array_keys($convert)[$x-1]][array_keys($convert[array_keys($convert)[$x-1]])[$y-1]]);$z++){
 			$reverce[$j]['category'] = array_keys($convert)[$x-1];
@@ -81,7 +80,19 @@ for($x=1;$x<=count($convert);$x++){
 			$j++;
 		}
 	}
+}*/
+$row = [];
+foreach ($convert as $categoryId => $category) {
+	$row['category'] = $categoryId;
+	foreach ($category as $attributeId => $attribute) {
+		$row['attribute'] = $attributeId;
+		foreach ($attribute as $optionId => $option) {
+			$row['option'] = $optionId;
+			array_push($reverce, $row);
+		}
+	}
 }
+
 print_r($reverce);
 
 

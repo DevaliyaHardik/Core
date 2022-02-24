@@ -1,6 +1,5 @@
 <?php
-$action = new Model_Core_Adapter();
-$products = $action->fetchAll("SELECT * FROM `product`");
+$products = $this->getProduct();
 
 ?>
 <!DOCTYPE html>
@@ -18,7 +17,7 @@ $products = $action->fetchAll("SELECT * FROM `product`");
 </style>
 <body>
     <h1 id="post">Products</h1>
-    <div id="add"><a href="index.php?c=product&a=add">Add Product</a></div>
+    <div id="add"><a href="<?php echo $this->getUrl('product','add') ?>">Add Product</a></div>
 
     <div id="item">
         <table border=1 width="100%">
@@ -46,8 +45,8 @@ $products = $action->fetchAll("SELECT * FROM `product`");
                 <td><?php echo $result; ?></td>
                 <td><?php echo $product['createdDate']; ?></td>
                 <td><?php echo $product['updatedDate']; ?></td>
-                <td><a href='index.php?c=product&a=edit&product_id=<?php echo $product['product_id']; ?>' id='edit'>Edit</a></td>
-                <td><a href='index.php?c=product&a=delete&product_id=<?php echo $product['product_id']; ?>' id='delete'><strong>Delete</strong></a></td>
+                <td><a href='<?php echo $this->getUrl('product','edit',['id'=>$product['product_id']],true) ?>' id='edit'>Edit</a></td>
+                <td><a href='<?php echo $this->getUrl('product','delete',['id'=>$product['product_id']],true) ?>' id='delete'><strong>Delete</strong></a></td>
             </tr>
             <?php endforeach; ?>
             <?php endif; ?>

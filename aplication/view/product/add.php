@@ -9,7 +9,7 @@
 <body>
   
     <div id="form">
-        <form action="index.php?c=product&a=save" method="POST" enctype="multipart/form-data">
+        <form action="<?php echo $this->getUrl('product','save'); ?>" method="POST" enctype="multipart/form-data">
             <table border=1>
                 <tr>
                     <td width="10%">Name</td>
@@ -36,7 +36,7 @@
                     <td width="10%"></td>
                     <td>
                         <input type="submit" name="submit" id="submit" value="add">
-                        <button><a href="index.php?c=product&a=grid">Cancel</a></button>
+                        <button><a href="<?php echo $this->getUrl('product','grid'); ?>">Cancel</a></button>
                     </td>
                 </tr>
             </table>            

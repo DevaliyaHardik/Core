@@ -1,51 +1,63 @@
+<?php Ccc::loadClass('Controller_Core_Action') ?>
 <?php
 
-class Controller_Product{
+class Controller_Product extends Controller_Core_Action{
 
 	public function gridAction()
 	{
-		//echo "111";
-		require_once('view/product/grid.php');
+		Ccc::getBlock('Product_Grid')->toHtml();
+	}
+
+	public function addAction()
+	{
+		Ccc::getBlock('Product_Add')->toHtml();
+	}
+
+	public function editAction()
+	{
+		$productModel = Ccc::getModel('Product');
+		$request = $this->getRequest();
+		$productId = $request->getRequest('id');
+		if(!$productId){
+			throw new Exception("Id is invalid", 1);
+		}
+		if(!(int)$productId){
+			throw new Exception("invalid request", 1);
+		}
+		$product = $productModel->fetchRow("SELECT * FROM `product` WHERE `product_id` = '$productId'");
+		if(!$product){
+			throw new Exception("System is unable to fwetch recored", 1);
+		}
+		Ccc::getBlock('Product_Edit')->addData('product',$product)->toHtml();
 	}
 
 	public function saveAction()
 	{
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
-			$name = $_POST['product']['name'];
-			$prize = $_POST['product']['prize'];
-			$quntity = $_POST['product']['quntity'];
-			$status = $_POST['product']['status'];
+		$request = $this->getRequest();
+		if($request->isPost()){
+			$row = $request->getPost('product');
 			try {
-				if(!isset($_POST['submit'])){
+				if(!$request->getPost('submit')){
 					throw new Exception("Invalid Request", 1);	
 				}
-				if($_POST['submit'] == "edit"){
-					$product_id = $_GET['product_id'];			
-					$save = new Model_Core_Adapter();
-					$date = date('Y-m-d h:i:s');
-					$result = $save->update("UPDATE `product` 
-										SET `name` = '$name', 
-											`prize` = $prize,
-											`quntity` = '$quntity',
-											`status` = '$status',
-											`updatedDate`= '$date' 
-										WHERE 
-											`product_id` = $product_id");
+				if($request->getPost('submit') == "edit"){
+					$product_id = $request->getRequest('id');
+					$row['updatedDate'] = date('Y-m-d h:i:s');
+					$edit = Ccc::getModel('Product');
+					$result = $edit->update($row,$product_id);
 			
 					if(!$result){
 						throw new Exception("System is unable to save your data.", 1);
 					}
-					$this->redirect("index.php?c=product&a=grid");
 				}else{
-					$add = new Model_Core_Adapter();
-					$date = date('Y-m-d h:i:s');
-					$result = $add->insert("INSERT INTO `product` (`name`,`prize`,`quntity`,`status`,`createdDate`) 
-											VALUE ('$name','$prize','$quntity','$status','$date')");
+					$row['createdDate'] = date('Y-m-d h:i:s');
+					$add = Ccc::getModel('Product');
+					$result = $add->insert($row);
 					if(!$result){
 						throw new Exception("System is unable to save your data.", 1);
 					}
-					$this->redirect("index.php?c=product&a=grid");
-				}			
+				}		
+				$this->redirect($this->getView()->getUrl('product','grid'));	
 			} catch (Exception $e) {
 				echo $e->getMessage();
 			}
@@ -54,23 +66,14 @@ class Controller_Product{
 		
 	}
 
-	public function editAction()
-	{
-		require_once('view/product/edit.php');
-	}
-
-	public function addAction()
-	{
-		require_once('view/product/add.php');
-	}
-
 	public function deleteAction()
 	{
 		try {
-			if(!isset($_GET['product_id'])){
+			$request = $this->getRequest();
+			if(!$request->getRequest('id')){
 				throw new Exception("Invalid Request", 1);
 			}
-			$product_id = $_GET['product_id'];
+			$product_id = $request->getRequest('id');
 			$data = new Model_Core_Adapter();
 			$result = $data->delete("DELETE FROM `product` WHERE `product_id` = $product_id");
 			if(!$result){

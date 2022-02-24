@@ -1,23 +1,8 @@
 <?php
 
-$load = new Model_Core_Adapter();
-$categories = $load->fetchAll("SELECT * FROM `category`");
-function path($categoryId,$categories){
+$categories = $this->getCategory();
 
-    $len = count($categories);
-
-    for($i = 0;$i< $len;$i++){
-
-        if($categoryId == $categories[$i]["category_id"]){
-            if($categories[$i]["parent_id"] == null){
-                return $categories[$i]["name"];
-            }
-            return path($categories[$i]["parent_id"],$categories)."=>".$categories[$i]["name"];
-        }
-    }
-}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,15 +12,15 @@ function path($categoryId,$categories){
     <title>Add</title>
 </head>
 <body>
-    <form action="index.php?c=category&a=save" method="post">
+    <form action="<?php echo $this->getUrl('category','save'); ?>" method="post">
         <table border="1" width="100%" cellspacing="4">
             <tr>
                 <td width="10%">Subcategory</td>
                 <td>
-                    <select name="category[parentId]" id="parentId">
+                    <select name="category[parent_id]" id="parentId">
                         <option value=<?php echo null; ?>>Root Category</option>
                     <?php foreach($categories as $category): ?>
-                        <option value="<?php echo $category['category_id']; ?>"><?php echo path($category['category_id'],$categories); ?></option>
+                        <option value="<?php echo $category['category_id']; ?>"><?php echo $this->getPath($category['category_id'],$category['path']); ?></option>
                     <?php endforeach; ?>
                     </select>
                 </td>
@@ -55,7 +40,7 @@ function path($categoryId,$categories){
                 <td width="10%"></td>
                 <td>
                     <input type="submit" value="add" name="submit">
-                    <button><a href="index.php?c=category&a=grid">Cancel</a></button>
+                    <button><a href="<?php echo $this->getUrl('category','grid'); ?>">Cancel</a></button>
                 </td>
             </tr>
 
