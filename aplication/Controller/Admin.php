@@ -10,7 +10,9 @@ class Controller_Admin extends Controller_Core_Action{
 
 	public function addAction()
 	{
-		Ccc::getBlock('Admin_Add')->toHtml();
+		$adminModel = Ccc::getModel('Admin');
+		$admin = $adminModel;
+		Ccc::getBlock("Admin_Edit")->addData('admin',$admin)->toHtml();
 	}
 
 	public function editAction()
@@ -24,7 +26,7 @@ class Controller_Admin extends Controller_Core_Action{
 		if(!(int)$adminId){
 			throw new Exception("Invalid request", 1);
 		}
-		$admin = $adminModel->fetchRow("SELECT * FROM `admin` WHERE `admin_id` = '$adminId'");
+		$admin = $adminModel->load($adminId);
 		if(!$admin){
 			throw new Exception("System is unable to fine recored", 1);
 		}
@@ -34,34 +36,39 @@ class Controller_Admin extends Controller_Core_Action{
 	public function saveAction()
 	{
 		try{
+			$adminModel = Ccc::getModel('Admin');
 			$request = $this->getRequest();
+			$adminId = $request->getRequest('id');
 			if($request->isPost()){
-				$row = $request->getPost('admin');
-				if(!$request->getPost('submit')){
-					throw new Exception("Invalid Request", 1);	
+				$postData = $request->getPost('admin');
+				if(!$postData)
+				{
+					throw new Exception("Invalid data posted.", 1);	
 				}
-				if($request->getPost('submit') == 'edit'){
-					$adminId = $request->getRequest('id');
-					$row['updatedDate'] = date("Y-m-d h:i:s");					;
-					$edit = Ccc::getModel('Admin');
-					$admin = $edit->update($row,$adminId);
+
+				$adminData = $adminModel->setData($postData);
+
+				if(!empty($adminId)){
+					$adminData->admin_id = $adminId;
+					$adminData->updatedDate = date("Y-m-d h:i:s");					;
+					$admin = $adminModel->save();
 					
 					if(!$admin){
-						echo $e->getMessage();
+						throw new Exception("System is unable to edit your data.", 1);	
 					}
 				}
 				else{
-					$row['createdDate'] = date("Y-m-d h:i:s");
-					$add = Ccc::getModel('Admin');
-					$adminId = $add->insert($row);
+					unset($adminData->admin_id);
+					$adminData->createdDate = date("Y-m-d h:i:s");
+					$adminId = $adminModel->save();
 					
 					if(!$adminId){
-						echo $e->getMessage();
+						throw new Exception("System is unable to insert your data.", 1);	
 					}
 					
 				}
 			}
-			$this->redirect($this->getView()->getUrl('admin','grid'));
+			$this->redirect($this->getView()->getUrl('grid','admin',[],true));
 		}
 		catch(Exception $e){
 			echo $e->getMessage();			
@@ -71,19 +78,19 @@ class Controller_Admin extends Controller_Core_Action{
 
 	public function deleteAction()
 	{
+		$adminModel = Ccc::getModel('Admin');
 		$request = $this->getRequest();
 		if(!$request->isPost()){
 			try {
 				if(!$request->getRequest('id')){
 					throw new Exception("System is unable to delete your data",1);
 				}
-				$admin_id=$request->getRequest('id');
-				$delete =new Model_Core_Adapter();
-				$result=$delete->delete("DELETE FROM `admin` WHERE `admin_id` = '$admin_id'");
+				$adminId = $request->getRequest('id');
+				$result = $adminModel->load($adminId)->delete();
 				if(!$result){
 					throw new Exception("System is unable to delete data.", 1);	
 				}
-				$this->redirect("index.php?c=admin&a=grid");
+				$this->redirect($this->getView()->getUrl('grid','admin',[],true));
 
 			} catch (Exception $e) {
 				echo $e->getMessage();

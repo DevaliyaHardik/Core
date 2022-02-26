@@ -20,16 +20,24 @@ class Block_Category_Grid extends Block_Core_Template
         $finalPath = NULL;
         $path = explode("/",$path);
         foreach ($path as $path1) {
-            $load = Ccc::getModel('Category');
-            $category = $load->fetchRow("SELECT `name` FROM `category` WHERE `category_id` = '$path1' ");
+            $categoryModel = Ccc::getModel('Category');
+            $category = $categoryModel->fetchRow("SELECT * FROM `category` WHERE `category_id` = '$path1' ");
             if($path1 != $categoryId){
-                $finalPath .= $category['name']."=>";
+                $finalPath .= $category->name ."=>";
             }else{
-                $finalPath .= $category['name'];
+                $finalPath .= $category->name;
             }
         }
         return $finalPath;
     }
+
+    public function getMedia($mediaId)
+    {
+        $mediaModel = Ccc::getModel('category');
+        $media = $mediaModel->fetchAll("SELECT * FROM `category_media` WHERE `media_id` = '$mediaId'");
+        return $media[0]->getData();
+    }
+
 }
 
 ?>

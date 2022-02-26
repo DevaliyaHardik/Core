@@ -10,7 +10,9 @@ class Controller_Product extends Controller_Core_Action{
 
 	public function addAction()
 	{
-		Ccc::getBlock('Product_Add')->toHtml();
+		$productModel = Ccc::getModel('Product');
+		$product = $productModel;
+		Ccc::getBlock('Product_Edit')->addData('product',$product)->toHtml();
 	}
 
 	public function editAction()
@@ -24,7 +26,8 @@ class Controller_Product extends Controller_Core_Action{
 		if(!(int)$productId){
 			throw new Exception("invalid request", 1);
 		}
-		$product = $productModel->fetchRow("SELECT * FROM `product` WHERE `product_id` = '$productId'");
+
+		$product = $productModel->load($productId);
 		if(!$product){
 			throw new Exception("System is unable to fwetch recored", 1);
 		}
@@ -33,53 +36,60 @@ class Controller_Product extends Controller_Core_Action{
 
 	public function saveAction()
 	{
-		$request = $this->getRequest();
-		if($request->isPost()){
-			$row = $request->getPost('product');
-			try {
-				if(!$request->getPost('submit')){
-					throw new Exception("Invalid Request", 1);	
+		try {
+			$productModel = Ccc::getModel('Product');
+			$request = $this->getRequest();
+			$productId = $request->getRequest('id');
+			if($request->isPost()){
+				$postData = $request->getPost('product');
+				if(!$postData){
+					throw new Exception("Invalid request.", 1);
 				}
-				if($request->getPost('submit') == "edit"){
-					$product_id = $request->getRequest('id');
-					$row['updatedDate'] = date('Y-m-d h:i:s');
-					$edit = Ccc::getModel('Product');
-					$result = $edit->update($row,$product_id);
+				$productData = $productModel->setData($postData);
+				if(!empty($productId)){
+					$productData->product_id = $productId;
+					$productData->updatedDate = date('Y-m-d h:i:s');
+					$result = $productModel->save();
 			
 					if(!$result){
 						throw new Exception("System is unable to save your data.", 1);
 					}
 				}else{
-					$row['createdDate'] = date('Y-m-d h:i:s');
-					$add = Ccc::getModel('Product');
-					$result = $add->insert($row);
+					$productData->createdDate = date('Y-m-d h:i:s');
+					$result = $productModel->save();
 					if(!$result){
 						throw new Exception("System is unable to save your data.", 1);
 					}
 				}		
-				$this->redirect($this->getView()->getUrl('product','grid'));	
-			} catch (Exception $e) {
-				echo $e->getMessage();
-			}
-			
-		}
-		
+				$this->redirect($this->getView()->getUrl('grid','product',[],true));	
+			} 			
+		}catch (Exception $e) {
+			echo $e->getMessage();
+		}		
 	}
 
 	public function deleteAction()
 	{
 		try {
+			$productModel = Ccc::getModel('Product');
 			$request = $this->getRequest();
 			if(!$request->getRequest('id')){
 				throw new Exception("Invalid Request", 1);
 			}
-			$product_id = $request->getRequest('id');
-			$data = new Model_Core_Adapter();
-			$result = $data->delete("DELETE FROM `product` WHERE `product_id` = $product_id");
+			$productId = $request->getRequest('id');
+
+			// $rows = $productModel->fetchAll("SELECT `name` FROM `media` WHERE  `product_id`='$product_id'");
+			// if($rows){
+			// 	foreach ($rows as $row) {
+			// 		unlink($this->getView()->getBaseUrl("Media/Product/"). $row['name']);
+			// 	}
+			// }
+
+			$result = $productModel->load($productId)->delete();
 			if(!$result){
 				throw new Exception("System is unable to delete data.", 1);
 			}
-			$this->redirect("index.php?c=product&a=grid");
+			$this->redirect($this->getView()->getUrl('grid','product',[],true));	
 		} catch (Exception $e) {
 			echo $e->getMessage();
 		}

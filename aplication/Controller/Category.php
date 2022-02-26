@@ -9,7 +9,9 @@ class Controller_Category extends Controller_Core_Action{
 
     public function addAction()
 	{
-		Ccc::getBlock('Category_Add')->toHtml();
+		$categoryModel = Ccc::getModel('Category');
+		$category = $categoryModel;
+        Ccc::getBlock('Category_Edit')->addData('category',$category)->toHtml();
 	}
 
     public function editAction()
@@ -23,7 +25,7 @@ class Controller_Category extends Controller_Core_Action{
         if(!(int)$categoryId){
             throw new Exception("Invalid request", 1);
         }
-        $category = $categoryModel->fetchRow("SELECT * FROM `category` WHERE `category_id` = '$categoryId'");
+        $category = $categoryModel->load($categoryId);
         if(!$category){
             throw new Exception("Invalid request", 1);
         }
@@ -33,24 +35,26 @@ class Controller_Category extends Controller_Core_Action{
 	public function saveAction()
 	{
 		try {
+			$categoryModel = Ccc::getModel('Category');
             $request = $this->getRequest();
+			$categoryId = $request->getRequest('id');
 			if($request->isPost()){
-                $row = $request->getPost('category');
-				if(!$row['submit']){
-					throw new Exception("Invalid Request", 1);
-				}
-				if($row['submit'] == 'edit'){
-					$edit = Ccc::getModel('Category');
-					$categoryId = $request->getRequest('id');
-                    $row['updatedDate'] = date('y-m-d h:m:s');
-					$result = $edit->update($row,$categoryId);
+                $postData = $request->getPost('category');
+				$categoryData = $categoryModel->setData($postData);
+				if(!empty($categoryId)){
+					$categoryData->category_id = $categoryId;
+                    $categoryData->updatedDate = date('y-m-d h:m:s');
+					if(!$postData['parent_id']){
+						$categoryData->parent_id = NULL;
+					}
+					$result = $categoryModel->save();
 					if(!$result){
 						throw new Exception("Sysetm is unable to save your data", 1);	
 					}
-                    $allPath = $edit->fetchAll("SELECT * FROM `category` WHERE `path` LIKE '%$categoryId%' ");
+					
+                    $allPath = $categoryModel->fetchAll("SELECT * FROM `category` WHERE `path` LIKE '%$categoryId%' ");
                     foreach ($allPath as $path) {
-
-                        $finalPath = explode('/',$path['path']);
+                        $finalPath = explode('/',$path->path);
                         foreach ($finalPath as $subPath) {
                             if($subPath == $categoryId){
                                 if(count($finalPath) != 1){
@@ -60,38 +64,44 @@ class Controller_Category extends Controller_Core_Action{
                             }
                             array_shift($finalPath);
                         }
-                        $parentPath = $edit->fetchRow("SELECT `path` FROM `category` WHERE `category_id` = {$path['parent_id']}");    
-                        $updatedPath['path'] = $parentPath['path']."/".implode('/',$finalPath);
-
-                        $result = $edit->update($updatedPath,$path['category_id']);
+						if($path->parent_id){
+							$parentPath = $categoryModel->load($path->parent_id);
+							$path->path = $parentPath->path ."/".implode('/',$finalPath);
+						}
+						else{
+							$path->path = $path->category_id;
+						}
+                        $result = $path->save();
                     }
-                    Ccc::getBlock('Category_Grid')->toHtml();
 				}
 				else{
-					$add = Ccc::getModel('Category');
-					if(empty($row['parent_id'])){
-                        unset($row['parent_id']);
-                        $insertId = $add->insert($row);
+					$categoryData->createdDate = date('y-m-d h:m:s');
+					if(!$categoryData->parent_id){
+                        unset($categoryData->parent_id);
+                        $insertId = $categoryModel->save();
                         if(!$insertId){
                             throw new Exception("system is unabel to insert your data", 1);
                         }
-                        $path['path'] = $insertId;
-						$result = $add->update($path,$insertId);
+						$categoryData->resetData();
+                        $categoryData->path = $insertId;
+						$categoryData->category_id = $insertId;
+						$result = $categoryModel->save();
 					}
 					else{
-                        $insertId = $add->insert($row);
+                        $insertId = $categoryModel->save();
                         if(!$insertId){
                             throw new Exception("system is unabel to insert your data", 1);
                         }
-                        $parentPath = $add->fetchRow("SELECT * FROM `category` WHERE `category_id` = {$row['parent_id']}");
-                        $path['path'] = $parentPath['path']."/". $insertId;
-						$result = $add->update($path,$insertId);
+						$categoryData->category_id = $insertId;
+                        $parentPath = $categoryModel->load($categoryData->parent_id);
+                        $categoryData->path = $parentPath->path."/". $insertId;
+						$result = $categoryData->save();
 					}
 					if(!$result){
 						throw new Exception("Sysetm is unable to save your data", 1);	
 					}
-                    Ccc::getBlock('Category_Grid')->toHtml();
 				}
+				$this->redirect($this->getView()->getUrl('grid','category',[],true));
 			}
 		} catch (Exception $e) {
 			echo $e->getMessage();
@@ -101,17 +111,17 @@ class Controller_Category extends Controller_Core_Action{
 	public function deleteAction()
 	{
 		try {
+			$categoryModel = Ccc::getModel('Category');
             $request = $this->getRequest();
 			if(!$request->getRequest('id')){
 				throw new Exception("Invalid Request", 1);
 			}
 		    $categoryId = $request->getRequest('id');
-		    $delete = Ccc::getModel('Category');
-		    $result = $delete->delete($categoryId);
+		    $result = $categoryModel->load($categoryId)->delete();
 		    if(!$result){
 				throw new Exception("System is unable to delete data.", 1);
 		    }
-            Ccc::getBlock('Category_Grid')->toHtml();
+			$this->redirect($this->getView()->getUrl('grid','category',[],true));
 		} catch (Exception $e) {
 			echo $e->getMessage();
 		}

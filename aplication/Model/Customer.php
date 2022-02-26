@@ -1,10 +1,11 @@
-	<?php Ccc::loadClass('Model_Core_Table');
+	<?php Ccc::loadClass('Model_Core_Row');
 
-class Model_Customer extends Model_Core_Table
+class Model_Customer extends Model_Core_Row
 {
 	public function __construct()
 	{
-		$this->setTableName('customer')->setPrimaryKey('customer_id');
+		$this->setResourceClassName('Customer_Resource');
+		parent::__construct();
 	}
 
 }

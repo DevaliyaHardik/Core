@@ -12,13 +12,13 @@ $medias = $this->getMedias();
 </head>
 <body>
 
-    <form action="<?php echo $this->getUrl('save','product_media') ?>" method="POST" align=center>
+    <form action="<?php echo $this->getUrl('save','category_media') ?>" method="POST" align=center>
         <input type="submit" value="update">
-        <button><a href="<?php echo $this->getUrl('grid','product',[],true); ?>">Cancel</a></button>
+        <button><a href="<?php echo $this->getUrl('grid','category',[],true); ?>">Cancel</a></button>
         <table border=3 align=center width=100% cellspacing=4>
             <tr>
                 <th>Image Id</th>
-                <th>Product Id</th>
+                <th>Category Id</th>
                 <th>Name</th>
                 <th>Base</th>
                 <th>Thumb</th>
@@ -34,7 +34,7 @@ $medias = $this->getMedias();
             <?php foreach ($medias as $media): ?>
             <tr>
                 <td><?php echo $media->media_id ?></td>
-                <td><?php echo $media->product_id ?></td>
+                <td><?php echo $media->category_id ?></td>
                 <td><?php echo $media->name ?></td>
                 <td>
                     <input type="radio" name="media[base]" value = "<?php echo $media->media_id ?>" <?php echo $this->selected($media->media_id,'base'); ?> >
@@ -57,7 +57,7 @@ $medias = $this->getMedias();
         </table>
     </form>
 
-    <form action="<?php echo $this->getUrl('save','product_media') ?>" method="POST" enctype="multipart/form-data">
+    <form action="<?php echo $this->getUrl('save','category_media') ?>" method="POST" enctype="multipart/form-data">
         <input type="file" name="name">
         <input type="submit" value="upload">
     </form>

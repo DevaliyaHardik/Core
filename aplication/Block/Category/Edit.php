@@ -16,8 +16,8 @@ class Block_Category_Edit extends Block_Core_Template
 
     public function getCategories()
     {
-        $fetch = Ccc::getModel('Category');
-        $categories = $fetch->fetchAll("SELECT * FROM `category` ORDER BY `path`");
+        $categoryModel = Ccc::getModel('category');
+        $categories = $categoryModel->fetchAll("SELECT * FROM `category` ORDER BY `path`");
         return $categories;
     }
 
@@ -27,11 +27,11 @@ class Block_Category_Edit extends Block_Core_Template
         $path = explode("/",$path);
         foreach ($path as $path1) {
             $load = Ccc::getModel('Category');
-            $category = $load->fetchRow("SELECT `name` FROM `category` WHERE `category_id` = '$path1' ");
+            $category = $load->load($path1);
             if($path1 != $categoryId){
-                $finalPath .= $category['name']."=>";
+                $finalPath .= $category->name."=>";
             }else{
-                $finalPath .= $category['name'];
+                $finalPath .= $category->name;
             }
         }
         return $finalPath;
