@@ -66,7 +66,7 @@ class Model_Core_Row
 		return Ccc::getModel($this->getResourceClassName());
 	}
 
-	public function save($column = null,$tableName = null)
+	public function save($column = null)
 	{
 		if(!$column){
 			$column = $this->getTable()->getPrimaryKey();
@@ -78,7 +78,7 @@ class Model_Core_Row
 				$result = $this->getTable()->update($this->data, [$column=>$id]);
 			}	
 			else{
-				$result = $this->getTable()->update($this->data, [$column=>$id],$tableName);
+				$result = $this->getTable()->update($this->data, [$column=>$id]);
 			}
 		}
 		else

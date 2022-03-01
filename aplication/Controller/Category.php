@@ -101,7 +101,7 @@ class Controller_Category extends Controller_Core_Action{
 						throw new Exception("Sysetm is unable to save your data", 1);	
 					}
 				}
-				$this->redirect($this->getView()->getUrl('grid','category',[],true));
+				$this->redirect(Ccc::getBlock('Category_Grid')->getUrl('grid','category',[],true));
 			}
 		} catch (Exception $e) {
 			echo $e->getMessage();
@@ -112,16 +112,22 @@ class Controller_Category extends Controller_Core_Action{
 	{
 		try {
 			$categoryModel = Ccc::getModel('Category');
+			$mediaModel = Ccc::getModel('Category_Media');
             $request = $this->getRequest();
 			if(!$request->getRequest('id')){
 				throw new Exception("Invalid Request", 1);
 			}
 		    $categoryId = $request->getRequest('id');
+			
+			$medias = $mediaModel->fetchAll("SELECT * FROM `category_media` WHERE `category_id` = '$categoryId'");
+			foreach($medias as $media){
+				unlink(Ccc::getBlock('Category_Grid')->getBaseUrl("Media/Category/"). $media->name);
+			}
 		    $result = $categoryModel->load($categoryId)->delete();
 		    if(!$result){
 				throw new Exception("System is unable to delete data.", 1);
 		    }
-			$this->redirect($this->getView()->getUrl('grid','category',[],true));
+			$this->redirect(Ccc::getBlock('Category_Grid')->getUrl('grid','category',[],true));
 		} catch (Exception $e) {
 			echo $e->getMessage();
 		}

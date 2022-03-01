@@ -67,7 +67,7 @@ class Controller_Config extends Controller_Core_Action{
 					
 				}
 			}
-			$this->redirect($this->getView()->getUrl('grid','config',[],true));
+			$this->redirect(Ccc::getBlock('Config_Grid')->getUrl('grid','config',[],true));
 		}
 		catch(Exception $e){
 			echo $e->getMessage();			
@@ -89,7 +89,7 @@ class Controller_Config extends Controller_Core_Action{
 				if(!$result){
 					throw new Exception("System is unable to delete data.", 1);	
 				}
-				$this->redirect($this->getView()->getUrl('grid','config',[],true));
+				$this->redirect(Ccc::getBlock('Config_Grid')->getUrl('grid','config',[],true));
 
 			} catch (Exception $e) {
 				echo $e->getMessage();

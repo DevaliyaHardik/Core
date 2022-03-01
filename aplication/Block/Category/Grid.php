@@ -33,7 +33,7 @@ class Block_Category_Grid extends Block_Core_Template
 
     public function getMedia($mediaId)
     {
-        $mediaModel = Ccc::getModel('category');
+        $mediaModel = Ccc::getModel('Category_Media');
         $media = $mediaModel->fetchAll("SELECT * FROM `category_media` WHERE `media_id` = '$mediaId'");
         return $media[0]->getData();
     }

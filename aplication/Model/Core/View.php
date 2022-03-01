@@ -20,7 +20,7 @@ class Model_Core_View{
         return $this->template;
     }
 
-    public function setDate(array $data)
+    public function setData(array $data)
     {
         $this->data = $data;
         return $this;

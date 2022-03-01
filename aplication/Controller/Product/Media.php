@@ -14,6 +14,7 @@ class Controller_Product_Media extends Controller_Core_Action{
 	{
 		try {
 			$mediaModel = Ccc::getModel('Product_Media');
+			$productModel = Ccc::getModel('Product');
 			$request = $this->getRequest();
 			$productId = $request->getRequest('id');
 			if($request->isPost()){
@@ -37,6 +38,7 @@ class Controller_Product_Media extends Controller_Core_Action{
 				}
 				else{
 					$mediaData = $mediaModel;
+					$productData = $productModel;
 					$mediaData->product_id = $productId;
 					$postData = $request->getPost();
 					if(array_key_exists('remove',$postData['media'])){
@@ -81,28 +83,31 @@ class Controller_Product_Media extends Controller_Core_Action{
 					unset($mediaData->gallery);
 
 					if(array_key_exists('base',$postData['media'])){
-						$mediaData->base = $postData['media']['base'];
-						$result = $mediaModel->save('product_id','product');
+						$productData->product_id = $productId;
+						$productData->base = $postData['media']['base'];
+						$result = $productModel->save();
 						if(!$result){
 							throw new Exception("System is unabel to set base", 1);
 						}
-						unset($mediaData->base);
+						unset($productData->base);
 					}
 					if(array_key_exists('thumb',$postData['media'])){
-						$mediaData->thumb = $postData['media']['thumb'];
-						$result = $mediaModel->save('product_id','product');
+						$productData->product_id = $productId;
+						$productData->thumb = $postData['media']['thumb'];
+						$result = $productModel->save();
 						if(!$result){
 							throw new Exception("System is unabel to set thumb", 1);
 						}
-						unset($mediaData->thumb);
+						unset($productData->thumb);
 					}
 					if(array_key_exists('small',$postData['media'])){
-						$mediaData->small = $postData['media']['small'];
-						$result = $mediaModel->save('product_id','product');
+						$productData->product_id = $productId;
+						$productData->small = $postData['media']['small'];
+						$result = $productModel->save();
 						if(!$result){
 							throw new Exception("System is unabel to set small", 1);
 						}
-						unset($mediaData->small);
+						unset($productData->small);
 					}
 				}
 			} 	
@@ -111,62 +116,6 @@ class Controller_Product_Media extends Controller_Core_Action{
 			echo $e->getMessage();
 		}
 		
-	}
-
-	public function editAction()
-	{
-		try{
-			$request = $this->getRequest();
-			$productId = $request->getRequest('id');
-
-			$mediaModel = Ccc::getModel('Product_Media');
-			if(!$request->isPost()){
-				throw new Exception("Invalid request.", 1);
-			}
-			$rows = $request->getPost();
-			echo "<pre>";
-			if(array_key_exists('media',$rows) && array_key_exists('base',$rows['media'])){
-				$result = $mediaModel->update(['base' => 2],$productId,'product_id');
-				if($result){
-					$base = $mediaModel->update(['base' => 1],$rows['media']['base']);
-				}
-			}
-			if(array_key_exists('media',$rows) && array_key_exists('thumb',$rows['media'])){
-				$result = $mediaModel->update(['thumb' => 2],$productId,'product_id');
-				if($result){
-					$thumb = $mediaModel->update(['thumb' => 1],$rows['media']['thumb']);
-					print_r($thumb);
-				}
-			}
-			if(array_key_exists('media',$rows) && array_key_exists('small',$rows['media'])){
-				$result = $mediaModel->update(['small' => 2],$productId,'product_id');
-				if($result){
-					$small = $mediaModel->update(['small' => 1],$rows['media']['small']);
-					print_r($small);
-				}
-			}
-			unset($rows['media']);
-			foreach($rows as $row){
-				if(array_key_exists('remove',$row)){
-					$result = $mediaModel->delete($row['image_id']);
-					if(!$result){
-						throw new Exception("Invalid request", 1);
-					}
-					unlink($this->getView()->getBaseUrl("Media/Product/"). $row['name']);
-				}
-
-				if(array_key_exists('gallery',$row)){
-					$result = $mediaModel->update(['gallery' => 1],$row['image_id']);
-				}
-				else{
-					$result = $mediaModel->update(['gallery' => 2],$row['image_id']);
-				}
-			}
-			$this->redirect($this->getView()->getUrl('grid','product_media',['id' => $productId],true));	
-		}
-		catch(Exception $e){
-			echo $e->getMessage();
-		}
 	}
 
 }

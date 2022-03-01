@@ -61,7 +61,7 @@ class Controller_Product extends Controller_Core_Action{
 						throw new Exception("System is unable to save your data.", 1);
 					}
 				}		
-				$this->redirect($this->getView()->getUrl('grid','product',[],true));	
+				$this->redirect(Ccc::getBlock('Product_Grid')->getUrl('grid','product',[],true));	
 			} 			
 		}catch (Exception $e) {
 			echo $e->getMessage();
@@ -72,24 +72,23 @@ class Controller_Product extends Controller_Core_Action{
 	{
 		try {
 			$productModel = Ccc::getModel('Product');
+			$mediaModel = Ccc::getModel('Product_Media');
 			$request = $this->getRequest();
 			if(!$request->getRequest('id')){
 				throw new Exception("Invalid Request", 1);
 			}
 			$productId = $request->getRequest('id');
 
-			// $rows = $productModel->fetchAll("SELECT `name` FROM `media` WHERE  `product_id`='$product_id'");
-			// if($rows){
-			// 	foreach ($rows as $row) {
-			// 		unlink($this->getView()->getBaseUrl("Media/Product/"). $row['name']);
-			// 	}
-			// }
+			$medias = $mediaModel->fetchAll("SELECT * FROM `product_media` WHERE `product_id` = '$productId'");
+			foreach($medias as $media){
+				unlink($this->getView()->getBaseUrl("Media/Product/"). $media->name);
+			}
 
 			$result = $productModel->load($productId)->delete();
 			if(!$result){
 				throw new Exception("System is unable to delete data.", 1);
 			}
-			$this->redirect($this->getView()->getUrl('grid','product',[],true));	
+			$this->redirect(Ccc::getBlock('Product_Grid')->getUrl('grid','product',[],true));	
 		} catch (Exception $e) {
 			echo $e->getMessage();
 		}

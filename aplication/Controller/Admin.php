@@ -5,7 +5,10 @@ class Controller_Admin extends Controller_Core_Action{
 
 	public function gridAction()
 	{
-		Ccc::getBlock('Admin_Grid')->toHtml();
+		$this->getLayout()->getHeader()->setData(['name'=>'Hardik']);
+
+		$this->randerLayout();
+		//Ccc::getBlock('Admin_Grid')->toHtml();
 	}
 
 	public function addAction()
@@ -68,7 +71,7 @@ class Controller_Admin extends Controller_Core_Action{
 					
 				}
 			}
-			$this->redirect($this->getView()->getUrl('grid','admin',[],true));
+			$this->redirect(Ccc::getBlock('Admin_Grid')->getUrl('grid','admin',[],true));
 		}
 		catch(Exception $e){
 			echo $e->getMessage();			
@@ -90,7 +93,7 @@ class Controller_Admin extends Controller_Core_Action{
 				if(!$result){
 					throw new Exception("System is unable to delete data.", 1);	
 				}
-				$this->redirect($this->getView()->getUrl('grid','admin',[],true));
+				$this->redirect(Ccc::getBlock('Admin_Grid')->getUrl('grid','admin',[],true));
 
 			} catch (Exception $e) {
 				echo $e->getMessage();

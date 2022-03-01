@@ -116,7 +116,7 @@ class Controller_Customer extends Controller_Core_Action{
 						throw new Exception("System is unabel to insert your data", 1);
 					}
 					}
-				$this->redirect($this->getView()->getUrl('grid','customer',[],true));
+				$this->redirect(Ccc::getBlock('Customer_Grid')->getUrl('grid','customer',[],true));
 			} catch (Exception $e) {
 				echo $e->getMessage();
 			}
@@ -136,7 +136,7 @@ class Controller_Customer extends Controller_Core_Action{
 				if(!$result){
 					throw new Exception("System is unable to delete data.", 1);	
 				}
-				$this->redirect($this->getView()->getUrl('grid','customer',[],true));
+				$this->redirect(Ccc::getBlock('Customer_Grid')->getUrl('grid','customer',[],true));
 
 			} catch (Exception $e) {
 				echo $e->getMessage();

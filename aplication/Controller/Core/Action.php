@@ -2,19 +2,24 @@
 Ccc::loadClass('Model_Core_View');
 class Controller_Core_Action{
 
-    protected $view = null;
-    public function getView()
+    protected $layout = null;
+    public function getLayout()
     {
-        if(!$this->view){
-            $this->setView(new Model_Core_View);
+        if(!$this->layout){
+            $this->setLayout(Ccc::getBlock('Core_Layout'));
         }
-        return $this->view;
+        return $this->layout;
     }
 
-    public function setView($view)
+    public function setLayout($layout)
     {
-        $this->view = $view;
+        $this->layout = $layout;
         return $this;
+    }
+
+    public function randerLayout()
+    {
+        return $this->getLayout()->toHtml();
     }
 
     public function getAdapter()

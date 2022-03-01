@@ -14,6 +14,7 @@ class Controller_Category_Media extends Controller_Core_Action{
 	{
 		try {
 			$mediaModel = Ccc::getModel('Category_Media');
+			$categoryModel = Ccc::getModel('Category');
 			$request = $this->getRequest();
 			$categoryId = $request->getRequest('id');
 			if($request->isPost()){
@@ -37,6 +38,7 @@ class Controller_Category_Media extends Controller_Core_Action{
 				}
 				else{
 					$mediaData = $mediaModel;
+					$categoryData = $categoryModel;
 					$mediaData->category_id = $categoryId;
 					$postData = $request->getPost();
 					if(array_key_exists('remove',$postData['media'])){
@@ -81,28 +83,31 @@ class Controller_Category_Media extends Controller_Core_Action{
 					unset($mediaData->gallery);
 
 					if(array_key_exists('base',$postData['media'])){
-						$mediaData->base = $postData['media']['base'];
-						$result = $mediaModel->save('category_id','category');
+						$categoryData->category_id = $categoryId;
+						$categoryData->base = $postData['media']['base'];
+						$result = $categoryModel->save();
 						if(!$result){
 							throw new Exception("System is unabel to set base", 1);
 						}
-						unset($mediaData->base);
+						unset($categoryData->base);
 					}
 					if(array_key_exists('thumb',$postData['media'])){
-						$mediaData->thumb = $postData['media']['thumb'];
-						$result = $mediaModel->save('category_id','category');
+						$categoryData->category_id = $categoryId;
+						$categoryData->thumb = $postData['media']['thumb'];
+						$result = $categoryModel->save();
 						if(!$result){
 							throw new Exception("System is unabel to set thumb", 1);
 						}
-						unset($mediaData->thumb);
+						unset($categoryData->thumb);
 					}
 					if(array_key_exists('small',$postData['media'])){
-						$mediaData->small = $postData['media']['small'];
-						$result = $mediaModel->save('category_id','category');
+						$categoryData->category_id = $categoryId;
+						$categoryData->small = $postData['media']['small'];
+						$result = $categoryModel->save();
 						if(!$result){
 							throw new Exception("System is unabel to set small", 1);
 						}
-						unset($mediaData->small);
+						unset($categoryData->small);
 					}
 				}
 			} 	

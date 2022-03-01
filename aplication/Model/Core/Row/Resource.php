@@ -62,12 +62,10 @@ class Model_Core_Row_Resource
 		return $result;
 	}
 
-	public function update(array $updateArray, array $updateWhere,$tableName = null)
+	public function update(array $updateArray, array $updateWhere)
 	{
 		$date = date('Y-m-d H:i:s');
-		if(!$tableName){
-			$tableName = $this->getTableName();
-		}
+		$tableName = $this->getTableName();
 		$valueArray = [];
 		$nullValueArray = [];
 		$key = key($updateWhere);
