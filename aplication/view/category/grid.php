@@ -22,7 +22,9 @@ $categories = $this->getCategory();
             <th>Gallery</th>
         </tr>
         <?php if(!$categories): ?>
-        <tr><td colspan="7">No Recored Receive</td></tr>
+        <tr>
+            <td colspan="11">No Recored Receive</td>
+        </tr>
         <?php else: ?>
         <?php foreach($categories as $category): ?>
         <tr>
@@ -54,5 +56,5 @@ $categories = $this->getCategory();
         </tr>
         <?php endforeach; ?>
         <?php endif; ?>
-    </tabel>
+    </table>
 </div>

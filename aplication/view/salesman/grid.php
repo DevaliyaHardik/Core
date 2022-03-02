@@ -1,11 +1,11 @@
 <?php $salesmans = $this->getSalesman(); ?>
 
 <h1 id="post">Salesman Details</h1>
-<div id="add"><a href="<?php echo $this->getUrl('add','salesman'); ?>">Add Customre</a></div>
+<div id="add"><a href="<?php echo $this->getUrl('add','salesman'); ?>">Add Salesman</a></div>
 <div id="item">
     <table border=1 width=100%>
         <tr>
-            <th>salesman Id</th>
+            <th>Salesman Id</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
@@ -34,6 +34,7 @@
             <td><a href="<?php echo $this->getUrl('edit','salesman',['id' => $salesman->salesman_id],true); ?>">Edit</a></td>
             <td><a href="<?php echo $this->getUrl('delete','salesman',['id' => $salesman->salesman_id],true); ?>">Delete</a></td>
         </tr>
-    <?php endforeach; ?>
-    <?php endif; ?>
+        <?php endforeach; ?>
+        <?php endif; ?>
+    </table>
 </div>
