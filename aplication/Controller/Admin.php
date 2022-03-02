@@ -5,6 +5,10 @@ class Controller_Admin extends Controller_Core_Action{
 
 	public function gridAction()
 	{
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
 		$content = $this->getLayout()->getContent();
 		$adminGrid = Ccc::getBlock('Admin_Grid');
 		$content->addChild($adminGrid);
@@ -16,7 +20,11 @@ class Controller_Admin extends Controller_Core_Action{
 	{
 		$adminModel = Ccc::getModel('Admin');
 		$admin = $adminModel;
-		
+
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
 		$content = $this->getLayout()->getContent();
 		$adminEdit = Ccc::getBlock('Admin_Edit')->addData('admin',$admin);
 		$content->addChild($adminEdit);
@@ -39,6 +47,10 @@ class Controller_Admin extends Controller_Core_Action{
 		if(!$admin){
 			throw new Exception("System is unable to fine recored", 1);
 		}
+		
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
 
 		$content = $this->getLayout()->getContent();
 		$adminEdit = Ccc::getBlock('Admin_Edit')->addData('admin',$admin);

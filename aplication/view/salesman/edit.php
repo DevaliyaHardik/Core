@@ -1,5 +1,4 @@
-<?php
-$countryList = array(
+<?php$countryList = array(
         "Afghanistan",
         "Albania",
         "Algeria",
@@ -249,63 +248,52 @@ $countryList = array(
         "Zambia",
         "Zimbabwe",
         "Åland Islands");
-?>
-<?php 
+
 $salesman = $this->getSalesman();
 ?> 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>salesman Edit</title>
-</head>
-<body>
-	<form action="<?php echo $this->getUrl('save','salesman',['id'=>$salesman->salesman_id],true) ?>" method="POST">
-		<table border="1" width="100%" cellspacing="4">
-			<tr>
-				<td colspan="2"><b>Personal Information</b></td>
-			</tr>
-			<tr>
-				<td width="10%">First Name</td>
-				<td><input type="text" name="salesman[firstName]" value=<?php echo $salesman->firstName ?>></td>
-			</tr>
-			
-			<tr>
-				<td width="10%">Last Name</td>
-				<td><input type="text" name="salesman[lastName]" value=<?php echo $salesman->lastName ?>></td>
-			</tr>
-			<tr>
-				<td width="10%">Email</td>
-				<td><input type="text" name="salesman[email]" value=<?php echo $salesman->email ?>></td>
-			</tr>
-			<tr>
-				<td width="10%">Mobile</td>
-				<td><input type="text" name="salesman[mobile]" value=<?php echo $salesman->mobile ?>></td>
-			</tr>
-			<tr>
-				<td width="10%">Status</td>
-				<td>
-					<select name="salesman[status]">
-						<?php if($salesman->status == 1): ?>
-							<option value="1" selected>Enabel</option>
-							<option value="2">Desabel</option>
-						<?php else: ?>
-							<option value="1">Enabel</option>
-							<option value="2" selected>Desabel</option>
-						<?php endif; ?>
-					</select>
-				</td>
-			</tr>
-                        <tr>
-                    <td width="10%"></td>
-                    <td>
-                        <input type="submit" name="submit" id="submit" value="save">
-                        <button><a href="<?php echo $this->getUrl('grid','salesman',); ?>">Cancel</a></button>
-                    </td>
-                </tr>
-		</table>	
-	</form>
-</body>
-</html>
+
+<form action="<?php echo $this->getUrl('save','salesman',['id'=>$salesman->salesman_id],true) ?>" method="POST">
+    <table border="1" width="100%" cellspacing="4">
+        <tr>
+            <td colspan="2"><b>Personal Information</b></td>
+        </tr>
+        <tr>
+            <td width="10%">First Name</td>
+            <td><input type="text" name="salesman[firstName]" value=<?php echo $salesman->firstName ?>></td>
+        </tr>
+        
+        <tr>
+            <td width="10%">Last Name</td>
+            <td><input type="text" name="salesman[lastName]" value=<?php echo $salesman->lastName ?>></td>
+        </tr>
+        <tr>
+            <td width="10%">Email</td>
+            <td><input type="text" name="salesman[email]" value=<?php echo $salesman->email ?>></td>
+        </tr>
+        <tr>
+            <td width="10%">Mobile</td>
+            <td><input type="text" name="salesman[mobile]" value=<?php echo $salesman->mobile ?>></td>
+        </tr>
+        <tr>
+            <td width="10%">Status</td>
+            <td>
+                <select name="salesman[status]">
+                    <?php if($salesman->status == 1): ?>
+                        <option value="1" selected>Enabel</option>
+                        <option value="2">Desabel</option>
+                    <?php else: ?>
+                        <option value="1">Enabel</option>
+                        <option value="2" selected>Desabel</option>
+                    <?php endif; ?>
+                </select>
+            </td>
+        </tr>
+                    <tr>
+                <td width="10%"></td>
+                <td>
+                    <input type="submit" name="submit" id="submit" value="save">
+                    <button><a href="<?php echo $this->getUrl('grid','salesman',); ?>">Cancel</a></button>
+                </td>
+            </tr>
+    </table>	
+</form>

@@ -5,7 +5,15 @@ class Controller_Customer extends Controller_Core_Action{
 
 	public function gridAction()
 	{
-		Ccc::getBlock('Customer_Grid')->toHtml();
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
+		$content = $this->getLayout()->getContent();
+		$customerGrid = Ccc::getBlock('Customer_Grid');
+		$content->addChild($customerGrid);
+
+		$this->randerLayout();
 	}
 
 	public function addAction()
@@ -13,7 +21,16 @@ class Controller_Customer extends Controller_Core_Action{
 		$customerModel = Ccc::getModel("Customer");
 		$customer = $customerModel;
 		$address = $customerModel;
-		Ccc::getBlock("Customer_Edit")->addData('customer',$customer)->addData('address',$address)->toHtml();
+
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
+		$content = $this->getLayout()->getContent();
+		$customerEdit = Ccc::getBlock('Customer_Edit')->addData('customer',$customer)->addData('address',$address);
+		$content->addChild($customerEdit);
+
+		$this->randerLayout();
 	}
 
 	public function editAction()
@@ -33,7 +50,16 @@ class Controller_Customer extends Controller_Core_Action{
 		if(!$customer){
 			throw new Exception("System is unable to fine recored", 1);
 		}
-		Ccc::getBlock("Customer_Edit")->addData('customer',$customer)->addData('address',$address)->toHtml();
+
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
+		$content = $this->getLayout()->getContent();
+		$customerEdit = Ccc::getBlock('Customer_Edit')->addData('customer',$customer)->addData('address',$address);
+		$content->addChild($customerEdit);
+
+		$this->randerLayout();
 	}
 
 	protected function saveCustomer()

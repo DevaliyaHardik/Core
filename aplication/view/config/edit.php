@@ -1,16 +1,4 @@
-
-<?php $config=$this->getConfig(); 
-?>
-
-<?php
-
-	
-
-
-?>
-<html>
-<head><title>Config Edit</title></head>
-<body>
+<?php $config=$this->getConfig(); ?>
 
 <form action="<?php echo $this->getUrl('save','config',['id'=>$config->config_id],true) ?>" method="POST">
 	<table border="1" width="100%" cellspacing="4">
@@ -54,5 +42,3 @@
 		
 	</table>	
 </form>
-</body>
-</html>
