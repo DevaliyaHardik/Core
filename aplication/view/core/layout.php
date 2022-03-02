@@ -9,7 +9,7 @@
 <body>
     <table border="1" width="100%">
         <tr>
-            <td><?php print_r($this->getHeader()->getData('name')); ?></td>
+            <td><?php $this->getHeader()->toHtml(); ?></td>
         </tr>
         <tr>
             <td><?php $this->getContent()->toHtml(); ?></td>
