@@ -107,7 +107,7 @@ class Controller_Product extends Controller_Core_Action{
 
 			$medias = $mediaModel->fetchAll("SELECT * FROM `product_media` WHERE `product_id` = '$productId'");
 			foreach($medias as $media){
-				unlink($this->getView()->getBaseUrl("Media/Product/"). $media->name);
+				unlink(Ccc::getBlock('Product_Grid')->getBaseUrl("Media/Product/"). $media->name);
 			}
 
 			$result = $productModel->load($productId)->delete();
