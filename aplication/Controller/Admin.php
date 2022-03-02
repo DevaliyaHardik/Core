@@ -5,11 +5,7 @@ class Controller_Admin extends Controller_Core_Action{
 
 	public function gridAction()
 	{
-		$content = $this->getLayout()->getContent();
-		$adminGrid = Ccc::getBlock('Admin_Grid');
-		$content->addChild($adminGrid);
-
-		$this->randerLayout();
+		Ccc::getBlock('Admin_Grid')->toHtml();
 	}
 
 	public function addAction()
@@ -17,11 +13,7 @@ class Controller_Admin extends Controller_Core_Action{
 		$adminModel = Ccc::getModel('Admin');
 		$admin = $adminModel;
 		
-		$content = $this->getLayout()->getContent();
-		$adminEdit = Ccc::getBlock('Admin_Edit')->addData('admin',$admin);
-		$content->addChild($adminEdit);
-
-		$this->randerLayout();
+		Ccc::getBlock('Admin_Edit')->addData('admin',$admin)->toHtml();
 	}
 
 	public function editAction()
@@ -40,12 +32,7 @@ class Controller_Admin extends Controller_Core_Action{
 			throw new Exception("System is unable to fine recored", 1);
 		}
 
-		$content = $this->getLayout()->getContent();
-		$adminEdit = Ccc::getBlock('Admin_Edit')->addData('admin',$admin);
-		$content->addChild($adminEdit);
-
-		$this->randerLayout();
-
+		Ccc::getBlock('Admin_Edit')->addData('admin',$admin)->toHtml();
 	}
 
 	public function saveAction()
