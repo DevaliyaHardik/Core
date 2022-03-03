@@ -50,8 +50,7 @@ class Controller_Admin extends Controller_Core_Action{
 		
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
+		$header->addChild($menu);
 
 		$content = $this->getLayout()->getContent();
 		$adminEdit = Ccc::getBlock('Admin_Edit')->addData('admin',$admin);
