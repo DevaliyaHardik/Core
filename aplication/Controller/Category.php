@@ -6,7 +6,8 @@ class Controller_Category extends Controller_Core_Action{
 	{
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$categoryGrid = Ccc::getBlock('Category_Grid');
@@ -22,7 +23,8 @@ class Controller_Category extends Controller_Core_Action{
 
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$categoryEdit = Ccc::getBlock('Category_Edit')->addData('category',$category);
@@ -37,19 +39,20 @@ class Controller_Category extends Controller_Core_Action{
 		$request = $this->getRequest();
         $categoryId = $request->getRequest('id');
         if(!$categoryId){
-            throw new Exception("Invalid request", 1);
+			$this->getMessage()->addMessage('Your data con not be fetch');
         }
         if(!(int)$categoryId){
-            throw new Exception("Invalid request", 1);
+			$this->getMessage()->addMessage('Your data con not be fetch');
         }
         $category = $categoryModel->load($categoryId);
         if(!$category){
-            throw new Exception("Invalid request", 1);
+			$this->getMessage()->addMessage('Your data con not be fetch');
         }
 
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$categoryEdit = Ccc::getBlock('Category_Edit')->addData('category',$category);
@@ -75,7 +78,7 @@ class Controller_Category extends Controller_Core_Action{
 					}
 					$result = $categoryModel->save();
 					if(!$result){
-						throw new Exception("Sysetm is unable to save your data", 1);	
+						$this->getMessage()->addMessage('Your data con not be updated');
 					}
 					
                     $allPath = $categoryModel->fetchAll("SELECT * FROM `category` WHERE `path` LIKE '%$categoryId%' ");
@@ -99,6 +102,7 @@ class Controller_Category extends Controller_Core_Action{
 						}
                         $result = $path->save();
                     }
+					$this->getMessage()->addMessage('Your Data Updated Successfully');
 				}
 				else{
 					$categoryData->createdDate = date('y-m-d h:m:s');
@@ -106,7 +110,7 @@ class Controller_Category extends Controller_Core_Action{
                         unset($categoryData->parent_id);
                         $insertId = $categoryModel->save();
                         if(!$insertId){
-                            throw new Exception("system is unabel to insert your data", 1);
+							$this->getMessage()->addMessage('Your data con not be saved');
                         }
 						$categoryData->resetData();
                         $categoryData->path = $insertId;
@@ -116,7 +120,7 @@ class Controller_Category extends Controller_Core_Action{
 					else{
                         $insertId = $categoryModel->save();
                         if(!$insertId){
-                            throw new Exception("system is unabel to insert your data", 1);
+							$this->getMessage()->addMessage('Your data con not be saved');
                         }
 						$categoryData->category_id = $insertId;
                         $parentPath = $categoryModel->load($categoryData->parent_id);
@@ -124,13 +128,14 @@ class Controller_Category extends Controller_Core_Action{
 						$result = $categoryData->save();
 					}
 					if(!$result){
-						throw new Exception("Sysetm is unable to save your data", 1);	
+						$this->getMessage()->addMessage('Your data con not be saved');
 					}
+					$this->getMessage()->addMessage('Your Data Save Successfully');
 				}
 				$this->redirect(Ccc::getBlock('Category_Grid')->getUrl('grid','category',[],true));
 			}
 		} catch (Exception $e) {
-			echo $e->getMessage();
+			$this->redirect(Ccc::getBlock('Category_Grid')->getUrl('grid','category',[],true));
 		}
 	}
 
@@ -141,7 +146,7 @@ class Controller_Category extends Controller_Core_Action{
 			$mediaModel = Ccc::getModel('Category_Media');
             $request = $this->getRequest();
 			if(!$request->getRequest('id')){
-				throw new Exception("Invalid Request", 1);
+				$this->getMessage()->addMessage('Your Data can not be Deleted');
 			}
 		    $categoryId = $request->getRequest('id');
 			
@@ -151,8 +156,9 @@ class Controller_Category extends Controller_Core_Action{
 			}
 		    $result = $categoryModel->load($categoryId)->delete();
 		    if(!$result){
-				throw new Exception("System is unable to delete data.", 1);
+				$this->getMessage()->addMessage('Your Data can not Deleted');
 		    }
+			$this->getMessage()->addMessage('Your Data Delete Successfully');
 			$this->redirect(Ccc::getBlock('Category_Grid')->getUrl('grid','category',[],true));
 		} catch (Exception $e) {
 			echo $e->getMessage();

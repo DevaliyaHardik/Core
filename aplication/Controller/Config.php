@@ -7,7 +7,9 @@ class Controller_Config extends Controller_Core_Action{
 	{
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
+
 
 		$content = $this->getLayout()->getContent();
 		$configGrid = Ccc::getBlock('Config_Grid');
@@ -23,7 +25,9 @@ class Controller_Config extends Controller_Core_Action{
 
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
+
 
 		$content = $this->getLayout()->getContent();
 		$configEdit = Ccc::getBlock('Config_Edit')->addData('config',$config);
@@ -38,19 +42,21 @@ class Controller_Config extends Controller_Core_Action{
 		$request = $this->getRequest();
 		$configId = $request->getRequest('id');
 		if(!$configId){
-			throw new Exception("Id is not valid", 1);
+			$this->getMessage()->addMessage('Your data con not be fetch');
 		}
 		if(!(int)$configId){
-			throw new Exception("Invalid request", 1);
+			$this->getMessage()->addMessage('Your data con not be fetch');
 		}
 		$config = $configModel->load($configId);
 		if(!$config){
-			throw new Exception("System is unable to fine recored", 1);
+			$this->getMessage()->addMessage('Your data con not be fetch');
 		}
 
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
+
 
 		$content = $this->getLayout()->getContent();
 		$configEdit = Ccc::getBlock('Config_Edit')->addData('config',$config);
@@ -69,7 +75,7 @@ class Controller_Config extends Controller_Core_Action{
 				$postData = $request->getPost('config');
 				if(!$postData)
 				{
-					throw new Exception("Invalid data posted.", 1);	
+					$this->getMessage()->addMessage('Your data con not be updated');
 				}
 
 				$configData = $configModel->setData($postData);
@@ -79,8 +85,9 @@ class Controller_Config extends Controller_Core_Action{
 					$config = $configModel->save();
 					
 					if(!$config){
-						throw new Exception("System is unable to edit your data.", 1);	
+						$this->getMessage()->addMessage('Your data con not be updated');
 					}
+					$this->getMessage()->addMessage('Your Data Updated Successfully');
 				}
 				else{
 					unset($configData->config_id);
@@ -88,9 +95,9 @@ class Controller_Config extends Controller_Core_Action{
 					$configId = $configModel->save();
 					
 					if(!$configId){
-						throw new Exception("System is unable to insert your data.", 1);	
+						$this->getMessage()->addMessage('Your data con not be saved');
 					}
-					
+					$this->getMessage()->addMessage('Your Data Save Successfully');
 				}
 			}
 			$this->redirect(Ccc::getBlock('Config_Grid')->getUrl('grid','config',[],true));
@@ -108,13 +115,14 @@ class Controller_Config extends Controller_Core_Action{
 		if(!$request->isPost()){
 			try {
 				if(!$request->getRequest('id')){
-					throw new Exception("System is unable to delete your data",1);
+					$this->getMessage()->addMessage('Your Data can not be Deleted');
 				}
 				$configId = $request->getRequest('id');
 				$result = $configModel->load($configId)->delete();
 				if(!$result){
 					throw new Exception("System is unable to delete data.", 1);	
 				}
+				$this->getMessage()->addMessage('Your Data Delete Successfully');
 				$this->redirect(Ccc::getBlock('Config_Grid')->getUrl('grid','config',[],true));
 
 			} catch (Exception $e) {
