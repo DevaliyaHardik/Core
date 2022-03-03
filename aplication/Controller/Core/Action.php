@@ -2,6 +2,7 @@
 Ccc::loadClass('Model_Core_View');
 class Controller_Core_Action{
 
+    protected $message;
     protected $layout = null;
     public function getLayout()
     {
@@ -37,6 +38,21 @@ class Controller_Core_Action{
     {
         header("location: $url");
     }
+
+    public function getMessage()
+    {
+        if(!$this->message){
+            $this->message = Ccc::getModel('Core_Message');
+        }
+        return $this->message;
+    }
+
+    public function setMessage($message)
+    {
+        $this->message = $message;
+        return $this;
+    }
+
 }
 
 ?>

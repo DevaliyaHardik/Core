@@ -7,12 +7,13 @@ class Controller_Admin extends Controller_Core_Action{
 	{
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$adminGrid = Ccc::getBlock('Admin_Grid');
 		$content->addChild($adminGrid);
-
+		
 		$this->randerLayout();
 	}
 
@@ -23,7 +24,8 @@ class Controller_Admin extends Controller_Core_Action{
 
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$adminEdit = Ccc::getBlock('Admin_Edit')->addData('admin',$admin);
@@ -38,19 +40,20 @@ class Controller_Admin extends Controller_Core_Action{
 		$request = $this->getRequest();
 		$adminId = $request->getRequest('id');
 		if(!$adminId){
-			throw new Exception("Id is not valid", 1);
+			$this->getMessage()->addMessage('Your data con not be fetch');
 		}
 		if(!(int)$adminId){
-			throw new Exception("Invalid request", 1);
+			$this->getMessage()->addMessage('Your data con not be fetch');
 		}
 		$admin = $adminModel->load($adminId);
 		if(!$admin){
-			throw new Exception("System is unable to fine recored", 1);
+			$this->getMessage()->addMessage('Your data con not be fetch');
 		}
 		
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$adminEdit = Ccc::getBlock('Admin_Edit')->addData('admin',$admin);
@@ -70,7 +73,7 @@ class Controller_Admin extends Controller_Core_Action{
 				$postData = $request->getPost('admin');
 				if(!$postData)
 				{
-					throw new Exception("Invalid data posted.", 1);	
+					$this->getMessage()->addMessage('Your data con not be updated');
 				}
 
 				$adminData = $adminModel->setData($postData);
@@ -81,8 +84,9 @@ class Controller_Admin extends Controller_Core_Action{
 					$admin = $adminModel->save();
 					
 					if(!$admin){
-						throw new Exception("System is unable to edit your data.", 1);	
+						$this->getMessage()->addMessage('Your data con not be updated');
 					}
+					$this->getMessage()->addMessage('Your Data Updated Successfully');
 				}
 				else{
 					unset($adminData->admin_id);
@@ -90,15 +94,15 @@ class Controller_Admin extends Controller_Core_Action{
 					$adminId = $adminModel->save();
 					
 					if(!$adminId){
-						throw new Exception("System is unable to insert your data.", 1);	
+						$this->getMessage()->addMessage('Your data con not be saved');
 					}
-					
+					$this->getMessage()->addMessage('Your Data Save Successfully');
 				}
 			}
 			$this->redirect(Ccc::getBlock('Admin_Grid')->getUrl('grid','admin',[],true));
 		}
 		catch(Exception $e){
-			echo $e->getMessage();			
+			$this->redirect(Ccc::getBlock('Admin_Grid')->getUrl('grid','admin',[],true));
 		}
 
 	}
@@ -110,17 +114,18 @@ class Controller_Admin extends Controller_Core_Action{
 		if(!$request->isPost()){
 			try {
 				if(!$request->getRequest('id')){
-					throw new Exception("System is unable to delete your data",1);
+					$this->getMessage()->addMessage('Your Data can not be Deleted');
 				}
 				$adminId = $request->getRequest('id');
 				$result = $adminModel->load($adminId)->delete();
 				if(!$result){
-					throw new Exception("System is unable to delete data.", 1);	
+					$this->getMessage()->addMessage('Your Data can not Deleted');
 				}
+				$this->getMessage()->addMessage('Your Data Delete Successfully');
 				$this->redirect(Ccc::getBlock('Admin_Grid')->getUrl('grid','admin',[],true));
 
 			} catch (Exception $e) {
-				echo $e->getMessage();
+				$this->redirect(Ccc::getBlock('Admin_Grid')->getUrl('grid','admin',[],true));
 			}	
 		}
 	}

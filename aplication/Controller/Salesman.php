@@ -7,7 +7,8 @@ class Controller_Salesman extends Controller_Core_Action{
 	{
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$salesmanGrid = Ccc::getBlock('Salesman_Grid');
@@ -60,7 +61,7 @@ class Controller_Salesman extends Controller_Core_Action{
 	}
 
 	public function saveAction()
-	{
+	{		
 		try {
 			$request = $this->getRequest();
 			$salesmanModel = Ccc::getModel('Salesman');
@@ -79,25 +80,24 @@ class Controller_Salesman extends Controller_Core_Action{
 					$salesman = $salesmanModel->save();
 					
 					if(!$salesman){
-						echo $e->getMessage();
+						$this->getMessage()->addMessage('Your Data Can not updated');
 					}
+					$this->getMessage()->addMessage('Your Data Updated Successfully');
 				}
 				else{
 					$salesmanData->createdDate = date("Y-m-d h:i:s");					;
 					$salesmanId = $salesmanModel->save();
 	
 					if(!$salesmanId){
-						echo $e->getMessage();
+						$this->getMessage()->addMessage('Your Data Can not saved');
 					}
-					
+					$this->getMessage()->addMessage('Your Data Saved Successfully');
 				}
 			}
-			if(!$salesmanId){
-				throw new Exception("System is unabel to insert your data", 1);
-			}
+
 			$this->redirect(Ccc::getBlock('Salesman_Grid')->getUrl('grid','salesman'));
-			} catch (Exception $e) {
-				echo $e->getMessage();
+			} catch (Exception $e){
+				$this->redirect(Ccc::getBlock('Salesman_Grid')->getUrl('grid','salesman'));
 			}
 	}
 
@@ -113,8 +113,10 @@ class Controller_Salesman extends Controller_Core_Action{
 				$salesmanId=$request->getRequest('id');
 				$result = $deleteModel->load($salesmanId)->delete();
 				if(!$result){
-					throw new Exception("System is unable to delete data.", 1);	
+					$this->getMessage()->addMessage('Your Data Saved Successfully');
 				}
+				$this->getMessage()->addMessage('Your Data Saved Successfully');
+
 				$this->redirect(Ccc::getBlock('Salesman_Grid')->getUrl('grid','salesman',[],true));
 
 			} catch (Exception $e) {
