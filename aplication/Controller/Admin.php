@@ -7,8 +7,7 @@ class Controller_Admin extends Controller_Core_Action{
 	{
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
+		$header->addChild($menu);
 
 		$content = $this->getLayout()->getContent();
 		$adminGrid = Ccc::getBlock('Admin_Grid');
@@ -24,8 +23,7 @@ class Controller_Admin extends Controller_Core_Action{
 
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
+		$header->addChild($menu);
 
 		$content = $this->getLayout()->getContent();
 		$adminEdit = Ccc::getBlock('Admin_Edit')->addData('admin',$admin);
@@ -40,14 +38,14 @@ class Controller_Admin extends Controller_Core_Action{
 		$request = $this->getRequest();
 		$adminId = $request->getRequest('id');
 		if(!$adminId){
-			$this->getMessage()->addMessage('Your data con not be fetch');
+			throw new Exception("Invalid Request", 1);
 		}
 		if(!(int)$adminId){
-			$this->getMessage()->addMessage('Your data con not be fetch');
+			throw new Exception("Invalid Request", 1);
 		}
 		$admin = $adminModel->load($adminId);
 		if(!$admin){
-			$this->getMessage()->addMessage('Your data con not be fetch');
+			throw new Exception("Invalid Request", 1);
 		}
 		
 		$header = $this->getLayout()->getHeader();
@@ -73,7 +71,7 @@ class Controller_Admin extends Controller_Core_Action{
 				$postData = $request->getPost('admin');
 				if(!$postData)
 				{
-					$this->getMessage()->addMessage('Your data con not be updated');
+					throw new Exception("Invalid Request", 1);
 				}
 
 				$adminData = $adminModel->setData($postData);
@@ -84,9 +82,8 @@ class Controller_Admin extends Controller_Core_Action{
 					$admin = $adminModel->save();
 					
 					if(!$admin){
-						$this->getMessage()->addMessage('Your data con not be updated');
+						throw new Exception("Invalid Request", 1);
 					}
-					$this->getMessage()->addMessage('Your Data Updated Successfully');
 				}
 				else{
 					unset($adminData->admin_id);
@@ -94,15 +91,14 @@ class Controller_Admin extends Controller_Core_Action{
 					$adminId = $adminModel->save();
 					
 					if(!$adminId){
-						$this->getMessage()->addMessage('Your data con not be saved');
+						throw new Exception("Invalid Request", 1);
 					}
-					$this->getMessage()->addMessage('Your Data Save Successfully');
 				}
 			}
 			$this->redirect(Ccc::getBlock('Admin_Grid')->getUrl('grid','admin',[],true));
 		}
 		catch(Exception $e){
-			$this->redirect(Ccc::getBlock('Admin_Grid')->getUrl('grid','admin',[],true));
+			echo $e->getMeaage();
 		}
 
 	}
@@ -114,18 +110,17 @@ class Controller_Admin extends Controller_Core_Action{
 		if(!$request->isPost()){
 			try {
 				if(!$request->getRequest('id')){
-					$this->getMessage()->addMessage('Your Data can not be Deleted');
+					throw new Exception("Invalid Request", 1);
 				}
 				$adminId = $request->getRequest('id');
 				$result = $adminModel->load($adminId)->delete();
 				if(!$result){
-					$this->getMessage()->addMessage('Your Data can not Deleted');
+					throw new Exception("Invalid Request", 1);
 				}
-				$this->getMessage()->addMessage('Your Data Delete Successfully');
 				$this->redirect(Ccc::getBlock('Admin_Grid')->getUrl('grid','admin',[],true));
 
 			} catch (Exception $e) {
-				$this->redirect(Ccc::getBlock('Admin_Grid')->getUrl('grid','admin',[],true));
+				echo $e->getMessage();
 			}	
 		}
 	}

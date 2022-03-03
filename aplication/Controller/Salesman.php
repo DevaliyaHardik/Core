@@ -7,8 +7,7 @@ class Controller_Salesman extends Controller_Core_Action{
 	{
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
+		$header->addChild($menu);
 
 		$content = $this->getLayout()->getContent();
 		$salesmanGrid = Ccc::getBlock('Salesman_Grid');
@@ -39,7 +38,7 @@ class Controller_Salesman extends Controller_Core_Action{
 		$request = $this->getRequest();
 		$salesmanId = $request->getRequest('id');
 		if(!$salesmanId){
-			throw new Exception("Id is not valid", 1);
+			throw new Exception("Invalid Request", 1);
 		}
 		if(!(int)$salesmanId){
 			throw new Exception("Invalid request", 1);
@@ -80,9 +79,8 @@ class Controller_Salesman extends Controller_Core_Action{
 					$salesman = $salesmanModel->save();
 					
 					if(!$salesman){
-						$this->getMessage()->addMessage('Your Data Can not updated');
+						throw new Exception("Invalid Request", 1);
 					}
-					$this->getMessage()->addMessage('Your Data Updated Successfully');
 				}
 				else{
 					$salesmanData->createdDate = date("Y-m-d h:i:s");					;
@@ -91,7 +89,6 @@ class Controller_Salesman extends Controller_Core_Action{
 					if(!$salesmanId){
 						$this->getMessage()->addMessage('Your Data Can not saved');
 					}
-					$this->getMessage()->addMessage('Your Data Saved Successfully');
 				}
 			}
 
@@ -113,9 +110,8 @@ class Controller_Salesman extends Controller_Core_Action{
 				$salesmanId=$request->getRequest('id');
 				$result = $deleteModel->load($salesmanId)->delete();
 				if(!$result){
-					$this->getMessage()->addMessage('Your Data Saved Successfully');
+					throw new Exception("Invalid Request", 1);
 				}
-				$this->getMessage()->addMessage('Your Data Saved Successfully');
 
 				$this->redirect(Ccc::getBlock('Salesman_Grid')->getUrl('grid','salesman',[],true));
 
