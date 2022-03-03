@@ -13,18 +13,18 @@ class Model_Core_Message{
 
 	public function addMessage($message,$type = null)
 	{
-		$messages = [
+		$types = [
 			self::MESSAGE_SUCCESS => self::MESSAGE_SUCCESS_LBL,
 			self::MESSAGE_WARNING => self::MESSAGE_WARNING_LBL,
 			self::MESSAGE_ERROR => self::MESSAGE_ERROR_LBL,
             self::MESSAGE_DEFAULT => self::MESSAGE_SUCCESS_LBL
 		];
 
-		if(!array_key_exists($type, $messages))
+		if(!array_key_exists($type, $types))
 		{
 			$type = self::MESSAGE_DEFAULT;
 		}
-        $type = $messages[$type];
+        $type = $types[$type];
 
         $this->getSession()->start();
         $_SESSION['message'][$type] = $message;
