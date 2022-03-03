@@ -5,15 +5,7 @@ class Controller_Vendor extends Controller_Core_Action{
 
     public function gridAction()
     {
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
-
-		$content = $this->getLayout()->getContent();
-		$vendorGrid = Ccc::getBlock('Vendor_Grid');
-		$content->addChild($vendorGrid);
-
-        $this->randerLayout();
+		Ccc::getBlock('Vendor_Grid')->toHtml();
     }
 
     public function addAction()
@@ -22,15 +14,7 @@ class Controller_Vendor extends Controller_Core_Action{
         $vendor = $vendorModel;
         $address = $vendorModel;
 
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
-
-		$content = $this->getLayout()->getContent();
-		$vendorEdit = Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->addData('address',$address);
-		$content->addChild($vendorEdit);
-
-        $this->randerLayout();
+		Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->addData('address',$address)->toHtml();
     }
 
     public function editAction()
@@ -43,15 +27,7 @@ class Controller_Vendor extends Controller_Core_Action{
         $vendor = $vendorModel->load($vendorId);
         $address = $addressModel->load($vendorId);
 
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
-
-		$content = $this->getLayout()->getContent();
-		$vendorEdit = Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->addData('address',$address);
-		$content->addChild($vendorEdit);
-
-        $this->randerLayout();
+		Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->addData('address',$address)->toHtml();
     }
 
     public function saveVendor()

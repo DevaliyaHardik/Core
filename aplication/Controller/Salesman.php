@@ -5,31 +5,14 @@ class Controller_Salesman extends Controller_Core_Action{
 
 	public function gridAction()
 	{
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
-
-		$content = $this->getLayout()->getContent();
-		$salesmanGrid = Ccc::getBlock('Salesman_Grid');
-		$content->addChild($salesmanGrid);
-
-		$this->randerLayout();
+		Ccc::getBlock('Salesman_Grid')->toHtml();
 	}
 
 	public function addAction()
 	{
 		$salesmanModel = Ccc::getModel("Salesman");
 		$salesman = $salesmanModel;
-
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
-
-		$content = $this->getLayout()->getContent();
-		$salesmanEdit = Ccc::getBlock('Salesman_Edit')->addData('salesman',$salesman);
-		$content->addChild($salesmanEdit);
-
-		$this->randerLayout();
+		Ccc::getBlock('Salesman_Edit')->addData('salesman',$salesman)->toHtml();
 	}
 
 	public function editAction()
@@ -48,15 +31,7 @@ class Controller_Salesman extends Controller_Core_Action{
 			throw new Exception("System is unable to fine recored", 1);
 		}
 
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
-
-		$content = $this->getLayout()->getContent();
-		$salesmanEdit = Ccc::getBlock('Salesman_Edit')->addData('salesman',$salesman);
-		$content->addChild($salesmanEdit);
-
-		$this->randerLayout();
+		Ccc::getBlock('Salesman_Edit')->addData('salesman',$salesman)->toHtml();
 	}
 
 	public function saveAction()

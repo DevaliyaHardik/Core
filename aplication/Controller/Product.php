@@ -5,31 +5,14 @@ class Controller_Product extends Controller_Core_Action{
 
 	public function gridAction()
 	{
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
-
-		$content = $this->getLayout()->getContent();
-		$productGrid = Ccc::getBlock('Product_Grid');
-		$content->addChild($productGrid);
-
-		$this->randerLayout();
+		Ccc::getBlock('Product_Grid')->toHtml();
 	}
 
 	public function addAction()
 	{
 		$productModel = Ccc::getModel('Product');
 		$product = $productModel;
-
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
-
-		$content = $this->getLayout()->getContent();
-		$productEdit = Ccc::getBlock('Product_Edit')->addData('product',$product);
-		$content->addChild($productEdit);
-
-		$this->randerLayout();
+		Ccc::getBlock('Product_Edit')->addData('product',$product)->toHtml();
 	}
 
 	public function editAction()
@@ -48,16 +31,7 @@ class Controller_Product extends Controller_Core_Action{
 		if(!$product){
 			throw new Exception("System is unable to fwetch recored", 1);
 		}
-
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
-
-		$content = $this->getLayout()->getContent();
-		$productEdit = Ccc::getBlock('Product_Edit')->addData('product',$product);
-		$content->addChild($productEdit);
-
-		$this->randerLayout();
+		Ccc::getBlock('Product_Edit')->addData('product',$product)->toHtml();
 	}
 
 	public function saveAction()
