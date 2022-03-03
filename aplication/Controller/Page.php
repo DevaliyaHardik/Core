@@ -7,7 +7,8 @@ class Controller_Page extends Controller_Core_Action{
 	{
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$pageGrid = Ccc::getBlock('Page_Grid');
@@ -23,7 +24,8 @@ class Controller_Page extends Controller_Core_Action{
 
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$pageEdit = Ccc::getBlock('Page_Edit')->addData('page',$page);
@@ -38,19 +40,23 @@ class Controller_Page extends Controller_Core_Action{
 		$request = $this->getRequest();
 		$pageId = $request->getRequest('id');
 		if(!$pageId){
-			throw new Exception("Id is not valid", 1);
+			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+			throw new Exception("Error Processing Request", 1);			
 		}
 		if(!(int)$pageId){
-			throw new Exception("Invalid request", 1);
+			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+			throw new Exception("Error Processing Request", 1);			
 		}
 		$page = $pageModel->load($pageId);
 		if(!$page){
-			throw new Exception("System is unable to fine recored", 1);
+			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+			throw new Exception("Error Processing Request", 1);			
 		}
 
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$pageEdit = Ccc::getBlock('Page_Edit')->addData('page',$page);
@@ -69,7 +75,8 @@ class Controller_Page extends Controller_Core_Action{
 				$postData = $request->getPost('page');
 				if(!$postData)
 				{
-					throw new Exception("Invalid data posted.", 1);	
+					$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
+					throw new Exception("Error Processing Request", 1);			
 				}
 
 				$pageData = $pageModel->setData($postData);
@@ -79,8 +86,10 @@ class Controller_Page extends Controller_Core_Action{
 					$page = $pageModel->save();
 					
 					if(!$page){
-						throw new Exception("System is unable to edit your data.", 1);	
+						$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
+						throw new Exception("Error Processing Request", 1);			
 					}
+					$this->getMessage()->addMessage('Your Data Updated Successfully');
 				}
 				else{
 					unset($pageData->page_id);
@@ -88,15 +97,16 @@ class Controller_Page extends Controller_Core_Action{
 					$pageId = $pageModel->save();
 					
 					if(!$pageId){
-						throw new Exception("System is unable to insert your data.", 1);	
+						$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
+						throw new Exception("Error Processing Request", 1);			
 					}
-					
+					$this->getMessage()->addMessage('Your Data Save Successfully');
 				}
 			}
 			$this->redirect(Ccc::getBlock('Page_Grid')->getUrl('grid','page',[],true));
 		}
 		catch(Exception $e){
-			echo $e->getMessage();			
+			$this->redirect(Ccc::getBlock('Page_Grid')->getUrl('grid','page',[],true));
 		}
 
 	}
@@ -108,17 +118,20 @@ class Controller_Page extends Controller_Core_Action{
 		if(!$request->isPost()){
 			try {
 				if(!$request->getRequest('id')){
-					throw new Exception("System is unable to delete your data",1);
+					$this->getMessage()->addMessage('Your Data can not be Deleted', Model_Core_Message::MESSAGE_ERROR);
+					throw new Exception("Error Processing Request", 1);			
 				}
 				$pageId = $request->getRequest('id');
 				$result = $pageModel->load($pageId)->delete();
 				if(!$result){
-					throw new Exception("System is unable to delete data.", 1);	
+					$this->getMessage()->addMessage('Your Data can not be Deleted', Model_Core_Message::MESSAGE_ERROR);
+					throw new Exception("Error Processing Request", 1);			
 				}
+				$this->getMessage()->addMessage('Your Data Delete Successfully');
 				$this->redirect(Ccc::getBlock('Page_Grid')->getUrl('grid','page',[],true));
 
 			} catch (Exception $e) {
-				echo $e->getMessage();
+				$this->redirect(Ccc::getBlock('Page_Grid')->getUrl('grid','page',[],true));
 			}	
 		}
 	}

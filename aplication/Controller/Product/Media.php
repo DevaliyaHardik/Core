@@ -7,7 +7,8 @@ class Controller_Product_Media extends Controller_Core_Action{
 	{
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$mediaGrid = Ccc::getBlock('Product_Media_Grid');
@@ -39,7 +40,8 @@ class Controller_Product_Media extends Controller_Core_Action{
 					if(in_array($fileExt, $extension)){
 						$result = $mediaModel->save();
 						if(!$result){
-							throw new Exception("System is unable to save your data.", 1);
+							$this->getMessage()->addMessage('Your media not saved', Model_Core_Message::MESSAGE_ERROR);
+							throw new Exception("Error Processing Request", 1);
 						}	
 						move_uploaded_file($file['name']['tmp_name'],Ccc::getBlock('Product_Grid')->getBaseUrl("Media/Product/").$fileName);
 					}
@@ -54,7 +56,8 @@ class Controller_Product_Media extends Controller_Core_Action{
 							$media = $mediaModel->load($remove);
 							$result = $media->delete();
 							if(!$result){
-								throw new Exception("Invalid request", 1);
+								$this->getMessage()->addMessage('media not removed', Model_Core_Message::MESSAGE_ERROR);
+								throw new Exception("Error Processing Request", 1);
 							}
 							unlink(Ccc::getBlock('Product_Grid')->getBaseUrl("Media/Product/"). $media->name);
 							
@@ -69,6 +72,7 @@ class Controller_Product_Media extends Controller_Core_Action{
 							}
 
 						}
+						$this->getMessage()->addMessage('Your Media removed');
 					}
 	
 					if(array_key_exists('gallery',$postData['media'])){
@@ -79,10 +83,12 @@ class Controller_Product_Media extends Controller_Core_Action{
 							$mediaData->media_id = $gallery;
 							$result = $mediaModel->save();
 							if(!$result){
-								throw new Exception("Invalid request", 1);
+								$this->getMessage()->addMessage('Gallery Added', Model_Core_Message::MESSAGE_ERROR);
+								throw new Exception("Error Processing Request", 1);
 							}
 						}
 						unset($mediaData->media_id);
+						$this->getMessage()->addMessage('Your Gallery Sellected');
 					}
 					else{
 						$mediaData->gallery = 2;
@@ -95,27 +101,33 @@ class Controller_Product_Media extends Controller_Core_Action{
 						$productData->base = $postData['media']['base'];
 						$result = $productModel->save();
 						if(!$result){
-							throw new Exception("System is unabel to set base", 1);
+							$this->getMessage()->addMessage('Base set successfully', Model_Core_Message::MESSAGE_ERROR);
+							throw new Exception("Error Processing Request", 1);
 						}
 						unset($productData->base);
+						$this->getMessage()->addMessage('Base set successfully');
 					}
 					if(array_key_exists('thumb',$postData['media'])){
 						$productData->product_id = $productId;
 						$productData->thumb = $postData['media']['thumb'];
 						$result = $productModel->save();
 						if(!$result){
-							throw new Exception("System is unabel to set thumb", 1);
+							$this->getMessage()->addMessage('Thumb set successfully', Model_Core_Message::MESSAGE_ERROR);
+							throw new Exception("Error Processing Request", 1);
 						}
 						unset($productData->thumb);
+						$this->getMessage()->addMessage('Thumb set successfully');
 					}
 					if(array_key_exists('small',$postData['media'])){
 						$productData->product_id = $productId;
 						$productData->small = $postData['media']['small'];
 						$result = $productModel->save();
 						if(!$result){
-							throw new Exception("System is unabel to set small", 1);
+							$this->getMessage()->addMessage('Small set successfully', Model_Core_Message::MESSAGE_ERROR);
+							throw new Exception("Error Processing Request", 1);
 						}
 						unset($productData->small);
+						$this->getMessage()->addMessage('Small set successfully');
 					}
 				}
 			} 	

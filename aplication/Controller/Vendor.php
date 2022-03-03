@@ -7,7 +7,8 @@ class Controller_Vendor extends Controller_Core_Action{
     {
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$vendorGrid = Ccc::getBlock('Vendor_Grid');
@@ -24,7 +25,8 @@ class Controller_Vendor extends Controller_Core_Action{
 
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$vendorEdit = Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->addData('address',$address);
@@ -45,7 +47,8 @@ class Controller_Vendor extends Controller_Core_Action{
 
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$vendorEdit = Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->addData('address',$address);
@@ -61,7 +64,8 @@ class Controller_Vendor extends Controller_Core_Action{
         $vendorId = $request->getRequest('id');
         if($request->isPost()){
             if(!$request->getPost('vendor')){
-                throw new Exception("Invalid Request", 1);
+				$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
+                throw new Exception("Error Processing Request", 1);
             }
             $postData = $request->getPost('vendor');
             $vendorData = $vendorModel->setData($postData);
@@ -72,15 +76,19 @@ class Controller_Vendor extends Controller_Core_Action{
 
                 $result = $vendorModel->save();
                 if(!$result){
-                    throw new Exception("System is unabel to update your data", 1);
-                }
+                    $this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
+                    throw new Exception("Error Processing Request", 1);
+				}
+				$this->getMessage()->addMessage('Your Data Updated Successfully');
             }
             else{
                 $vendorData->createdDate = date('Y-m-d h:i:s');
                 $vendorId = $vendorModel->save();
                 if(!$vendorId){
-                    throw new Exception("System is unabel to insert your data", 1);
-                }
+					$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
+                    throw new Exception("Error Processing Request", 1);
+				}
+				$this->getMessage()->addMessage('Your Data Save Successfully');
             }
             return $vendorId;
         }
@@ -92,7 +100,8 @@ class Controller_Vendor extends Controller_Core_Action{
         $request = $this->getRequest('id');
         if($request->isPost()){
             if(!$request->getPost('address')){
-                throw new Exception("Invalid request", 1);
+                $this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
+                throw new Exception("Error Processing Request", 1);
             }
             $postData = $request->getPost('address');
             $addressData = $addressModel->setData($postData);
@@ -101,10 +110,20 @@ class Controller_Vendor extends Controller_Core_Action{
             if($address){
                 $addressData->vendor_id = $vendorId;
                 $result = $addressModel->save();
+                if(!$result){
+                    $this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
+                    throw new Exception("Error Processing Request", 1);
+                }
+                $this->getMessage()->addMessage('Your Data Updated Successfully');
             }
             else{
                 $addressData->vendor_id = $vendorId;
                 $result = $addressModel->save('address_id');
+                if(!$result){
+					$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
+                    throw new Exception("Error Processing Request", 1);
+				}
+				$this->getMessage()->addMessage('Your Data Save Successfully');
             }
             return $result;
         }
@@ -116,17 +135,19 @@ class Controller_Vendor extends Controller_Core_Action{
             $request = $this->getRequest();
             $vendorId = $this->saveVendor();
             if(!$vendorId){
-                throw new Exception("System is unabel to insert your data", 1);
+                $this->getMessage()->addMessage('Your data con not be inserted', Model_Core_Message::MESSAGE_ERROR);
+                throw new Exception("Error Processing Request", 1);
             }
             if(!empty($request->getPost('address')['address'])){
                 $result = $this->saveAddress($vendorId);
                 if(!$result){
-                    throw new Exception("System is unabel to insert your data", 1);
+                    $this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
+                    throw new Exception("Error Processing Request", 1);
                 }
                 }
             $this->redirect(Ccc::getBlock('Vendor_Grid')->getUrl('grid','vendor',[],true));
         } catch (Exception $e) {
-            echo $e->getMessage();
+            $this->redirect(Ccc::getBlock('Vendor_Grid')->getUrl('grid','vendor',[],true));
         }
     
     }
@@ -138,17 +159,20 @@ class Controller_Vendor extends Controller_Core_Action{
         if(!$request->isPost()){
             try {
 				if(!$request->getRequest('id')){
-					throw new Exception("System is unable to delete your data",1);
+					$this->getMessage()->addMessage('Your Data can not be Deleted', Model_Core_Message::MESSAGE_ERROR);
+                    throw new Exception("Error Processing Request", 1);
 				}
 				$vendorId=$request->getRequest('id');
 				$result = $vendorModel->load($vendorId)->delete();
 				if(!$result){
-					throw new Exception("System is unable to delete data.", 1);	
+					$this->getMessage()->addMessage('Your Data can not be Deleted', Model_Core_Message::MESSAGE_ERROR);
+                    throw new Exception("Error Processing Request", 1);
 				}
+				$this->getMessage()->addMessage('Your Data Delete Successfully');
 				$this->redirect(Ccc::getBlock('Vendor_Grid')->getUrl('grid','vendor',[],true));
 
 			} catch (Exception $e) {
-				echo $e->getMessage();
+				$this->redirect(Ccc::getBlock('Vendor_Grid')->getUrl('grid','vendor',[],true));
 			}	
         }
     }

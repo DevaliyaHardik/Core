@@ -42,14 +42,17 @@ class Controller_Config extends Controller_Core_Action{
 		$request = $this->getRequest();
 		$configId = $request->getRequest('id');
 		if(!$configId){
-			$this->getMessage()->addMessage('Your data con not be fetch');
+			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+			throw new Exception("Error Processing Request", 1);			
 		}
 		if(!(int)$configId){
-			$this->getMessage()->addMessage('Your data con not be fetch');
+			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+			throw new Exception("Error Processing Request", 1);			
 		}
 		$config = $configModel->load($configId);
 		if(!$config){
-			$this->getMessage()->addMessage('Your data con not be fetch');
+			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+			throw new Exception("Error Processing Request", 1);			
 		}
 
 		$header = $this->getLayout()->getHeader();
@@ -75,7 +78,8 @@ class Controller_Config extends Controller_Core_Action{
 				$postData = $request->getPost('config');
 				if(!$postData)
 				{
-					$this->getMessage()->addMessage('Your data con not be updated');
+					$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
+					throw new Exception("Error Processing Request", 1);			
 				}
 
 				$configData = $configModel->setData($postData);
@@ -85,7 +89,8 @@ class Controller_Config extends Controller_Core_Action{
 					$config = $configModel->save();
 					
 					if(!$config){
-						$this->getMessage()->addMessage('Your data con not be updated');
+						$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
+						throw new Exception("Error Processing Request", 1);			
 					}
 					$this->getMessage()->addMessage('Your Data Updated Successfully');
 				}
@@ -95,7 +100,8 @@ class Controller_Config extends Controller_Core_Action{
 					$configId = $configModel->save();
 					
 					if(!$configId){
-						$this->getMessage()->addMessage('Your data con not be saved');
+						$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
+						throw new Exception("Error Processing Request", 1);			
 					}
 					$this->getMessage()->addMessage('Your Data Save Successfully');
 				}
@@ -103,7 +109,7 @@ class Controller_Config extends Controller_Core_Action{
 			$this->redirect(Ccc::getBlock('Config_Grid')->getUrl('grid','config',[],true));
 		}
 		catch(Exception $e){
-			echo $e->getMessage();			
+			$this->redirect(Ccc::getBlock('Config_Grid')->getUrl('grid','config',[],true));
 		}
 
 	}
@@ -115,7 +121,8 @@ class Controller_Config extends Controller_Core_Action{
 		if(!$request->isPost()){
 			try {
 				if(!$request->getRequest('id')){
-					$this->getMessage()->addMessage('Your Data can not be Deleted');
+					$this->getMessage()->addMessage('Your Data can not be Deleted', Model_Core_Message::MESSAGE_ERROR);
+					throw new Exception("Error Processing Request", 1);			
 				}
 				$configId = $request->getRequest('id');
 				$result = $configModel->load($configId)->delete();
@@ -126,7 +133,7 @@ class Controller_Config extends Controller_Core_Action{
 				$this->redirect(Ccc::getBlock('Config_Grid')->getUrl('grid','config',[],true));
 
 			} catch (Exception $e) {
-				echo $e->getMessage();
+				$this->redirect(Ccc::getBlock('Config_Grid')->getUrl('grid','config',[],true));
 			}	
 		}
 	}

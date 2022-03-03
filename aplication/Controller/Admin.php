@@ -40,14 +40,17 @@ class Controller_Admin extends Controller_Core_Action{
 		$request = $this->getRequest();
 		$adminId = $request->getRequest('id');
 		if(!$adminId){
-			$this->getMessage()->addMessage('Your data con not be fetch');
+			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+			throw new Exception("Error Processing Request", 1);			
 		}
 		if(!(int)$adminId){
-			$this->getMessage()->addMessage('Your data con not be fetch');
+			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+			throw new Exception("Error Processing Request", 1);			
 		}
 		$admin = $adminModel->load($adminId);
 		if(!$admin){
-			$this->getMessage()->addMessage('Your data con not be fetch');
+			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+			throw new Exception("Error Processing Request", 1);			
 		}
 		
 		$header = $this->getLayout()->getHeader();
@@ -73,7 +76,8 @@ class Controller_Admin extends Controller_Core_Action{
 				$postData = $request->getPost('admin');
 				if(!$postData)
 				{
-					$this->getMessage()->addMessage('Your data con not be updated');
+					$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
+					throw new Exception("Error Processing Request", 1);			
 				}
 
 				$adminData = $adminModel->setData($postData);
@@ -84,7 +88,8 @@ class Controller_Admin extends Controller_Core_Action{
 					$admin = $adminModel->save();
 					
 					if(!$admin){
-						$this->getMessage()->addMessage('Your data con not be updated');
+						$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
+						throw new Exception("Error Processing Request", 1);			
 					}
 					$this->getMessage()->addMessage('Your Data Updated Successfully');
 				}
@@ -94,7 +99,8 @@ class Controller_Admin extends Controller_Core_Action{
 					$adminId = $adminModel->save();
 					
 					if(!$adminId){
-						$this->getMessage()->addMessage('Your data con not be saved');
+						$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
+						throw new Exception("Error Processing Request", 1);			
 					}
 					$this->getMessage()->addMessage('Your Data Save Successfully');
 				}
@@ -115,11 +121,13 @@ class Controller_Admin extends Controller_Core_Action{
 			try {
 				if(!$request->getRequest('id')){
 					$this->getMessage()->addMessage('Your Data can not be Deleted');
+					throw new Exception("Error Processing Request", 1);			
 				}
 				$adminId = $request->getRequest('id');
 				$result = $adminModel->load($adminId)->delete();
 				if(!$result){
-					$this->getMessage()->addMessage('Your Data can not Deleted');
+					$this->getMessage()->addMessage('Your Data can not Deleted', Model_Core_Message::MESSAGE_ERROR);
+					throw new Exception("Error Processing Request", 1);			
 				}
 				$this->getMessage()->addMessage('Your Data Delete Successfully');
 				$this->redirect(Ccc::getBlock('Admin_Grid')->getUrl('grid','admin',[],true));
