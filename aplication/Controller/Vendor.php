@@ -5,7 +5,15 @@ class Controller_Vendor extends Controller_Core_Action{
 
     public function gridAction()
     {
-        Ccc::getBlock('Vendor_Grid')->toHtml();
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
+		$content = $this->getLayout()->getContent();
+		$vendorGrid = Ccc::getBlock('Vendor_Grid');
+		$content->addChild($vendorGrid);
+
+        $this->randerLayout();
     }
 
     public function addAction()
@@ -13,7 +21,16 @@ class Controller_Vendor extends Controller_Core_Action{
         $vendorModel = Ccc::getModel('Vendor');
         $vendor = $vendorModel;
         $address = $vendorModel;
-        Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->addData('address',$address)->toHtml();
+
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
+		$content = $this->getLayout()->getContent();
+		$vendorEdit = Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->addData('address',$address);
+		$content->addChild($vendorEdit);
+
+        $this->randerLayout();
     }
 
     public function editAction()
@@ -26,7 +43,15 @@ class Controller_Vendor extends Controller_Core_Action{
         $vendor = $vendorModel->load($vendorId);
         $address = $addressModel->load($vendorId);
 
-        Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->addData('address',$address)->toHtml();
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
+		$content = $this->getLayout()->getContent();
+		$vendorEdit = Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->addData('address',$address);
+		$content->addChild($vendorEdit);
+
+        $this->randerLayout();
     }
 
     public function saveVendor()
@@ -43,7 +68,7 @@ class Controller_Vendor extends Controller_Core_Action{
 
             if(!empty($vendorId)){
                 $vendorData->vendor_id = $vendorId;
-                $vendorData->updatedDate = date('Y-m-s h:i:s');
+                $vendorData->updatedDate = date('Y-m-d h:i:s');
 
                 $result = $vendorModel->save();
                 if(!$result){
@@ -51,7 +76,7 @@ class Controller_Vendor extends Controller_Core_Action{
                 }
             }
             else{
-                $vendorData->createdDate = date('Y-m-s h:i:s');
+                $vendorData->createdDate = date('Y-m-d h:i:s');
                 $vendorId = $vendorModel->save();
                 if(!$vendorId){
                     throw new Exception("System is unabel to insert your data", 1);

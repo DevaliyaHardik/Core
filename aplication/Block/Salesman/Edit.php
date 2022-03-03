@@ -8,7 +8,7 @@ class Block_Salesman_Edit extends Block_Core_Template
         $this->setTemplate("view/salesman/edit.php");
     }
 
-    public function getsalesman()
+    public function getSalesman()
     {
         $salesman = $this->getData('salesman');
 		return $salesman;

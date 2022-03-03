@@ -5,14 +5,31 @@ class Controller_Config extends Controller_Core_Action{
 
 	public function gridAction()
 	{
-		Ccc::getBlock('Config_Grid')->toHtml();
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
+		$content = $this->getLayout()->getContent();
+		$configGrid = Ccc::getBlock('Config_Grid');
+		$content->addChild($configGrid);
+
+		$this->randerLayout();
 	}
 
 	public function addAction()
 	{
 		$configModel = Ccc::getModel('config');
 		$config = $configModel;
-		Ccc::getBlock("Config_Edit")->addData('config',$config)->toHtml();
+
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
+		$content = $this->getLayout()->getContent();
+		$configEdit = Ccc::getBlock('Config_Edit')->addData('config',$config);
+		$content->addChild($configEdit);
+
+		$this->randerLayout();
 	}
 
 	public function editAction()
@@ -30,7 +47,16 @@ class Controller_Config extends Controller_Core_Action{
 		if(!$config){
 			throw new Exception("System is unable to fine recored", 1);
 		}
-		Ccc::getBlock("Config_Edit")->addData('config',$config)->toHtml();
+
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
+		$content = $this->getLayout()->getContent();
+		$configEdit = Ccc::getBlock('Config_Edit')->addData('config',$config);
+		$content->addChild($configEdit);
+
+		$this->randerLayout();
 	}
 
 	public function saveAction()

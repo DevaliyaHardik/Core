@@ -1,16 +1,4 @@
-
-<?php $page=$this->getPage(); 
-?>
-
-<?php
-
-	
-
-
-?>
-<html>
-<head><title>Page Edit</title></head>
-<body>
+<?php $page=$this->getPage(); ?>
 
 <form action="<?php echo $this->getUrl('save','page',['id'=>$page->page_id],true) ?>" method="POST">
 	<table border="1" width="100%" cellspacing="4">
@@ -54,5 +42,3 @@
 		
 	</table>	
 </form>
-</body>
-</html>

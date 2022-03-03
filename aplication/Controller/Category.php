@@ -4,14 +4,31 @@ class Controller_Category extends Controller_Core_Action{
 
 	public function gridAction()
 	{
-		Ccc::getBlock('Category_Grid')->toHtml();
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
+		$content = $this->getLayout()->getContent();
+		$categoryGrid = Ccc::getBlock('Category_Grid');
+		$content->addChild($categoryGrid);
+
+		$this->randerLayout();
 	}
 
     public function addAction()
 	{
 		$categoryModel = Ccc::getModel('Category');
 		$category = $categoryModel;
-        Ccc::getBlock('Category_Edit')->addData('category',$category)->toHtml();
+
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
+		$content = $this->getLayout()->getContent();
+		$categoryEdit = Ccc::getBlock('Category_Edit')->addData('category',$category);
+		$content->addChild($categoryEdit);
+
+		$this->randerLayout();
 	}
 
     public function editAction()
@@ -29,7 +46,16 @@ class Controller_Category extends Controller_Core_Action{
         if(!$category){
             throw new Exception("Invalid request", 1);
         }
-        Ccc::getBlock('Category_Edit')->addData('category',$category)->toHtml();
+
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
+		$content = $this->getLayout()->getContent();
+		$categoryEdit = Ccc::getBlock('Category_Edit')->addData('category',$category);
+		$content->addChild($categoryEdit);
+
+		$this->randerLayout();
 	}
 
 	public function saveAction()

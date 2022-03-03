@@ -12,9 +12,11 @@ class Controller_Admin extends Controller_Core_Action{
 	{
 		$adminModel = Ccc::getModel('Admin');
 		$admin = $adminModel;
+
 		
 		Ccc::getBlock('Admin_Edit')->addData('admin',$admin)->toHtml();
 	}
+
 
 	public function editAction()
 	{
@@ -31,7 +33,7 @@ class Controller_Admin extends Controller_Core_Action{
 		if(!$admin){
 			throw new Exception("System is unable to fine recored", 1);
 		}
-
+		
 		Ccc::getBlock('Admin_Edit')->addData('admin',$admin)->toHtml();
 	}
 

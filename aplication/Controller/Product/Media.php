@@ -5,7 +5,15 @@ class Controller_Product_Media extends Controller_Core_Action{
 
 	public function gridAction()
 	{
-		Ccc::getBlock('product_Media_Grid')->toHtml();
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
+		$content = $this->getLayout()->getContent();
+		$mediaGrid = Ccc::getBlock('Product_Media_Grid');
+		$content->addChild($mediaGrid);
+
+		$this->randerLayout();
 	}
 
 
@@ -33,7 +41,7 @@ class Controller_Product_Media extends Controller_Core_Action{
 						if(!$result){
 							throw new Exception("System is unable to save your data.", 1);
 						}	
-						move_uploaded_file($file['name']['tmp_name'],$this->getView()->getBaseUrl("Media/Product/").$fileName);
+						move_uploaded_file($file['name']['tmp_name'],Ccc::getBlock('Product_Grid')->getBaseUrl("Media/Product/").$fileName);
 					}
 				}
 				else{
@@ -48,7 +56,7 @@ class Controller_Product_Media extends Controller_Core_Action{
 							if(!$result){
 								throw new Exception("Invalid request", 1);
 							}
-							unlink($this->getView()->getBaseUrl("Media/Product/"). $media->name);
+							unlink(Ccc::getBlock('Product_Grid')->getBaseUrl("Media/Product/"). $media->name);
 							
 							if($postData['media']['base'] == $remove){
 								unset($postData['media']['base']);
@@ -111,7 +119,7 @@ class Controller_Product_Media extends Controller_Core_Action{
 					}
 				}
 			} 	
-			$this->redirect($this->getView()->getUrl('grid','product_media',['id' => $productId],true));	
+			$this->redirect(Ccc::getBlock('Product_Grid')->getUrl('grid','product_media',['id' => $productId],true));	
 			}catch (Exception $e) {
 			echo $e->getMessage();
 		}

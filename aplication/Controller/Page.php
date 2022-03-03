@@ -5,14 +5,31 @@ class Controller_Page extends Controller_Core_Action{
 
 	public function gridAction()
 	{
-		Ccc::getBlock('Page_Grid')->toHtml();
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
+		$content = $this->getLayout()->getContent();
+		$pageGrid = Ccc::getBlock('Page_Grid');
+		$content->addChild($pageGrid);
+
+		$this->randerLayout();
 	}
 
 	public function addAction()
 	{
 		$pageModel = Ccc::getModel('page');
 		$page = $pageModel;
-		Ccc::getBlock("Page_Edit")->addData('page',$page)->toHtml();
+
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
+		$content = $this->getLayout()->getContent();
+		$pageEdit = Ccc::getBlock('Page_Edit')->addData('page',$page);
+		$content->addChild($pageEdit);
+
+		$this->randerLayout();
 	}
 
 	public function editAction()
@@ -30,7 +47,16 @@ class Controller_Page extends Controller_Core_Action{
 		if(!$page){
 			throw new Exception("System is unable to fine recored", 1);
 		}
-		Ccc::getBlock("Page_Edit")->addData('page',$page)->toHtml();
+
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$header->addChild($menu);
+
+		$content = $this->getLayout()->getContent();
+		$pageEdit = Ccc::getBlock('Page_Edit')->addData('page',$page);
+		$content->addChild($pageEdit);
+
+		$this->randerLayout();
 	}
 
 	public function saveAction()
