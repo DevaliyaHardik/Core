@@ -14,7 +14,7 @@ class Model_Core_Message{
 
 	public function addMessage($message,$type = null)
 	{
-        $this->getSession()->start();
+        $this->getSession();
 		$types = [
 			self::MESSAGE_SUCCESS => self::MESSAGE_SUCCESS_LBL,
 			self::MESSAGE_WARNING => self::MESSAGE_WARNING_LBL,
@@ -36,7 +36,7 @@ class Model_Core_Message{
     
     public function getMessages()
     {
-        $this->getSession()->start();
+        $this->getSession();
         if(!$this->getSession()->messages){
             return null;
         }
@@ -45,7 +45,7 @@ class Model_Core_Message{
 
     public function unsetMessage()
     {
-        $this->getSession()->start();
+        $this->getSession();
         if(!$this->getSession()->messages){
             return null;
         }
