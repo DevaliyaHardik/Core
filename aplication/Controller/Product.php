@@ -74,6 +74,7 @@ class Controller_Product extends Controller_Core_Action{
 			$productId = $request->getRequest('id');
 			if($request->isPost()){
 				$postData = $request->getPost('product');
+				$categoryData = $request->getPost('category');
 				if(!$postData){
 					$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
 					throw new Exception("Error Processing Request", 1);			
@@ -88,6 +89,18 @@ class Controller_Product extends Controller_Core_Action{
 						$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
 						throw new Exception("Error Processing Request", 1);			
 					}
+					$categoryProductModel = Ccc::getModel('Product_CategoryProduct');
+					$categoryProduct = $categoryProductModel->fetchAll("SELECT * FROM `category_product` WHERE `product_id` = '$productId' ");
+					foreach($categoryProduct as $category){
+						$categoryProductModel->load($category->entity_id)->delete();
+					}
+					foreach($categoryData as $category){
+						$categoryProductModel = Ccc::getModel('Product_CategoryProduct');
+						$categoryProductModel->product_id = $productId;
+						$categoryProductModel->category_id = $category;
+						$categoryProductModel->save();
+					}
+
 					$this->getMessage()->addMessage('Your Data Updated Successfully');
 				}else{
 					$productData->createdDate = date('Y-m-d h:i:s');
@@ -95,6 +108,12 @@ class Controller_Product extends Controller_Core_Action{
 					if(!$result){
 						$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
 						throw new Exception("Error Processing Request", 1);			
+					}
+					foreach($categoryData as $category){
+						$categoryProductModel = Ccc::getModel('Product_CategoryProduct');
+						$categoryProductModel->product_id = $result;
+						$categoryProductModel->category_id = $category;
+						$categoryProductModel->save();
 					}
 					$this->getMessage()->addMessage('Your Data Save Successfully');
 				}		

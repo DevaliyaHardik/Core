@@ -1,7 +1,32 @@
 <?php $admin = $this->getProduct(); ?>
+<?php $categories = $this->getCategories(); ?>
 
 <div id="form">
     <form action="<?php echo $this->getUrl('save','product',['id'=>$admin->product_id],true) ?>" method="POST" enctype="multipart/form-data">
+        <table border="1" width="100%">
+            <tr>
+                <th>Select</th>
+                <th>Category Id</th>
+                <th>Category</th>
+            </tr>
+            <?php if(!$categories): ?>
+            <tr>
+                <td colspan="3">No category Found</td>
+            </tr>
+            <?php else: ?>
+            <?php foreach($categories as $category): ?>
+            
+            <tr>
+                <td> <input type="checkbox" name="category[]" value="<?php echo $category->category_id ?>" <?php echo $this->selected($category->category_id); ?>> </td>
+                <td><?php echo $category->category_id; ?></td>
+                <td><?php echo $this->getPath($category->category_id,$category->path) ?></td>
+            </tr>
+
+            <?php endforeach; ?>
+
+            <?php endif; ?>
+        </table>
+        <br>
         <table border=1 width="100%" cellspacing=4>
 
             <tr>

@@ -4,7 +4,7 @@ class Model_Core_Adapter{
     public $config = ['host' => 'localhost',
                       'userName' => 'root',
                       'password' => '',
-                      'dbName' => 'ecommerce'];
+                      'dbName' => 'project_hardik'];
     
     private $connect = null;
 
