@@ -8,11 +8,14 @@ $products = $this->getProduct();
     <table border=1 width="100%">
         <tr>
             <th>ID</th>
+            <th>sku</th>
             <th>Name</th>
             <th>Base Image</th>
             <th>Thumb Image</th>
             <th>Small Image</th>
             <th>Prize</th>
+            <th>MSP</th>
+            <th>Cost Price</th>
             <th>Quntity</th>
             <th>Status</th>
             <th>Created Date</th>
@@ -27,6 +30,7 @@ $products = $this->getProduct();
         <?php foreach($products as $product): ?>
         <tr>
             <td><?php echo $product->product_id; ?></td>
+            <td><?php echo $product->sku ?></td>
             <td><?php echo $product->name; ?></td>
             <?php if($product->base ): ?>
             <td><img src="<?php echo 'Media/Product/'.$this->getMedia($product->base)['name']; ?>" alt="No Image found" width=50 height=50></td>
@@ -46,7 +50,9 @@ $products = $this->getProduct();
             <td>No small image</td>
             <?php endif; ?>
 
-            <td><?php echo $product->prize; ?></td>
+            <td><?php echo $product->price; ?></td>
+            <td><?php echo $product->minimum_support_price ?></td>
+            <td><?php echo $product->cost_price ?></td>
             <td><?php echo $product->quntity; ?></td>
             <td><?php echo $this->getStatus($product->status); ?></td>
             <td><?php echo $product->createdDate; ?></td>

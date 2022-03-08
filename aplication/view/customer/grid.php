@@ -17,6 +17,7 @@ $address = $this->getAddress();
             <th>Updated Date</th>
             <th>Edit</th>
             <th>Delete</th>
+            <th>Price</th>
         </tr>
         <?php if(!$customers): ?>
             <tr>
@@ -35,6 +36,7 @@ $address = $this->getAddress();
             <td><?php echo $customer->updatedDate; ?></td>
             <td><a href="<?php echo $this->getUrl('edit','customer',['id' => $customer->customer_id],true); ?>">Edit</a></td>
             <td><a href="<?php echo $this->getUrl('delete','customer',['id' => $customer->customer_id],true); ?>">Delete</a></td>
+            <td><a href="<?php echo $this->getUrl('grid','customer_price',['id' => $customer->customer_id],true); ?>">Price</a></td>
         </tr>
     <?php endforeach; ?>
     <?php endif; ?>

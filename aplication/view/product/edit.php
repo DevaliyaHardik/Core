@@ -28,14 +28,26 @@
         </table>
         <br>
         <table border=1 width="100%" cellspacing=4>
-
+            
+            <tr>
+                <td width="10%">sku</td>
+                <td><input type="text" name="product[sku]" value="<?php echo $admin->sku;?>"></td>
+            </tr>
             <tr>
                 <td width="10%">Name</td>
                 <td><input type="text" name="product[name]" value="<?php echo $admin->name;?>"></td>
             </tr>
             <tr>
                 <td width="10%">Prize</td>
-                <td><input type="float" name="product[prize]" value="<?php echo $admin->prize;?>"></td>
+                <td><input type="float" name="product[price]" value="<?php echo $admin->price;?>"></td>
+            </tr>
+            <tr>
+                <td width="10%">MSP</td>
+                <td><input type="float" name="product[minimum_support_price]" value="<?php echo $admin->minimum_support_price;?>"></td>
+            </tr>
+            <tr>
+                <td width="10%">Cost Price</td>
+                <td><input type="float" name="product[cost_price]" value="<?php echo $admin->cost_price;?>"></td>
             </tr>
             <tr>
                 <td width="10%">Quntity</td>

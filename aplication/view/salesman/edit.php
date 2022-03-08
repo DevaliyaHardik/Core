@@ -23,6 +23,10 @@
             <td><input type="text" name="salesman[mobile]" value=<?php echo $salesman->mobile ?>></td>
         </tr>
         <tr>
+            <td width="10%">Discount</td>
+            <td><input type="text" name="salesman[discount]" value=<?php echo $salesman->discount ?>></td>
+        </tr>
+        <tr>
             <td width="10%">Status</td>
             <td>
                 <select name="salesman[status]">

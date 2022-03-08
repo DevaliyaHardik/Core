@@ -15,10 +15,12 @@
             <th>Updated Date</th>
             <th>Edit</th>
             <th>Delete</th>
+            <th>Customer</th>
+            <th>Percentage</th>
         </tr>
         <?php if(!$salesmans): ?>
             <tr>
-                <td colspan="10">No Recored Found</td>
+                <td colspan="11">No Recored Found</td>
             </tr>
         <?php else: ?>
         <?php foreach ($salesmans as $salesman): ?>
@@ -33,6 +35,8 @@
             <td><?php echo $salesman->updatedDate; ?></td>
             <td><a href="<?php echo $this->getUrl('edit','salesman',['id' => $salesman->salesman_id],true); ?>">Edit</a></td>
             <td><a href="<?php echo $this->getUrl('delete','salesman',['id' => $salesman->salesman_id],true); ?>">Delete</a></td>
+            <td><a href="<?php echo $this->getUrl('grid','salesman_salesmanCustomer',['id' => $salesman->salesman_id],true); ?>">Customer</a></td>
+            <td><?php echo $salesman->discount; ?></td>                        
         </tr>
         <?php endforeach; ?>
         <?php endif; ?>
