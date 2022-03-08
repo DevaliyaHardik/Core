@@ -56,16 +56,11 @@
             <tr>
                 <td width="10%">Staus</td>
                 <td>
-                    <select name="product[status]" id="status">
-                        <?php if($admin->status == '1'): ?>
-                            <option value="1" selected>Enabled</option>
-                            <option value="2">Disabled</option>
-                        <?php else: ?>
-                            <option value="1">Enabled</option>
-                            <option value="2" selected>Disabled</option>
-                        <?php endif; ?>
-                    </select>
-                </td>
+				<select name="product[status]">
+					<option value="1" <?php echo ($this->getStatus($product->status)=='Enabel')?'selected':'' ?>>Enabel</option>
+					<option value="2" <?php echo ($this->getStatus($product->status)=='Disabled')?'selected':'' ?>>Disabled</option>
+				</select>			
+			</td>
             </tr>
             <tr>
                 <td width="10%"></td>

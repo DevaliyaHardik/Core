@@ -26,15 +26,10 @@ $categories = $this->getCategories();
             <tr>
                 <td width="10%">Status</td>
                 <td>
-                    <select name="category[status]" id="status">
-                        <?php if($categoryData->status == 1):?>
-                        <option value="1" selected>Enabel</option>
-                        <option value="2">Disabel</option>
-                    <?php else: ?>
-                        <option value="1">Enabel</option>
-                        <option value="2" selected>Disabel</option>
-                    <?php endif; ?>
-                    </select>
+                    <select name="category[status]">
+                            <option value="1" <?php echo ($this->getStatus($category->status)=='Enabel')?'selected':'' ?>>Enabel</option>
+                            <option value="2" <?php echo ($this->getStatus($category->status)=='Disabled')?'selected':'' ?>>Disabled</option>
+                    </select>			
                 </td>
             </tr>
             <tr>

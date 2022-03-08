@@ -22,14 +22,9 @@
 			<td width="10%">Status</td>
 			<td>
 				<select name="config[status]">
-					<?php if($config->status==1): ?>
-					<option value="1" selected>Enabled</option>
-					<option value="2">Disabled</option>
-					<?php else: ?>
-					<option value="1">Enabled</option>
-					<option value="2" selected>Disabled</option>				
-					<?php endif; ?>
-				</select>
+					<option value="1" <?php echo ($this->getStatus($config->status)=='Enabel')?'selected':'' ?>>Enabel</option>
+					<option value="2" <?php echo ($this->getStatus($config->status)=='Disabled')?'selected':'' ?>>Disabled</option>
+				</select>			
 			</td>
 		</tr>
 		<tr>

@@ -278,17 +278,12 @@ $address = $this->getAddress();
                 </tr>
                 <tr>
                         <td width="10%">Status</td>
-                        <td>
-                                <select name="customer[status]">
-                                        <?php if($customer->status == 1): ?>
-                                                <option value="1" selected>Enabel</option>
-                                                <option value="2">Desabel</option>
-                                        <?php else: ?>
-                                                <option value="1">Enabel</option>
-                                                <option value="2" selected>Desabel</option>
-                                        <?php endif; ?>
-                                </select>
-                        </td>
+			<td>
+				<select name="customer[status]">
+					<option value="1" <?php echo ($this->getStatus($customer->status)=='Enabel')?'selected':'' ?>>Enabel</option>
+					<option value="2" <?php echo ($this->getStatus($customer->status)=='Disabled')?'selected':'' ?>>Disabled</option>
+				</select>			
+			</td>
                 </tr>
                 <tr>
                         <td colspan="2"><b>Address Information</b></td>
