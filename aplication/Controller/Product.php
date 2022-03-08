@@ -74,7 +74,7 @@ class Controller_Product extends Controller_Core_Action{
 			$productId = $request->getRequest('id');
 			if($request->isPost()){
 				$postData = $request->getPost('product');
-				$categoryData = $request->getPost('category');
+				$categoryIds = $request->getPost('category');
 				if(!$postData){
 					$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
 					throw new Exception("Error Processing Request", 1);			
@@ -84,39 +84,18 @@ class Controller_Product extends Controller_Core_Action{
 					$productData->product_id = $productId;
 					$productData->updatedDate = date('Y-m-d h:i:s');
 					$result = $productModel->save();
-			
-					if(!$result){
-						$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
-						throw new Exception("Error Processing Request", 1);			
-					}
-					$categoryProductModel = Ccc::getModel('Product_CategoryProduct');
-					$categoryProduct = $categoryProductModel->fetchAll("SELECT * FROM `category_product` WHERE `product_id` = '$productId' ");
-					foreach($categoryProduct as $category){
-						$categoryProductModel->load($category->entity_id)->delete();
-					}
-					foreach($categoryData as $category){
-						$categoryProductModel = Ccc::getModel('Product_CategoryProduct');
-						$categoryProductModel->product_id = $productId;
-						$categoryProductModel->category_id = $category;
-						$categoryProductModel->save();
-					}
-
-					$this->getMessage()->addMessage('Your Data Updated Successfully');
 				}else{
 					$productData->createdDate = date('Y-m-d h:i:s');
-					$result = $productModel->save();
-					if(!$result){
-						$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
-						throw new Exception("Error Processing Request", 1);			
-					}
-					foreach($categoryData as $category){
-						$categoryProductModel = Ccc::getModel('Product_CategoryProduct');
-						$categoryProductModel->product_id = $result;
-						$categoryProductModel->category_id = $category;
-						$categoryProductModel->save();
-					}
-					$this->getMessage()->addMessage('Your Data Save Successfully');
-				}		
+				}
+
+				$product = $productModel->save();
+				if(!$product){
+					$this->getMessage()->addMessage('Your product con not be saved', Model_Core_Message::MESSAGE_ERROR);
+					throw new Exception("Error Processing Request", 1);			
+				}
+
+				$result = $product->saveCategories($categoryIds);
+				$this->getMessage()->addMessage('Your product Save Successfully');
 				$this->redirect(Ccc::getBlock('Product_Grid')->getUrl('grid','product',[],true));	
 			} 			
 		}catch (Exception $e) {

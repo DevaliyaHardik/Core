@@ -44,10 +44,12 @@ class Block_Product_Edit extends Block_Core_Template
     {
         $request = Ccc::getFront()->getRequest();
         $productId = $request->getRequest('id');
-        $categoryProductModel = Ccc::getModel('Product_CategoryProduct');
-        $select = $categoryProductModel->fetchAll("SELECT * FROM `category_product` WHERE `product_id` = '$productId' AND `category_id` = '$categoryId'");
-        if($select){
-            return 'checked';
+        if($productId){
+            $categoryProductModel = Ccc::getModel('Product_CategoryProduct');
+            $select = $categoryProductModel->fetchAll("SELECT * FROM `category_product` WHERE `product_id` = '$productId' AND `category_id` = '$categoryId'");
+            if($select){
+                return 'checked';
+            }
         }
         return null;
     }

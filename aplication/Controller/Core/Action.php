@@ -34,8 +34,9 @@ class Controller_Core_Action{
         return Ccc::getFront()->getRequest();
     }
 
-    public function redirect($url)
+    public function redirect($a=null,$c=null,array $data = [],$reset = false)
     {
+        $url = Ccc::getModel('Core_View')->getUrl($a,$c,$data,$reset);
         header("location: $url");
     }
 

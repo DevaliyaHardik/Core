@@ -51,7 +51,7 @@ class Model_Core_Row
 
 	public function setData(array $data)
 	{
-		$this->data = $data;
+		$this->data = array_merge($this->data,$data);
 		return $this;
 	}
 
@@ -78,9 +78,10 @@ class Model_Core_Row
 		}
 		else
 		{
-			$result = $this->getTable()->insert($this->data);
+			$productId = $this->getTable()->insert($this->data);
+			$this->setData(['product_id' => $productId]);	
 		}
-		return $result;
+		return $this;
 	}
 
 	public function delete()
