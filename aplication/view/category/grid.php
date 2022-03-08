@@ -47,7 +47,7 @@ $categories = $this->getCategory();
             <?php else: ?>
             <td>No small image</td>
             <?php endif; ?>
-            <td><?php echo $this->getStatus($category->status); ?></td>
+            <td><?php echo $category->getStatus($category->status); ?></td>
             <td><?php echo $category->createdDate; ?></td>
             <td><?php echo $category->updatedDate; ?></td>
             <td><a href='<?php echo $this->getUrl('edit','category',['id'=>$category->category_id],true) ?>'>Edit</a></td>

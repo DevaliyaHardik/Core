@@ -83,23 +83,22 @@ class Controller_Product extends Controller_Core_Action{
 				if(!empty($productId)){
 					$productData->product_id = $productId;
 					$productData->updatedDate = date('Y-m-d h:i:s');
-					$result = $productModel->save();
 				}else{
 					$productData->createdDate = date('Y-m-d h:i:s');
 				}
 
 				$product = $productModel->save();
 				if(!$product){
-					$this->getMessage()->addMessage('Your product con not be saved', Model_Core_Message::MESSAGE_ERROR);
+					$this->getMessage()->addMessage('product con not be saved', Model_Core_Message::MESSAGE_ERROR);
 					throw new Exception("Error Processing Request", 1);			
 				}
 
 				$result = $product->saveCategories($categoryIds);
-				$this->getMessage()->addMessage('Your product Save Successfully');
-				$this->redirect(Ccc::getBlock('Product_Grid')->getUrl('grid','product',[],true));	
+				$this->getMessage()->addMessage('product Save Successfully');
+				$this->redirect('grid','product',[],true);	
 			} 			
 		}catch (Exception $e) {
-			$this->redirect(Ccc::getBlock('Product_Grid')->getUrl('grid','product',[],true));	
+			$this->redirect('grid','product',[],true);	
 		}		
 	}
 
@@ -126,9 +125,9 @@ class Controller_Product extends Controller_Core_Action{
 				throw new Exception("Error Processing Request", 1);			
 			}
 			$this->getMessage()->addMessage('Your Data Delete Successfully');
-			$this->redirect(Ccc::getBlock('Product_Grid')->getUrl('grid','product',[],true));	
+			$this->redirect('grid','product',[],true);	
 		} catch (Exception $e) {
-			$this->redirect(Ccc::getBlock('Product_Grid')->getUrl('grid','product',[],true));	
+			$this->redirect('grid','product',[],true);	
 		}
 	}
 

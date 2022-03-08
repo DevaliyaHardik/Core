@@ -64,7 +64,6 @@ class Model_Core_Row_Resource
 
 	public function update(array $updateArray, array $updateWhere)
 	{
-		$date = date('Y-m-d H:i:s');
 		$tableName = $this->getTableName();
 		$valueArray = [];
 		$nullValueArray = [];

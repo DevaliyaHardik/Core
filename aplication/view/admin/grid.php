@@ -27,7 +27,7 @@ $admins = $this->getAdmin();
             <td><?php echo $admin->firstName; ?></td>
             <td><?php echo $admin->lastName; ?></td>
             <td><?php echo $admin->email; ?></td>
-            <td><?php echo $this->getStatus($admin->status); ?></td>
+            <td><?php echo $admin->getStatus($admin->status); ?></td>
             <td><?php echo $admin->createdDate; ?></td>
             <td><?php echo $admin->updatedDate; ?></td>
             <td><a href="<?php echo $this->getUrl('edit','admin',['id'=>$admin->admin_id],true) ?>">Edit</a></td>

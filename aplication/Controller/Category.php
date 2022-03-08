@@ -139,10 +139,10 @@ class Controller_Category extends Controller_Core_Action{
 					}
 					$this->getMessage()->addMessage('Your Data Save Successfully');
 				}
-				$this->redirect(Ccc::getBlock('Category_Grid')->getUrl('grid','category',[],true));
+				$this->redirect('grid','category',[],true);
 			}
 		} catch (Exception $e) {
-			$this->redirect(Ccc::getBlock('Category_Grid')->getUrl('grid','category',[],true));
+			$this->redirect('grid','category',[],true);
 		}
 	}
 
@@ -168,9 +168,9 @@ class Controller_Category extends Controller_Core_Action{
 				throw new Exception("Error Processing Request", 1);			
 		    }
 			$this->getMessage()->addMessage('Your Data Delete Successfully');
-			$this->redirect(Ccc::getBlock('Category_Grid')->getUrl('grid','category',[],true));
+			$this->redirect('grid','category',[],true);
 		} catch (Exception $e) {
-			$this->redirect(Ccc::getBlock('Category_Grid')->getUrl('grid','category',[],true));
+			$this->redirect('grid','category',[],true);
 		}
 	}
 

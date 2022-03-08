@@ -83,30 +83,23 @@ class Controller_Page extends Controller_Core_Action{
 
 				if(!empty($pageId)){
 					$pageData->page_id = $pageId;
-					$page = $pageModel->save();
-					
-					if(!$page){
-						$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
-						throw new Exception("Error Processing Request", 1);			
-					}
-					$this->getMessage()->addMessage('Your Data Updated Successfully');
 				}
 				else{
 					unset($pageData->page_id);
 					$pageData->createdDate = date("Y-m-d h:i:s");
-					$pageId = $pageModel->save();
-					
-					if(!$pageId){
-						$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
-						throw new Exception("Error Processing Request", 1);			
-					}
-					$this->getMessage()->addMessage('Your Data Save Successfully');
 				}
-			}
-			$this->redirect(Ccc::getBlock('Page_Grid')->getUrl('grid','page',[],true));
+
+				$pageId = $pageModel->save();	
+				if(!$pageId){
+					$this->getMessage()->addMessage('Page con not be saved', Model_Core_Message::MESSAGE_ERROR);
+					throw new Exception("Error Processing Request", 1);			
+				}
+				$this->getMessage()->addMessage('Page save successfully');
+		}
+			$this->redirect('grid','page',[],true);
 		}
 		catch(Exception $e){
-			$this->redirect(Ccc::getBlock('Page_Grid')->getUrl('grid','page',[],true));
+			$this->redirect('grid','page',[],true);
 		}
 
 	}
@@ -128,10 +121,10 @@ class Controller_Page extends Controller_Core_Action{
 					throw new Exception("Error Processing Request", 1);			
 				}
 				$this->getMessage()->addMessage('Your Data Delete Successfully');
-				$this->redirect(Ccc::getBlock('Page_Grid')->getUrl('grid','page',[],true));
+				$this->redirect('grid','page',[],true);
 
 			} catch (Exception $e) {
-				$this->redirect(Ccc::getBlock('Page_Grid')->getUrl('grid','page',[],true));
+				$this->redirect('grid','page',[],true);
 			}	
 		}
 	}

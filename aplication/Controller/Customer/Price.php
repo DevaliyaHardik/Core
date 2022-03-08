@@ -45,9 +45,9 @@ class Controller_Customer_Price extends Controller_Core_Action{
 					}
 				}
 				$this->getMessage()->addMessage('Discount set successfully');
-				$this->redirect(Ccc::getBlock('Customer_Price_Grid')->getUrl('grid','customer_price',['id' => $customerId],true));
+				$this->redirect('grid','customer_price',['id' => $customerId],true);
 			} catch (Exception $e) {
-				$this->redirect(Ccc::getBlock('Customer_Price_Grid')->getUrl('grid','customer_price',['id' => $customerId],true));
+				$this->redirect('grid','customer_price',['id' => $customerId],true);
 			}
 	}
 }

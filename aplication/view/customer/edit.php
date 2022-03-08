@@ -280,8 +280,8 @@ $address = $this->getAddress();
                         <td width="10%">Status</td>
 			<td>
 				<select name="customer[status]">
-					<option value="1" <?php echo ($this->getStatus($customer->status)=='Enabel')?'selected':'' ?>>Enabel</option>
-					<option value="2" <?php echo ($this->getStatus($customer->status)=='Disabled')?'selected':'' ?>>Disabled</option>
+					<option value="1" <?php echo ($customer->getStatus($customer->status)=='Enabel')?'selected':'' ?>>Enabel</option>
+					<option value="2" <?php echo ($customer->getStatus($customer->status)=='Disabled')?'selected':'' ?>>Disabled</option>
 				</select>			
 			</td>
                 </tr>

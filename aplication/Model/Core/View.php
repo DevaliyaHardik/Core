@@ -3,12 +3,6 @@
 class Model_Core_View{
     public $template = null;
     public $data = [];
-    const STATUS_ENABLED = 1;
-	const STATUS_DISABLED = 2;
-	const STATUS_DEFAULT = 1;
-	const STATUS_ENABLED_LBL = 'Enabled';
-	const STATUS_DISABLED_LBL = 'Disabled';
-
 
     public function setTemplate($tamplate)
     {
@@ -88,24 +82,6 @@ class Model_Core_View{
         }
         return $url;
     }
-
-    public function getStatus($key = null)
-	{
-		$statuses = [
-			self::STATUS_ENABLED => self::STATUS_ENABLED_LBL,
-			self::STATUS_DISABLED => self::STATUS_DISABLED_LBL
-		];
-		if(!$key)
-		{
-			return $statuses;
-		}
-
-		if(array_key_exists($key, $statuses)) {
-			return $statuses[$key];
-		}
-		return $statuses[self::STATUS_DEFAULT];
-	}
-
 }
 
 ?>

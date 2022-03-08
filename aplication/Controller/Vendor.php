@@ -145,9 +145,9 @@ class Controller_Vendor extends Controller_Core_Action{
                     throw new Exception("Error Processing Request", 1);
                 }
                 }
-            $this->redirect(Ccc::getBlock('Vendor_Grid')->getUrl('grid','vendor',[],true));
+				$this->redirect('grid','vendor',[],true);
         } catch (Exception $e) {
-            $this->redirect(Ccc::getBlock('Vendor_Grid')->getUrl('grid','vendor',[],true));
+            $this->redirect('grid','vendor',[],true);
         }
     
     }
@@ -169,10 +169,10 @@ class Controller_Vendor extends Controller_Core_Action{
                     throw new Exception("Error Processing Request", 1);
 				}
 				$this->getMessage()->addMessage('Your Data Delete Successfully');
-				$this->redirect(Ccc::getBlock('Vendor_Grid')->getUrl('grid','vendor',[],true));
+				$this->redirect('grid','vendor',[],true);
 
 			} catch (Exception $e) {
-				$this->redirect(Ccc::getBlock('Vendor_Grid')->getUrl('grid','vendor',[],true));
+				$this->redirect('grid','vendor',[],true);
 			}	
         }
     }

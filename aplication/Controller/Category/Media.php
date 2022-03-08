@@ -132,10 +132,10 @@ class Controller_Category_Media extends Controller_Core_Action{
 					}
 				}
 			} 	
-			$this->redirect(Ccc::getBlock('Admin_Grid')->getUrl('grid','category_media',['id' => $categoryId],true));	
-			}catch (Exception $e) {
-				$this->redirect(Ccc::getBlock('Admin_Grid')->getUrl('grid','category_media',['id' => $categoryId],true));	
-			}
+			$this->redirect('grid','category_media',['id' => $categoryId],true);	
+		}catch (Exception $e) {
+			$this->redirect('grid','category_media',['id' => $categoryId],true);	
+		}
 		
 	}
 

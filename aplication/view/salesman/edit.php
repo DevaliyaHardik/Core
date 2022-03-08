@@ -30,8 +30,8 @@
             <td width="10%">Status</td>
 			<td>
 				<select name="salesman[status]">
-					<option value="1" <?php echo ($this->getStatus($salesman->status)=='Enabel')?'selected':'' ?>>Enabel</option>
-					<option value="2" <?php echo ($this->getStatus($salesman->status)=='Disabled')?'selected':'' ?>>Disabled</option>
+					<option value="1" <?php echo ($salesman->getStatus($salesman->status)=='Enabel')?'selected':'' ?>>Enabel</option>
+					<option value="2" <?php echo ($salesman->getStatus($salesman->status)=='Disabled')?'selected':'' ?>>Disabled</option>
 				</select>			
 			</td>
         </tr>

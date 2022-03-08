@@ -78,8 +78,8 @@ class Model_Core_Row
 		}
 		else
 		{
-			$productId = $this->getTable()->insert($this->data);
-			$this->setData(['product_id' => $productId]);	
+			$insertedId = $this->getTable()->insert($this->data);
+			$this->setData([$column => $insertedId]);	
 		}
 		return $this;
 	}

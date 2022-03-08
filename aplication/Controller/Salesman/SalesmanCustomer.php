@@ -34,7 +34,7 @@ class Controller_Salesman_SalesmanCustomer extends Controller_Core_Action{
                     throw new Exception("Error Processing Request", 1);
                 }
             }
-			$this->redirect(Ccc::getBlock('Salesman_SalesmanCustomer_Grid')->getUrl('grid','Salesman_SalesmanCustomer'));
+			$this->redirect('grid','Salesman_SalesmanCustomer');
         }
     }
 

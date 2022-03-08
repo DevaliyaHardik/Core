@@ -131,10 +131,10 @@ class Controller_Product_Media extends Controller_Core_Action{
 					}
 				}
 			} 	
-			$this->redirect(Ccc::getBlock('Product_Grid')->getUrl('grid','product_media',['id' => $productId],true));	
+			$this->redirect('grid','product_media',['id' => $productId],true);	
 			}catch (Exception $e) {
-			echo $e->getMessage();
-		}
+				$this->redirect('grid','product_media',['id' => $productId],true);	
+			}
 		
 	}
 

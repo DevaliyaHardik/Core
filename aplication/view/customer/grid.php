@@ -31,7 +31,7 @@ $address = $this->getAddress();
             <td><?php echo $customer->lastName; ?></td>
             <td><?php echo $customer->email; ?></td>
             <td><?php echo $customer->mobile; ?></td>
-            <td><?php echo $this->getStatus($customer->status); ?></td>
+            <td><?php echo $customer->getStatus($customer->status); ?></td>
             <td><?php echo $customer->createdDate; ?></td>
             <td><?php echo $customer->updatedDate; ?></td>
             <td><a href="<?php echo $this->getUrl('edit','customer',['id' => $customer->customer_id],true); ?>">Edit</a></td>

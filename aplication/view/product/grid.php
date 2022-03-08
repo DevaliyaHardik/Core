@@ -54,7 +54,7 @@ $products = $this->getProduct();
             <td><?php echo $product->minimum_support_price ?></td>
             <td><?php echo $product->cost_price ?></td>
             <td><?php echo $product->quntity; ?></td>
-            <td><?php echo $this->getStatus($product->status); ?></td>
+            <td><?php echo $product->getStatus($product->status); ?></td>
             <td><?php echo $product->createdDate; ?></td>
             <td><?php echo $product->updatedDate; ?></td>
             <td><a href='<?php echo $this->getUrl('edit','product',['id'=>$product->product_id],true) ?>' id='edit'>Edit</a></td>

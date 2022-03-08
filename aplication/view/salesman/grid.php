@@ -30,7 +30,7 @@
             <td><?php echo $salesman->lastName; ?></td>
             <td><?php echo $salesman->email; ?></td>
             <td><?php echo $salesman->mobile; ?></td>
-            <td><?php echo $this->getStatus($salesman->status); ?></td>
+            <td><?php echo $salesman->getStatus($salesman->status); ?></td>
             <td><?php echo $salesman->createdDate; ?></td>
             <td><?php echo $salesman->updatedDate; ?></td>
             <td><a href="<?php echo $this->getUrl('edit','salesman',['id' => $salesman->salesman_id],true); ?>">Edit</a></td>

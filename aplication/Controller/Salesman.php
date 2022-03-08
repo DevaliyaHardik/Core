@@ -81,30 +81,22 @@ class Controller_Salesman extends Controller_Core_Action{
 				if(!empty($salesmanId)){
 					$salesmanData->salesman_id = $salesmanId;
 					$salesmanData->updatedDate = date("Y-m-d h:i:s");					;
-					$salesman = $salesmanModel->save();
-					
-					if(!$salesman){
-						$this->getMessage()->addMessage('Your Data Can not updated', Model_Core_Message::MESSAGE_ERROR);
-						throw new Exception("Error Processing Request", 1);
-					}
-					$this->getMessage()->addMessage('Your Data Updated Successfully');
 				}
 				else{
 					$salesmanData->createdDate = date("Y-m-d h:i:s");					;
-					$salesmanId = $salesmanModel->save();
-	
-					if(!$salesmanId){
-						$this->getMessage()->addMessage('Your Data Can not saved', Model_Core_Message::MESSAGE_ERROR);
-						throw new Exception("Error Processing Request", 1);
-					}
-					$this->getMessage()->addMessage('Your Data Saved Successfully');
 				}
-			}
+				$salesmanId = $salesmanModel->save();
+				if(!$salesmanId){
+					$this->getMessage()->addMessage('Salesman Can not saved', Model_Core_Message::MESSAGE_ERROR);
+					throw new Exception("Error Processing Request", 1);
+				}
+				$this->getMessage()->addMessage('Salesman Saved Successfully');
+		}
 
-			$this->redirect(Ccc::getBlock('Salesman_Grid')->getUrl('grid','salesman'));
-			} catch (Exception $e){
-				$this->redirect(Ccc::getBlock('Salesman_Grid')->getUrl('grid','salesman'));
-			}
+			$this->redirect('grid','salesman',[],true);
+		} catch (Exception $e){
+			$this->redirect('grid','salesman',[],true);
+		}
 	}
 
 	public function deleteAction()
@@ -125,10 +117,10 @@ class Controller_Salesman extends Controller_Core_Action{
 				}
 				$this->getMessage()->addMessage('Your Data Saved Successfully');
 
-				$this->redirect(Ccc::getBlock('Salesman_Grid')->getUrl('grid','salesman',[],true));
+				$this->redirect('grid','salesman',[],true);
 
 			} catch (Exception $e) {
-				$this->redirect(Ccc::getBlock('Salesman_Grid')->getUrl('grid','salesman',[],true));
+				$this->redirect('grid','salesman',[],true);
 			}	
 		}
 	}

@@ -85,25 +85,18 @@ class Controller_Admin extends Controller_Core_Action{
 				if(!empty($adminId)){
 					$adminData->admin_id = $adminId;
 					$adminData->updatedDate = date("Y-m-d h:i:s");					;
-					$admin = $adminModel->save();
-					
-					if(!$admin){
-						$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
-						throw new Exception("Error Processing Request", 1);			
-					}
-					$this->getMessage()->addMessage('Your Data Updated Successfully');
 				}
 				else{
 					unset($adminData->admin_id);
 					$adminData->createdDate = date("Y-m-d h:i:s");
-					$adminId = $adminModel->save();
-					
-					if(!$adminId){
-						$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
-						throw new Exception("Error Processing Request", 1);			
-					}
-					$this->getMessage()->addMessage('Your Data Save Successfully');
 				}
+
+				$adminId = $adminModel->save();
+				if(!$adminId){
+					$this->getMessage()->addMessage('Admin con not be saved', Model_Core_Message::MESSAGE_ERROR);
+					throw new Exception("Error Processing Request", 1);			
+				}
+				$this->getMessage()->addMessage('Admin Save Successfully');
 			}
 			$this->redirect('grid','admin',[],true);
 		}

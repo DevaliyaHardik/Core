@@ -16,14 +16,14 @@
 		</tr>
 		<tr>
 			<td width="10%">Value</td>
-			<td><textarea name="page[content]" value="<?php echo $page->content ?>" id="" cols="30" rows="10"></textarea></td>
+			<td><textarea name="page[content]" value="<?php echo $page->content ?>" id="" cols="30" rows="10"><?php echo $page->content ?></textarea></td>
 		</tr>
 		<tr>
 			<td width="10%">Status</td>
 			<td>
 				<select name="page[status]">
-					<option value="1" <?php echo ($this->getStatus($page->status)=='Enabel')?'selected':'' ?>>Enabel</option>
-					<option value="2" <?php echo ($this->getStatus($page->status)=='Disabled')?'selected':'' ?>>Disabled</option>
+					<option value="1" <?php echo ($page->getStatus($page->status)=='Enabel')?'selected':'' ?>>Enabel</option>
+					<option value="2" <?php echo ($page->getStatus($page->status)=='Disabled')?'selected':'' ?>>Disabled</option>
 				</select>			
 			</td>
 		</tr>

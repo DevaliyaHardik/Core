@@ -157,9 +157,9 @@ class Controller_Customer extends Controller_Core_Action{
 						throw new Exception("Error Processing Request", 1);			
 					}
 					}
-				$this->redirect(Ccc::getBlock('Customer_Grid')->getUrl('grid','customer',[],true));
-			} catch (Exception $e) {
-				$this->redirect(Ccc::getBlock('Customer_Grid')->getUrl('grid','customer',[],true));
+					$this->redirect('grid','customer',[],true);
+				} catch (Exception $e) {
+				$this->redirect('grid','customer',[],true);
 			}
 	}
 
@@ -180,10 +180,10 @@ class Controller_Customer extends Controller_Core_Action{
 					throw new Exception("Error Processing Request", 1);			
 				}
 				$this->getMessage()->addMessage('Your Data Delete Successfully');
-				$this->redirect(Ccc::getBlock('Customer_Grid')->getUrl('grid','customer',[],true));
+				$this->redirect('grid','customer',[],true);
 
 			} catch (Exception $e) {
-				$this->redirect(Ccc::getBlock('Customer_Grid')->getUrl('grid','customer',[],true));
+				$this->redirect('grid','customer',[],true);
 			}	
 		}
 	}

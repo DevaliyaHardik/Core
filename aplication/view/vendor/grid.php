@@ -30,7 +30,7 @@ $address = $this->getAddress();
         <td><?php echo $vendor->vendor_id; ?></td>
         <td><?php echo $vendor->email; ?></td>
         <td><?php echo $vendor->mobile; ?></td>
-        <td><?php echo $this->getStatus($vendor->status); ?></td>
+        <td><?php echo $vendor->getStatus($vendor->status); ?></td>
         <td><?php echo $vendor->createdDate; ?></td>
         <td><?php echo $vendor->updatedDate; ?></td>
         <td><a href="<?php echo $this->getUrl('edit','vendor',['id' => $vendor->vendor_id],true) ?>">Edit</a></td>

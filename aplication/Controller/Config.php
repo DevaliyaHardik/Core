@@ -86,30 +86,22 @@ class Controller_Config extends Controller_Core_Action{
 
 				if(!empty($configId)){
 					$configData->config_id = $configId;
-					$config = $configModel->save();
-					
-					if(!$config){
-						$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
-						throw new Exception("Error Processing Request", 1);			
-					}
-					$this->getMessage()->addMessage('Your Data Updated Successfully');
 				}
 				else{
 					unset($configData->config_id);
 					$configData->createdDate = date("Y-m-d h:i:s");
-					$configId = $configModel->save();
-					
-					if(!$configId){
-						$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
-						throw new Exception("Error Processing Request", 1);			
-					}
-					$this->getMessage()->addMessage('Your Data Save Successfully');
 				}
+				$configId = $configModel->save();
+				if(!$configId){
+					$this->getMessage()->addMessage('Config con not be saved', Model_Core_Message::MESSAGE_ERROR);
+					throw new Exception("Error Processing Request", 1);			
+				}
+				$this->getMessage()->addMessage('Config saved successfully');
 			}
-			$this->redirect(Ccc::getBlock('Config_Grid')->getUrl('grid','config',[],true));
+			$this->redirect('grid','config',[],true);
 		}
 		catch(Exception $e){
-			$this->redirect(Ccc::getBlock('Config_Grid')->getUrl('grid','config',[],true));
+			$this->redirect('grid','config',[],true);
 		}
 
 	}
@@ -130,10 +122,10 @@ class Controller_Config extends Controller_Core_Action{
 					throw new Exception("System is unable to delete data.", 1);	
 				}
 				$this->getMessage()->addMessage('Your Data Delete Successfully');
-				$this->redirect(Ccc::getBlock('Config_Grid')->getUrl('grid','config',[],true));
+				$this->redirect('grid','config',[],true);
 
 			} catch (Exception $e) {
-				$this->redirect(Ccc::getBlock('Config_Grid')->getUrl('grid','config',[],true));
+				$this->redirect('grid','config',[],true);
 			}	
 		}
 	}
