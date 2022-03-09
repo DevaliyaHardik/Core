@@ -42,6 +42,7 @@ class Controller_Customer_Price extends Controller_Core_Action{
 						}
 						$customerPriceModel->product_id = $customer['product_id'];
 						$customerPriceModel->save();
+						unset($customerPriceModel->entity_id);
 					}
 				}
 				$this->getMessage()->addMessage('Discount set successfully');

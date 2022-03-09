@@ -101,7 +101,9 @@ class Controller_Salesman extends Controller_Core_Action{
 
 	public function deleteAction()
 	{
-		$deleteModel = Ccc::getModel('Salesman');
+		$salesmanModel = Ccc::getModel('Salesman');
+		$customerModel = Ccc::getModel('Customer');
+		$customerPriceModel = Ccc::getModel('Customer_Price');
 		$request = $this->getRequest();
 		if(!$request->isPost()){
 			try {
@@ -109,14 +111,23 @@ class Controller_Salesman extends Controller_Core_Action{
 					$this->getMessage()->addMessage('Your Data can not be Deleted', Model_Core_Message::MESSAGE_ERROR);
 					throw new Exception("Error Processing Request", 1);
 				}
+				
 				$salesmanId=$request->getRequest('id');
-				$result = $deleteModel->load($salesmanId)->delete();
+				$customers = $customerModel->fetchAll("SELECT * FROM `customer` WHERE `salesman_id` = {$salesmanId}");
+				foreach($customers as $customer){
+					$customerPrices = $customerPriceModel->fetchAll("SELECT `entity_id` FROM `customer_price` WHERE `customer_id` = {$customer->customer_id}");
+					foreach ($customerPrices as $customerPrice) {
+						$customerPriceModel->load($customerPrice->entity_id)->delete();
+					}
+				}
+
+				$result = $salesmanModel->load($salesmanId)->delete();
 				if(!$result){
 					$this->getMessage()->addMessage('Your Data can not Saved', Model_Core_Message::MESSAGE_ERROR);
 					throw new Exception("Error Processing Request", 1);
 				}
-				$this->getMessage()->addMessage('Your Data Saved Successfully');
 
+				$this->getMessage()->addMessage('Your Data Saved Successfully');
 				$this->redirect('grid','salesman',[],true);
 
 			} catch (Exception $e) {
