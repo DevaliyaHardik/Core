@@ -1,10 +1,11 @@
-<?php Ccc::loadClass("Controller_Core_Action"); ?>
+<?php Ccc::loadClass("Controller_Admin_Action"); ?>
 <?php
 
-class Controller_Admin extends Controller_Core_Action{
+class Controller_Admin extends Controller_Admin_Action{
 
 	public function gridAction()
 	{
+
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
 		$message = Ccc::getBlock('Core_Layout_Header_Message');

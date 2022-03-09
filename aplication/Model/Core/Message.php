@@ -12,6 +12,11 @@ class Model_Core_Message{
 	const MESSAGE_ERROR_LBL = 'error';
     const MESSAGE_DEFAULT_LBL = 'success';
 
+    public function __construct()
+	{
+
+	}
+
 	public function addMessage($message,$type = null)
 	{
         $this->getSession();
@@ -55,7 +60,8 @@ class Model_Core_Message{
 
     public function setSession($session)
     {
-        $this->session = $session;
+		$this->session = $session;
+		return $this->session;
     }
 
     public function getSession()

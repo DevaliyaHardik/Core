@@ -43,7 +43,7 @@ class Controller_Core_Action{
     public function getMessage()
     {
         if(!$this->message){
-            $this->message = Ccc::getModel('Core_Message');
+            $this->message = Ccc::getModel('Admin_Message');
         }
         return $this->message;
     }
