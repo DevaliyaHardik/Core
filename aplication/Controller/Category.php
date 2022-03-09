@@ -76,69 +76,20 @@ class Controller_Category extends Controller_Core_Action{
 				if(!empty($categoryId)){
 					$categoryData->category_id = $categoryId;
                     $categoryData->updatedDate = date('y-m-d h:m:s');
-					if(!$postData['parent_id']){
-						$categoryData->parent_id = NULL;
-					}
-					$result = $categoryModel->save();
-					if(!$result){
-						$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
-						throw new Exception("Error Processing Request", 1);			
-					}
-					
-                    $allPath = $categoryModel->fetchAll("SELECT * FROM `category` WHERE `path` LIKE '%$categoryId%' ");
-                    foreach ($allPath as $path) {
-                        $finalPath = explode('/',$path->path);
-                        foreach ($finalPath as $subPath) {
-                            if($subPath == $categoryId){
-                                if(count($finalPath) != 1){
-                                    array_shift($finalPath);
-                                }    
-                                break;
-                            }
-                            array_shift($finalPath);
-                        }
-						if($path->parent_id){
-							$parentPath = $categoryModel->load($path->parent_id);
-							$path->path = $parentPath->path ."/".implode('/',$finalPath);
-						}
-						else{
-							$path->path = $path->category_id;
-						}
-                        $result = $path->save();
-                    }
-					$this->getMessage()->addMessage('Your Data Updated Successfully');
 				}
 				else{
 					$categoryData->createdDate = date('y-m-d h:m:s');
 					if(!$categoryData->parent_id){
                         unset($categoryData->parent_id);
-                        $insertId = $categoryModel->save();
-                        if(!$insertId){
-							$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
-							throw new Exception("Error Processing Request", 1);			
-                        }
-						$categoryData->resetData();
-                        $categoryData->path = $insertId;
-						$categoryData->category_id = $insertId;
-						$result = $categoryModel->save();
 					}
-					else{
-                        $insertId = $categoryModel->save();
-                        if(!$insertId){
-							$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
-							throw new Exception("Error Processing Request", 1);			
-                        }
-						$categoryData->category_id = $insertId;
-                        $parentPath = $categoryModel->load($categoryData->parent_id);
-                        $categoryData->path = $parentPath->path."/". $insertId;
-						$result = $categoryData->save();
-					}
-					if(!$result){
-						$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
-						throw new Exception("Error Processing Request", 1);			
-					}
-					$this->getMessage()->addMessage('Your Data Save Successfully');
 				}
+				$category = $categoryModel->save();
+				if(!$category){
+					$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
+					throw new Exception("Error Processing Request", 1);			
+				}
+				$category->savePath($categoryData);
+				$this->getMessage()->addMessage('Your Data Updated Successfully');
 				$this->redirect('grid','category',[],true);
 			}
 		} catch (Exception $e) {

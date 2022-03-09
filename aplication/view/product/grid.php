@@ -3,7 +3,7 @@ $products = $this->getProduct();
 ?>
 
 <h1 id="post">Products</h1>
-<div id="add"><a href="<?php echo $this->getUrl('add','product',) ?>">Add Product</a></div>
+<div id="add"><a href="<?php echo $this->getUrl('add') ?>">Add Product</a></div>
 <div id="item">
     <table border=1 width="100%">
         <tr>

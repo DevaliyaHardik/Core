@@ -84,26 +84,20 @@ class Controller_Customer extends Controller_Core_Action{
 			if(!empty($customerId)){
 				$customerData->customer_id = $customerId;
 				$customerData->updatedDate = date("Y-m-d h:i:s");					;
-				$customer = $customerModel->save();
-				
-				if(!$customer){
-					$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);			
-				}
-				$this->getMessage()->addMessage('Your Data Updated Successfully');
 			}
 			else{
 				$customerData->createdDate = date("Y-m-d h:i:s");					;
-				$customerId = $customerModel->save();
-
-				if(!$customerId){
-					$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);			
-				}
-				$this->getMessage()->addMessage('Your Data Save Successfully');
 			}
+			$customer = $customerModel->save();
+
+			if(!$customer){
+				$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
+				throw new Exception("Error Processing Request", 1);			
+			}
+			$this->getMessage()->addMessage('Your Data Save Successfully');
+
 		}
-		return $customerId;
+		return $customer->customer_id;
 
 	}
 
@@ -118,25 +112,22 @@ class Controller_Customer extends Controller_Core_Action{
 			$postData['biling'] = !empty($postData['biling']) ? '1' : '2';
 			$postData['shiping'] = !empty($postData['shiping']) ? '1' : '2';
 			$addressData = $addressModel->setData($postData);
+			$addressData->customer_id = $customerId;
 			$address = $addressModel->fetchRow("SELECT * FROM `customer_address` WHERE `customer_id` = '$customerId'");
 			if($address){
-				$addressData->customer_id = $customerId;
-				$result = $addressModel->save();
-				if(!$result){
-					$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);			
-				}
-				$this->getMessage()->addMessage('Your Data Updated Successfully');
+				$column = null;
 			}
 			else{
-				$addressData->customer_id = $customerId;
-				$result = $addressModel->save('address_id');
-				if(!$result){
-					$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);			
-				}
-				$this->getMessage()->addMessage('Your Data Save Successfully');
+				$column = 'address_id';
 			}
+			
+			$result = $addressModel->save($column);
+			if(!$result){
+				$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
+				throw new Exception("Error Processing Request", 1);			
+			}
+			$this->getMessage()->addMessage('Your Data Save Successfully');
+
 			return $result;
 		}
 	}

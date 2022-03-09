@@ -1,7 +1,7 @@
 <?php $configs = $this->getConfig(); ?>
 
 <h1 id="post">Config Details</h1>
-<div id="add"><a href="<?php echo $this->getUrl('add','config') ?>">Add Config</a></div>
+<div id="add"><a href="<?php echo $this->getUrl('add') ?>">Add Config</a></div>
 <div id="item">
     <table border=1 width=100%>
         <tr>

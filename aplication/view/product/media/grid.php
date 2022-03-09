@@ -1,6 +1,6 @@
 <?php $medias = $this->getMedias(); ?>
 
-<form action="<?php echo $this->getUrl('save','product_media') ?>" method="POST" align=center>
+<form action="<?php echo $this->getUrl('save') ?>" method="POST" align=center>
     <input type="submit" value="update">
     <button><a href="<?php echo $this->getUrl('grid','product',[],true); ?>">Cancel</a></button>
     <table border=3 align=center width=100% cellspacing=4>

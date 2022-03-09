@@ -5,7 +5,7 @@ $categories = $this->getCategory();
 ?>
 
 <h1 id="post">Categories</h1>
-<div id="add"><a href="<?php echo $this->getUrl('add','category') ?>">Add CATEGORY</a></div>
+<div id="add"><a href="<?php echo $this->getUrl('add') ?>">Add CATEGORY</a></div>
 <div id="item">
     <table border=1 width=100%>
         <tr>

@@ -1,5 +1,5 @@
 <?php
-Ccc::loadClass('Model_Core_View');
+
 class Controller_Core_Action{
 
     protected $message;

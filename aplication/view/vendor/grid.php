@@ -4,7 +4,7 @@ $address = $this->getAddress();
 ?>
 
 <h1>Vendor Details</h1>
-<button><a href="<?php echo $this->getUrl('add','vendor'); ?>">Add Vendor</a></button>
+<button><a href="<?php echo $this->getUrl('add'); ?>">Add Vendor</a></button>
 <table border="1" align="center" width="100%">
     <tr>
         <th>Vendor Id</th>

@@ -33,7 +33,6 @@
 				</select>			
 			</td>
 		</tr>
-		admin
 			<td width="10%">&nbsp;</td>
 			<td>
 				<input type="submit" name="submit" value="save">

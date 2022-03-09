@@ -1,7 +1,7 @@
 <?php $salesmans = $this->getSalesman(); ?>
 
 <h1 id="post">Salesman Details</h1>
-<div id="add"><a href="<?php echo $this->getUrl('add','salesman'); ?>">Add Salesman</a></div>
+<div id="add"><a href="<?php echo $this->getUrl('add'); ?>">Add Salesman</a></div>
 <div id="item">
     <table border=1 width=100%>
         <tr>

@@ -1,4 +1,3 @@
-<?php Ccc::loadClass('Model_Core_Request'); ?>
 <?php
 
 class Controller_Core_Front{
@@ -12,7 +11,7 @@ class Controller_Core_Front{
     public function getRequest()
     {
         if(!$this->request){
-            $request = new Model_Core_Request();
+            $request = Ccc::getModel('Core_Request');
             $this->setRequest($request);
         }
         return $this->request;

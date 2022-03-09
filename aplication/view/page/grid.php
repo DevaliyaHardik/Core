@@ -1,7 +1,7 @@
 <?php $pages = $this->getPage(); ?>
 
 <h1 id="post">Page Details</h1>
-<div id="add"><a href="<?php echo $this->getUrl('add','page') ?>">Add Page</a></div>
+<div id="add"><a href="<?php echo $this->getUrl('add') ?>">Add Page</a></div>
 <div id="item">
     <table border=1 width=100%>
         <tr>

@@ -73,24 +73,18 @@ class Controller_Vendor extends Controller_Core_Action{
             if(!empty($vendorId)){
                 $vendorData->vendor_id = $vendorId;
                 $vendorData->updatedDate = date('Y-m-d h:i:s');
-
-                $result = $vendorModel->save();
-                if(!$result){
-                    $this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
-                    throw new Exception("Error Processing Request", 1);
-				}
-				$this->getMessage()->addMessage('Your Data Updated Successfully');
             }
             else{
                 $vendorData->createdDate = date('Y-m-d h:i:s');
-                $vendorId = $vendorModel->save();
-                if(!$vendorId){
-					$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
-                    throw new Exception("Error Processing Request", 1);
-				}
-				$this->getMessage()->addMessage('Your Data Save Successfully');
             }
-            return $vendorId;
+            $vendor = $vendorModel->save();
+            if(!$vendor){
+                $this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
+                throw new Exception("Error Processing Request", 1);
+            }
+            $this->getMessage()->addMessage('Your Data Save Successfully');
+
+            return $vendor->vendor_id;
         }
     }
 
@@ -108,23 +102,20 @@ class Controller_Vendor extends Controller_Core_Action{
 
             $address = $addressModel->fetchRow("SELECT * FROM `vendor_address` WHERE `vendor_id` = '$vendorId'");
             if($address){
+                $column = null;
                 $addressData->vendor_id = $vendorId;
-                $result = $addressModel->save();
-                if(!$result){
-                    $this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
-                    throw new Exception("Error Processing Request", 1);
-                }
-                $this->getMessage()->addMessage('Your Data Updated Successfully');
             }
             else{
+                $column = 'address_id';
                 $addressData->vendor_id = $vendorId;
-                $result = $addressModel->save('address_id');
-                if(!$result){
-					$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
-                    throw new Exception("Error Processing Request", 1);
-				}
-				$this->getMessage()->addMessage('Your Data Save Successfully');
             }
+            $result = $addressModel->save($column);
+            if(!$result){
+                $this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
+                throw new Exception("Error Processing Request", 1);
+            }
+            $this->getMessage()->addMessage('Your Data Save Successfully');
+
             return $result;
         }
     }

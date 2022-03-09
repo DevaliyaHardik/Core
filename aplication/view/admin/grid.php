@@ -2,7 +2,7 @@
 $admins = $this->getAdmin();
 ?>
 <h1 id="post" align="center">Admin</h1>
-<div id="add" align="center"><a href="<?php echo $this->getUrl('add','admin') ?>">Add Admin</a></div>
+<div id="add" align="center"><a href="<?php echo $this->getUrl('add') ?>">Add Admin</a></div>
 <div id="item">
     <table border=1 width=100% align="center">
         <tr>
