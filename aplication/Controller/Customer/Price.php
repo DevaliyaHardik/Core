@@ -33,19 +33,20 @@ class Controller_Customer_Price extends Controller_Core_Action{
 					$customerData = $request->getPost('product');
 					$customerPriceModel->customer_id = $customerId;
 					foreach($customerData as $customer){
-						$minimunPrize = (float)$customer['mrp'] - (float)$customer['mrp']*(float)$customer['discount']/100;
-						if($minimunPrize >= (float)$customer['msp']){
-							$customerPriceModel->discount = $customer['discount'];
+						if($customer['slaesmanPrice'] <= $customer['price']){
+							$customerPriceModel->price = $customer['price'];
 						}
 						else{
-							$customerPriceModel->discount = 100 - (float)$customer['msp']*100/(float)$customer['mrp'];
+							$customerPriceModel->price = $customer['slaesmanPrice'];
 						}
-						$customerPriceModel->product_id = $customer['product_id'];
-						$customerPriceModel->save();
-						unset($customerPriceModel->entity_id);
+						if($customer['price']){
+							$customerPriceModel->product_id = $customer['product_id'];
+							$customerPriceModel->save();
+							unset($customerPriceModel->entity_id);
+						}
 					}
 				}
-				$this->getMessage()->addMessage('Discount set successfully');
+				$this->getMessage()->addMessage('Price set successfully');
 				$this->redirect('grid','customer_price',['id' => $customerId],true);
 			} catch (Exception $e) {
 				$this->redirect('grid','customer_price',['id' => $customerId],true);

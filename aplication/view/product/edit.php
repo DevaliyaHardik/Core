@@ -19,14 +19,6 @@
                 <td><input type="float" name="product[price]" value="<?php echo $product->price;?>"></td>
             </tr>
             <tr>
-                <td width="10%">MSP</td>
-                <td><input type="float" name="product[minimum_support_price]" value="<?php echo $product->minimum_support_price;?>"></td>
-            </tr>
-            <tr>
-                <td width="10%">Cost Price</td>
-                <td><input type="float" name="product[cost_price]" value="<?php echo $product->cost_price;?>"></td>
-            </tr>
-            <tr>
                 <td width="10%">Quntity</td>
                 <td><input type="number" name="product[quntity]" id="quntity" value="<?php echo $product->quntity;?>"></td>
             </tr>

@@ -14,8 +14,6 @@ $products = $this->getProduct();
             <th>Thumb Image</th>
             <th>Small Image</th>
             <th>Prize</th>
-            <th>MSP</th>
-            <th>Cost Price</th>
             <th>Quntity</th>
             <th>Status</th>
             <th>Created Date</th>
@@ -51,8 +49,6 @@ $products = $this->getProduct();
             <?php endif; ?>
 
             <td><?php echo $product->price; ?></td>
-            <td><?php echo $product->minimum_support_price ?></td>
-            <td><?php echo $product->cost_price ?></td>
             <td><?php echo $product->quntity; ?></td>
             <td><?php echo $product->getStatus($product->status); ?></td>
             <td><?php echo $product->createdDate; ?></td>

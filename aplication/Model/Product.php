@@ -14,7 +14,7 @@ class Model_Product extends Model_Core_Row
 		parent::__construct();
 	}
 
-	public function saveCategories($categoryIds)
+	public function saveCategories(array $categoryIds)
 	{
 		if(!$this->product_id){
 			throw new Exception("Invalid Request.", 1);
