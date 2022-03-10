@@ -50,7 +50,6 @@ class Model_Core_Message{
 
     public function unsetMessage()
     {
-        $this->getSession();
         if(!$this->getSession()->messages){
             return null;
         }

@@ -2,7 +2,6 @@
 <?php
 
 class Controller_Admin extends Controller_Admin_Action{
-	protected $authetication = false;
 
 	public function __construct()
 	{
@@ -88,7 +87,7 @@ class Controller_Admin extends Controller_Admin_Action{
 				}
 
 				$adminData = $adminModel->setData($postData);
-
+				$adminData->password = md5($adminData->password);
 				if(!empty($adminId)){
 					$adminData->admin_id = $adminId;
 					$adminData->updatedDate = date("Y-m-d h:i:s");

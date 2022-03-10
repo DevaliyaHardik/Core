@@ -30,7 +30,7 @@ class Model_Core_Login{
         }
         $login['loginId'] = $loginId;
         $this->getSession()->login = $login;
-        return $this->getSession()->login;
+        return $this;
     }
 
     public function logout()
@@ -43,7 +43,7 @@ class Model_Core_Login{
         return $this;
     }
 
-    public function getLogin()
+    public function isLogin()
     {
         if(!$this->getSession()->login){
             return false;
