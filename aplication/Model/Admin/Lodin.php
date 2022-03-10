@@ -1,6 +1,6 @@
-<?php 	Ccc::loadClass('Model_Core_Message');
+<?php 	Ccc::loadClass('Model_Core_Login');
 
-class Model_Admin_Message extends Model_Core_Message
+class Model_Admin_Login extends Model_Core_Login
 {
 	public function __construct()
 	{
