@@ -9,7 +9,7 @@
 		</tr>
 		<tr>
 			<td width="10%">Password</td>
-			<td><input type="text" name="admin[password]"></td>
+			<td><input type="password" name="admin[password]"></td>
 		</tr>
         <tr>
 			<td width="10%">&nbsp;</td>
