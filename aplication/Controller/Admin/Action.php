@@ -10,7 +10,7 @@ class Controller_Admin_Action extends Controller_Core_Action{
 			$this->redirect();
         }
         if(!$loginModel->getLogin()){
-			$this->redirect('login','admin_login');
+            return false;
         }
         return true;
     }

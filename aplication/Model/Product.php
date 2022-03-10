@@ -14,12 +14,12 @@ class Model_Product extends Model_Core_Row
 		parent::__construct();
 	}
 
-	public function saveCategories(array $categoryIds)
+	public function saveCategories($categoryIds)
 	{
 		if(!$this->product_id){
 			throw new Exception("Invalid Request.", 1);
 		}
-		if(!$categoryIds){
+		if(!$categoryIds || !array_key_exists('exists',$categoryIds)){
 			$categoryIds['exists'] = [];
 		}
 		$categoryProductModel = Ccc::getModel('Product_CategoryProduct');
