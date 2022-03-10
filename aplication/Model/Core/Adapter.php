@@ -88,11 +88,10 @@ class Model_Core_Adapter{
     public function fetchOne($query)
     {
         $result = $this->query($query);
-        if(!result)
-        {
-            return false;
+        if($result->num_rows){
+            return $result->fetch_all(MYSQLI_ASSOC);
         }
-        return $result;
+        return false;
     }
 }
 

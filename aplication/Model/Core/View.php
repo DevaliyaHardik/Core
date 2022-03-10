@@ -82,6 +82,12 @@ class Model_Core_View{
         }
         return $url;
     }
+
+    public function getAdapter()
+	{
+		$adapter = new Model_Core_Adapter();
+		return $adapter;
+	}
 }
 
 ?>

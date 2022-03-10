@@ -1,8 +1,17 @@
 <?php $pages = $this->getPage(); ?>
 
 <h1 id="post">Page Details</h1>
-<div id="add"><a href="<?php echo $this->getUrl('add') ?>">Add Page</a></div>
+<div id="add"><a href="<?php echo $this->getUrl('add') ?>"><button>Add Page</button></a></div>
 <div id="item">
+    <table align="center">
+        <tr>
+            <td><a href="<?php echo $this->getUrl(null,null,['p' => $this->getPager()->getStart()]) ?>" style="pointer-events: <?php echo (!$this->getPager()->getStart()) ? 'none' : ''?>"><button>Start</button></a></td>
+            <td><a href="<?php echo $this->getUrl(null,null,['p' => $this->getPager()->getPrev()]) ?>" style="pointer-events: <?php echo (!$this->getPager()->getPrev()) ? 'none' : ''?>"><button>Prev</button></a></td>
+            <td><a href="<?php echo $this->getUrl(null,null,['p' => $this->getPager()->getCurrent()]) ?>" style="pointer-events: none "><button><?php echo $this->getPager()->getCurrent(); ?></button></a></td>
+            <td><a href="<?php echo $this->getUrl(null,null,['p' => $this->getPager()->getNext()]) ?>" style="pointer-events: <?php echo (!$this->getPager()->getNext()) ? 'none' : ''?>"><button>Next</button></a></td>
+            <td><a href="<?php echo $this->getUrl(null,null,['p' => $this->getPager()->getEnd()]) ?>" style="pointer-events: <?php echo (!$this->getPager()->getEnd()) ? 'none' : ''?>"><button>End</button></a></td>
+        </tr>
+    </table>
     <table border=1 width=100%>
         <tr>
             <th>page Id</th>
