@@ -84,6 +84,16 @@ class Model_Core_Adapter{
         }
         return false;
     }
+
+    public function fetchOne($query)
+    {
+        $result = $this->query($query);
+        if(!result)
+        {
+            return false;
+        }
+        return $result;
+    }
 }
 
 $adapter = new Model_Core_Adapter();
