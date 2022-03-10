@@ -1,6 +1,6 @@
 <?php
 
-class Model_Core_Message{
+class Model_Core_Login{
 
     protected $session = null;
 
@@ -23,14 +23,14 @@ class Model_Core_Message{
         return $this->session;
     }
 
-    public function login($login)
+    public function login($loginId)
     {
-        if(!$login){
+        if(!$loginId){
             return $this;
         }
-        $lodin['login'] = $login;
-        $this->getSession()->$login;
-        return $this;
+        $login['loginId'] = $loginId;
+        $this->getSession()->login = $login;
+        return $this->getSession()->login;
     }
 
     public function logout()

@@ -2,7 +2,14 @@
 <?php
 
 class Controller_Admin extends Controller_Admin_Action{
+	protected $authetication = false;
 
+	public function __construct()
+	{
+		if(!$this->authentication()){
+			$this->redirect('login','admin_login');
+		}
+	}
 	public function gridAction()
 	{
 		$header = $this->getLayout()->getHeader();
@@ -84,7 +91,7 @@ class Controller_Admin extends Controller_Admin_Action{
 
 				if(!empty($adminId)){
 					$adminData->admin_id = $adminId;
-					$adminData->updatedDate = date("Y-m-d h:i:s");					;
+					$adminData->updatedDate = date("Y-m-d h:i:s");
 				}
 				else{
 					unset($adminData->admin_id);

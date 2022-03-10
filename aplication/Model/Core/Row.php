@@ -122,7 +122,6 @@ class Model_Core_Row
 	public function fetchAll($query)
 	{
 		$results = $this->getTable()->fetchAll($query);
-
 		if(!$results)
 		{
 			return $results;

@@ -30,6 +30,11 @@
                     color: black;
                 }
 
+                #logoutbutton{
+                    background-color: black;
+                }
+                
+
             </style>
         </head>
         <body>
@@ -48,6 +53,7 @@
                 }   
             }
         ?>
+        <button id="logoutbutton"><a href="index.php?c=admin_login&a=logout">Logout</a></button>
         </div>
 
     </body>
