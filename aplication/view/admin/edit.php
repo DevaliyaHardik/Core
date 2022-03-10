@@ -1,5 +1,7 @@
 
-<?php $admin=$this->getAdmin(); ?>
+<?php $admin=$this->getAdmin(); 
+$hidden = ($admin->password) ? 'hidden' : 'password'; 
+?>
 
 
 <form action="<?php echo $this->getUrl('save','admin',['id'=>$admin->admin_id],true) ?>" method="POST">
@@ -22,7 +24,7 @@
 		</tr>
 		<tr>
 			<td width="10%">Password</td>
-			<td><input type="text" name="admin[password]" value="<?php echo $admin->password ?>"></td>
+			<td><input type="<?php echo $hidden ?>" name="admin[password]" value="<?php echo $admin->password ?>" ></td>
 		</tr>
 		<tr>
 			<td width="10%">Status</td>
