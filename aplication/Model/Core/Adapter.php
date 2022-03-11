@@ -89,7 +89,7 @@ class Model_Core_Adapter{
     {
         $result = $this->query($query);
         if($result->num_rows){
-            return $result->fetch_all(MYSQLI_ASSOC);
+            return $result->fetch_column();
         }
         return false;
     }
