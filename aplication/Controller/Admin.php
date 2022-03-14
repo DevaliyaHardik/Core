@@ -5,6 +5,7 @@ class Controller_Admin extends Controller_Admin_Action{
 
 	public function __construct()
 	{
+		$this->setTitle('Admin');
 		if(!$this->authentication()){
 			$this->redirect('login','admin_login');
 		}
@@ -34,7 +35,8 @@ class Controller_Admin extends Controller_Admin_Action{
 		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
-		$adminEdit = Ccc::getBlock('Admin_Edit')->addData('admin',$admin);
+		$adminEdit = Ccc::getBlock('Admin_Edit');
+		$admin = $adminEdit->admin = $admin;
 		$content->addChild($adminEdit);
 
 		$this->randerLayout();
@@ -65,7 +67,8 @@ class Controller_Admin extends Controller_Admin_Action{
 		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
-		$adminEdit = Ccc::getBlock('Admin_Edit')->addData('admin',$admin);
+		$adminEdit = Ccc::getBlock('Admin_Edit');
+		$admin = $adminEdit->admin = $admin;
 		$content->addChild($adminEdit);
 
 		$this->randerLayout();
@@ -104,10 +107,10 @@ class Controller_Admin extends Controller_Admin_Action{
 				}
 				$this->getMessage()->addMessage('Admin Save Successfully');
 			}
-			$this->redirect('grid','admin',[],true);
+			$this->redirect('grid',null,['id' => null]);
 		}
 		catch(Exception $e){
-			$this->redirect('grid','admin',[],true);
+			$this->redirect('grid',null,['id' => null]);
 		}
 
 	}
@@ -129,10 +132,10 @@ class Controller_Admin extends Controller_Admin_Action{
 					throw new Exception("Error Processing Request", 1);			
 				}
 				$this->getMessage()->addMessage('Your Data Delete Successfully');
-				$this->redirect('grid','admin',[],true);
+				$this->redirect('grid',null,['id' => null]);
 
 			} catch (Exception $e) {
-				$this->redirect('grid','admin',[],true);
+				$this->redirect('grid',null,['id' => null]);
 			}	
 		}
 	}

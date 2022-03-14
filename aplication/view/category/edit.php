@@ -4,7 +4,7 @@ $categories = $this->getCategories();
 
 ?>
 <div id="form">
-    <form action="<?php echo $this->getUrl('save','category',['id'=>$categoryData->category_id],true) ?>" method="POST" enctype="multipart/form-data">
+    <form action="<?php echo $this->getUrl('save','category',['id'=>$categoryData->category_id]) ?>" method="POST" enctype="multipart/form-data">
         <table border="1" width="100%" cellspacing="4">
             <tr>
                 <td width="10%">Subcategory</td>
@@ -36,7 +36,7 @@ $categories = $this->getCategories();
                 <td width="10%"></td>
                 <td>
                     <input type="submit" name="submit" value="save">
-                    <button><a href="<?php echo $this->getUrl('grid','category'); ?>">Cancel</a></button>
+                    <button><a href="<?php echo $this->getUrl('grid','category',['id' => null]); ?>">Cancel</a></button>
                 </td>
             </tr>
         </table>   

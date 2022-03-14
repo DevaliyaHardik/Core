@@ -1,6 +1,6 @@
 <?php $page=$this->getPage(); ?>
 
-<form action="<?php echo $this->getUrl('save','page',['id'=>$page->page_id],true) ?>" method="POST">
+<form action="<?php echo $this->getUrl('save','page',['id'=>$page->page_id]) ?>" method="POST">
 	<table border="1" width="100%" cellspacing="4">
 		<tr>
 			<td colspan="2"><b>Page Information</b></td>
@@ -31,7 +31,7 @@
 			<td width="10%">&nbsp;</td>
 			<td>
 				<input type="submit" name="submit" value="save">
-				<button type="button"><a href="<?php echo $this->getUrl('grid','page') ?>">Cancel</a></button>
+				<button type="button"><a href="<?php echo $this->getUrl('grid','page',['id' => null]) ?>">Cancel</a></button>
 			</td>
 		</tr>
 		

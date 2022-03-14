@@ -1,6 +1,6 @@
 <?php $salesman = $this->getSalesman(); ?> 
 
-<form action="<?php echo $this->getUrl('save','salesman',['id'=>$salesman->salesman_id],true) ?>" method="POST">
+<form action="<?php echo $this->getUrl('save','salesman',['id'=>$salesman->salesman_id]) ?>" method="POST">
     <table border="1" width="100%" cellspacing="4">
         <tr>
             <td colspan="2"><b>Personal Information</b></td>
@@ -39,7 +39,7 @@
                 <td width="10%"></td>
                 <td>
                     <input type="submit" name="submit" id="submit" value="save">
-                    <button><a href="<?php echo $this->getUrl('grid','salesman',); ?>">Cancel</a></button>
+                    <button><a href="<?php echo $this->getUrl('grid','salesman',['id' => null]); ?>">Cancel</a></button>
                 </td>
             </tr>
     </table>	

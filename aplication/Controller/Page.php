@@ -5,6 +5,7 @@ class Controller_Page extends Controller_Admin_Action{
 
 	public function __construct()
 	{
+		$this->setTitle('Page');
 		if(!$this->authentication()){
 			$this->redirect('login','admin_login');
 		}
@@ -26,7 +27,7 @@ class Controller_Page extends Controller_Admin_Action{
 
 	public function addAction()
 	{
-		$pageModel = Ccc::getModel('page');
+		$pageModel = Ccc::getModel('Page');
 		$page = $pageModel;
 
 		$header = $this->getLayout()->getHeader();
@@ -35,7 +36,8 @@ class Controller_Page extends Controller_Admin_Action{
 		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
-		$pageEdit = Ccc::getBlock('Page_Edit')->addData('page',$page);
+		$pageEdit = Ccc::getBlock('Page_Edit');
+		$page = $pageEdit->page = $page;
 		$content->addChild($pageEdit);
 
 		$this->randerLayout();
@@ -66,7 +68,8 @@ class Controller_Page extends Controller_Admin_Action{
 		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
-		$pageEdit = Ccc::getBlock('Page_Edit')->addData('page',$page);
+		$pageEdit = Ccc::getBlock('Page_Edit');
+		$page = $pageEdit->page = $page;
 		$content->addChild($pageEdit);
 
 		$this->randerLayout();
@@ -103,10 +106,10 @@ class Controller_Page extends Controller_Admin_Action{
 				}
 				$this->getMessage()->addMessage('Page save successfully');
 		}
-			$this->redirect('grid','page',[],true);
+			$this->redirect('grid',null,['id' => null]);
 		}
 		catch(Exception $e){
-			$this->redirect('grid','page',[],true);
+			$this->redirect('grid',null,['id' => null]);
 		}
 
 	}
@@ -128,10 +131,10 @@ class Controller_Page extends Controller_Admin_Action{
 					throw new Exception("Error Processing Request", 1);			
 				}
 				$this->getMessage()->addMessage('Your Data Delete Successfully');
-				$this->redirect('grid','page',[],true);
+				$this->redirect('grid',null,['id' => null]);
 
 			} catch (Exception $e) {
-				$this->redirect('grid','page',[],true);
+				$this->redirect('grid',null,['id' => null]);
 			}	
 		}
 	}

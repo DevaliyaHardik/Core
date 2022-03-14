@@ -254,7 +254,7 @@ $countryList = array(
 $customer = $this->getCustomer();
 $address = $this->getAddress();
 ?> 
-<form action="<?php echo $this->getUrl('save','customer',['id'=>$customer->customer_id],true) ?>" method="POST">
+<form action="<?php echo $this->getUrl('save','customer',['id'=>$customer->customer_id]) ?>" method="POST">
         <table border="1" width="100%" cellspacing="4">
                 <tr>
                         <td colspan="2"><b>Personal Information</b></td>
@@ -331,7 +331,7 @@ $address = $this->getAddress();
                         <td width="10%">&nbsp;</td>
                         <td>
                                 <input type="submit" name="submit" value="save">
-                                <button type="button"><a href="<?php echo $this->getUrl('grid','customer'); ?>">Cancel</a></button>
+                                <button type="button"><a href="<?php echo $this->getUrl('grid','customer',['id' => null]); ?>">Cancel</a></button>
                         </td>
                 </tr>
                 

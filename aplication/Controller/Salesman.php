@@ -5,6 +5,7 @@ class Controller_Salesman extends Controller_Admin_Action{
 	
 	public function __construct()
 	{
+		$this->setTitle('Salesman');
 		if(!$this->authentication()){
 			$this->redirect('login','admin_login');
 		}
@@ -34,7 +35,8 @@ class Controller_Salesman extends Controller_Admin_Action{
 		$header->addChild($menu);
 
 		$content = $this->getLayout()->getContent();
-		$salesmanEdit = Ccc::getBlock('Salesman_Edit')->addData('salesman',$salesman);
+		$salesmanEdit = Ccc::getBlock('Salesman_Edit');
+		$salesmanEdit->salesman = $salesman;
 		$content->addChild($salesmanEdit);
 
 		$this->randerLayout();
@@ -64,7 +66,8 @@ class Controller_Salesman extends Controller_Admin_Action{
 		$header->addChild($menu);
 
 		$content = $this->getLayout()->getContent();
-		$salesmanEdit = Ccc::getBlock('Salesman_Edit')->addData('salesman',$salesman);
+		$salesmanEdit = Ccc::getBlock('Salesman_Edit');
+		$salesmanEdit->salesman = $salesman;
 		$content->addChild($salesmanEdit);
 
 		$this->randerLayout();
@@ -98,11 +101,10 @@ class Controller_Salesman extends Controller_Admin_Action{
 					throw new Exception("Error Processing Request", 1);
 				}
 				$this->getMessage()->addMessage('Salesman Saved Successfully');
-		}
-
-			$this->redirect('grid','salesman',[],true);
+			}
+			$this->redirect('grid',null,['id' => null]);
 		} catch (Exception $e){
-			$this->redirect('grid','salesman',[],true);
+			$this->redirect('grid',null,['id' => null]);
 		}
 	}
 
@@ -135,10 +137,10 @@ class Controller_Salesman extends Controller_Admin_Action{
 				}
 
 				$this->getMessage()->addMessage('Your Data Saved Successfully');
-				$this->redirect('grid','salesman',[],true);
+				$this->redirect('grid',null,['id' => null]);
 
 			} catch (Exception $e) {
-				$this->redirect('grid','salesman',[],true);
+				$this->redirect('grid',null,['id' => null]);
 			}	
 		}
 	}

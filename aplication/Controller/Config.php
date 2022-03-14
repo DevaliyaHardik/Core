@@ -5,6 +5,7 @@ class Controller_Config extends Controller_Admin_Action{
 	
 	public function __construct()
 	{
+		$this->setTitle('Config');
 		if(!$this->authentication()){
 			$this->redirect('login','admin_login');
 		}
@@ -37,7 +38,8 @@ class Controller_Config extends Controller_Admin_Action{
 
 
 		$content = $this->getLayout()->getContent();
-		$configEdit = Ccc::getBlock('Config_Edit')->addData('config',$config);
+		$configEdit = Ccc::getBlock('Config_Edit');
+		$configEdit->config = $config;
 		$content->addChild($configEdit);
 
 		$this->randerLayout();
@@ -69,7 +71,8 @@ class Controller_Config extends Controller_Admin_Action{
 
 
 		$content = $this->getLayout()->getContent();
-		$configEdit = Ccc::getBlock('Config_Edit')->addData('config',$config);
+		$configEdit = Ccc::getBlock('Config_Edit');
+		$configEdit->config = $config;
 		$content->addChild($configEdit);
 
 		$this->randerLayout();
@@ -105,10 +108,10 @@ class Controller_Config extends Controller_Admin_Action{
 				}
 				$this->getMessage()->addMessage('Config saved successfully');
 			}
-			$this->redirect('grid','config',[],true);
+			$this->redirect('grid',null,['id' => null]);
 		}
 		catch(Exception $e){
-			$this->redirect('grid','config',[],true);
+			$this->redirect('grid',null,['id' => null]);
 		}
 
 	}
@@ -129,10 +132,10 @@ class Controller_Config extends Controller_Admin_Action{
 					throw new Exception("System is unable to delete data.", 1);	
 				}
 				$this->getMessage()->addMessage('Your Data Delete Successfully');
-				$this->redirect('grid','config',[],true);
+				$this->redirect('grid',null,['id' => null]);
 
 			} catch (Exception $e) {
-				$this->redirect('grid','config',[],true);
+				$this->redirect('grid',null,['id' => null]);
 			}	
 		}
 	}

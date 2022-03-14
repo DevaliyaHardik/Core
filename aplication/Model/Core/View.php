@@ -20,26 +20,30 @@ class Model_Core_View{
         return $this;
     }
 
-    public function getData($key = null)
+    public function getData()
     {
-        if(!$key){
-            return $this->data;
-        }
-        if(array_key_exists($key,$this->data)){
-            return $this->data[$key];
-        }
-        return null;
+        return $this->data;
     }
 
-    public function addData($key,$value)
+    public function __set($key, $value)
     {
         $this->data[$key] = $value;
         return $this;
     }
 
-    public function removeData($key)
+    public function __get($key = null)
     {
-        if(array_key_exists($key,$this->data)){
+        if(array_key_exists($key,$this->data))
+        {
+            return $this->data[$key];
+        }
+        return null;
+    }
+
+    public function __unset($key)
+    {
+        if(array_key_exists($key,$this->data))
+        {
             unset($this->data[$key]);
         }
         return $this;
@@ -47,9 +51,11 @@ class Model_Core_View{
 
     public function toHtml()
     {
+        ob_start();
         require($this->getTemplate());
+        $html = ob_get_contents();
+        ob_end_flush();
     }
-
     public function getUrl($a=null,$c=null,array $data = [],$reset = false)
 	{
 

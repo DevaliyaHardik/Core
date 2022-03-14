@@ -1,6 +1,6 @@
 <?php $config=$this->getConfig(); ?>
 
-<form action="<?php echo $this->getUrl('save','config',['id'=>$config->config_id],true) ?>" method="POST">
+<form action="<?php echo $this->getUrl('save','config',['id'=>$config->config_id]) ?>" method="POST">
 	<table border="1" width="100%" cellspacing="4">
 		<tr>
 			<td colspan="2"><b>Config Information</b></td>
@@ -31,7 +31,7 @@
 			<td width="10%">&nbsp;</td>
 			<td>
 				<input type="submit" name="submit" value="save">
-				<button type="button"><a href="<?php echo $this->getUrl('grid','config') ?>">Cancel</a></button>
+				<button type="button"><a href="<?php echo $this->getUrl('grid','config',['id' => null]) ?>">Cancel</a></button>
 			</td>
 		</tr>
 		

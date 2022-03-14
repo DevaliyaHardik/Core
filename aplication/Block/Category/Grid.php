@@ -3,6 +3,8 @@
 
 class Block_Category_Grid extends Block_Core_Template
 {
+    protected $pager = null;
+
     public function __construct()
     {
         $this->setTemplate("view/category/grid.php");
@@ -11,7 +13,13 @@ class Block_Category_Grid extends Block_Core_Template
     public function getCategory()
     {
         $categoryModel = Ccc::getModel('category');
-        $category = $categoryModel->fetchAll("SELECT * FROM `category` ORDER BY `path`");
+        $request = Ccc::getModel('Core_Request');
+        $this->setPager(Ccc::getModel('Core_Pager'));
+        $current = $request->getRequest('p',1);
+        $perPageCount = $request->getRequest('ppc',20);
+        $totalCount = $this->getAdapter()->fetchOne("SELECT COUNT('category_id') FROM `category`");
+        $this->getPager()->execute($totalCount,$current,$perPageCount);
+        $category = $categoryModel->fetchAll("SELECT * FROM `category` ORDER BY `path` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");
         return $category;
     }
 
@@ -38,6 +46,19 @@ class Block_Category_Grid extends Block_Core_Template
         return $media[0]->getData();
     }
 
+    public function setPager($pager)
+    {
+        $this->pager = $pager;
+        return $this;
+    }
+
+    public function getPager()
+    {
+        if(!$this->pager){
+            $this->setPager(Ccc::getModel('Core_Pager'));
+        }
+        return $this->pager;
+    }
 }
 
 ?>

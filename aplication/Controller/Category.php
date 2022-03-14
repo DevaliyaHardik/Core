@@ -4,6 +4,7 @@ class Controller_Category extends Controller_Admin_Action{
 
 	public function __construct()
 	{
+		$this->setTitle('Category');
 		if(!$this->authentication()){
 			$this->redirect('login','admin_login');
 		}
@@ -34,7 +35,8 @@ class Controller_Category extends Controller_Admin_Action{
 		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
-		$categoryEdit = Ccc::getBlock('Category_Edit')->addData('category',$category);
+		$categoryEdit = Ccc::getBlock('Category_Edit');
+		$categoryEdit->category = $category;
 		$content->addChild($categoryEdit);
 
 		$this->randerLayout();
@@ -65,7 +67,8 @@ class Controller_Category extends Controller_Admin_Action{
 		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
-		$categoryEdit = Ccc::getBlock('Category_Edit')->addData('category',$category);
+		$categoryEdit = Ccc::getBlock('Category_Edit');
+		$categoryEdit->category = $category;
 		$content->addChild($categoryEdit);
 
 		$this->randerLayout();
@@ -97,10 +100,10 @@ class Controller_Category extends Controller_Admin_Action{
 				}
 				$category->savePath($categoryData);
 				$this->getMessage()->addMessage('Your Data Updated Successfully');
-				$this->redirect('grid','category',[],true);
+				$this->redirect('grid',null,['id' => null]);
 			}
 		} catch (Exception $e) {
-			$this->redirect('grid','category',[],true);
+			$this->redirect('grid',null,['id' => null]);
 		}
 	}
 
@@ -126,9 +129,9 @@ class Controller_Category extends Controller_Admin_Action{
 				throw new Exception("Error Processing Request", 1);			
 		    }
 			$this->getMessage()->addMessage('Your Data Delete Successfully');
-			$this->redirect('grid','category',[],true);
+			$this->redirect('grid',null,['id' => null]);
 		} catch (Exception $e) {
-			$this->redirect('grid','category',[],true);
+			$this->redirect('grid',null,['id' => null]);
 		}
 	}
 

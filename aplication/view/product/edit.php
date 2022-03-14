@@ -1,7 +1,7 @@
 <?php $product = $this->getProduct(); ?>
 <?php $categories = $this->getCategories(); ?>
 <div id="form">
-    <form action="<?php echo $this->getUrl('save','product',['id'=>$product->product_id],true) ?>" method="POST" enctype="multipart/form-data">
+    <form action="<?php echo $this->getUrl('save','product',['id'=>$product->product_id]) ?>" method="POST" enctype="multipart/form-data">
        
         <br>
         <table border=1 width="100%" cellspacing=4>
@@ -61,7 +61,7 @@
                 <td width="10%"></td>
                 <td>
                     <input type="submit" name="submit" id="submit" value="save">
-                    <button><a href="<?php echo $this->getUrl('grid','product',); ?>">Cancel</a></button>
+                    <button><a href="<?php echo $this->getUrl('grid','product',['id' => null]); ?>">Cancel</a></button>
                 </td>
             </tr>
         </table> 

@@ -5,6 +5,7 @@ class Controller_Customer extends Controller_Admin_Action{
 
 	public function __construct()
 	{
+		$this->setTitle('Customer');
 		if(!$this->authentication()){
 			$this->redirect('login','admin_login');
 		}
@@ -36,7 +37,9 @@ class Controller_Customer extends Controller_Admin_Action{
 		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
-		$customerEdit = Ccc::getBlock('Customer_Edit')->addData('customer',$customer)->addData('address',$address);
+		$customerEdit = Ccc::getBlock('Customer_Edit');
+		$customerEdit->customer = $customer;
+		$customerEdit->address = $address;
 		$content->addChild($customerEdit);
 
 		$this->randerLayout();
@@ -69,7 +72,9 @@ class Controller_Customer extends Controller_Admin_Action{
 		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
-		$customerEdit = Ccc::getBlock('Customer_Edit')->addData('customer',$customer)->addData('address',$address);
+		$customerEdit = Ccc::getBlock('Customer_Edit');
+		$customerEdit->customer = $customer;
+		$customerEdit->address = $address;
 		$content->addChild($customerEdit);
 
 		$this->randerLayout();
@@ -155,10 +160,10 @@ class Controller_Customer extends Controller_Admin_Action{
 						throw new Exception("Error Processing Request", 1);			
 					}
 					}
-					$this->redirect('grid','customer',[],true);
+					$this->redirect('grid',null,['id' => null]);
 				} catch (Exception $e) {
-				$this->redirect('grid','customer',[],true);
-			}
+					$this->redirect('grid',null,['id' => null]);
+				}
 	}
 
 	public function deleteAction()
@@ -178,10 +183,10 @@ class Controller_Customer extends Controller_Admin_Action{
 					throw new Exception("Error Processing Request", 1);			
 				}
 				$this->getMessage()->addMessage('Your Data Delete Successfully');
-				$this->redirect('grid','customer',[],true);
+				$this->redirect('grid',null,['id' => null]);
 
 			} catch (Exception $e) {
-				$this->redirect('grid','customer',[],true);
+				$this->redirect('grid',null,['id' => null]);
 			}	
 		}
 	}

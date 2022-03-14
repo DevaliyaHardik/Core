@@ -34,7 +34,7 @@ class Model_Core_Request{
     public function getRequest($key = null,$value = null)
     {
         if(!$key){
-            return $_REQUEST;
+            return $_GET;
         }
         if(!array_key_exists($key,$_REQUEST)){
            return $value; 

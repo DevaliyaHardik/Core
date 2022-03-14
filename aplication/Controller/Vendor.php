@@ -5,6 +5,7 @@ class Controller_Vendor extends Controller_Admin_Action{
 
     public function __construct()
 	{
+        $this->setTitle('Vendor');
 		if(!$this->authentication()){
 			$this->redirect('login','admin_login');
 		}
@@ -36,7 +37,9 @@ class Controller_Vendor extends Controller_Admin_Action{
 		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
-		$vendorEdit = Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->addData('address',$address);
+		$vendorEdit = Ccc::getBlock('Vendor_Edit');
+        $vendorEdit->vendor = $vendor;
+        $vendorEdit->address = $address;
 		$content->addChild($vendorEdit);
 
         $this->randerLayout();
@@ -58,7 +61,9 @@ class Controller_Vendor extends Controller_Admin_Action{
 		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
-		$vendorEdit = Ccc::getBlock('Vendor_Edit')->addData('vendor',$vendor)->addData('address',$address);
+		$vendorEdit = Ccc::getBlock('Vendor_Edit');
+        $vendorEdit->vendor = $vendor;
+        $vendorEdit->address = $address;
 		$content->addChild($vendorEdit);
 
         $this->randerLayout();
@@ -143,9 +148,9 @@ class Controller_Vendor extends Controller_Admin_Action{
                     throw new Exception("Error Processing Request", 1);
                 }
                 }
-				$this->redirect('grid','vendor',[],true);
+				$this->redirect('grid',null,['id' => null]);
         } catch (Exception $e) {
-            $this->redirect('grid','vendor',[],true);
+            $this->redirect('grid',null,['id' => null]);
         }
     
     }
@@ -167,10 +172,10 @@ class Controller_Vendor extends Controller_Admin_Action{
                     throw new Exception("Error Processing Request", 1);
 				}
 				$this->getMessage()->addMessage('Your Data Delete Successfully');
-				$this->redirect('grid','vendor',[],true);
+				$this->redirect('grid',null,['id' => null]);
 
 			} catch (Exception $e) {
-				$this->redirect('grid','vendor',[],true);
+				$this->redirect('grid',null,['id' => null]);
 			}	
         }
     }

@@ -10,7 +10,7 @@ class Block_Category_Edit extends Block_Core_Template
 
     public function getcategory()
     {
-        $category = $this->getData('category');
+        $category = $this->category;
 		return $category;
     }
 

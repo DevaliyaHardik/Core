@@ -1,12 +1,13 @@
 <?php
 
-class Model_Core_Adapter{
-    public $config = ['host' => 'localhost',
-                      'userName' => 'root',
-                      'password' => '',
-                      'dbName' => 'project_hardik'];
-    
+class Model_Core_Adapter{                      
+    private $config = null;
     private $connect = null;
+
+    public function __construct()
+    {
+        $this->setConfig(Ccc::getConfig('connection'));
+    }
 
     public function connect()
     {
@@ -92,6 +93,24 @@ class Model_Core_Adapter{
             return $result->fetch_column();
         }
         return false;
+    }
+    
+    public function fetchPair($query)
+    {
+        $result = $this->fetchAll($query,MYSQLI_NUM);
+        if(!$result)
+        {
+            return false;
+        }
+        $keys = array_column($result, '0');
+        $values = array_column($result, '1');
+
+        if (!$values)
+        {
+            $values = array_fill(0,count($keys),NULL);
+        }
+        $result = array_combine($keys, $values);
+        return $result;
     }
 }
 

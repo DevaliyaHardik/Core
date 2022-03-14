@@ -4,7 +4,7 @@ $hidden = ($admin->password) ? 'hidden' : 'password';
 ?>
 
 
-<form action="<?php echo $this->getUrl('save','admin',['id'=>$admin->admin_id],true) ?>" method="POST">
+<form action="<?php echo $this->getUrl('save','admin',['id'=>$admin->admin_id]) ?>" method="POST">
 	<table border="1" width="100%" cellspacing="4">
 		<tr>
 			<td colspan="2"><b>Admin Information</b></td>
@@ -38,7 +38,7 @@ $hidden = ($admin->password) ? 'hidden' : 'password';
 			<td width="10%">&nbsp;</td>
 			<td>
 				<input type="submit" name="submit" value="save">
-				<button type="button"><a href="<?php echo $this->getUrl('grid','admin') ?>">Cancel</a></button>
+				<button type="button"><a href="<?php echo $this->getUrl('grid','admin',['id' => null]) ?>">Cancel</a></button>
 			</td>
 		</tr>
 		

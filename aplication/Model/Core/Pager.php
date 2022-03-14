@@ -1,6 +1,7 @@
 <?php
 class Model_Core_Pager
 {
+    protected $perPageCountOption = [10,20,30,40,50,100,200];
     protected $perPageCount = 20;
     protected $totalCount = 0;
     protected $pageCount = 0;
@@ -12,8 +13,12 @@ class Model_Core_Pager
     protected $startLimit = 0;
     protected $endLimit = 0;
     
-    public function execute($totalCount, $current)
+    public function execute($totalCount, $current,$perPageCount)
     {
+        if($totalCount == 0){
+            $totalCount = 1;
+        }
+        $this->setPerPageCount($perPageCount);
         $this->setTotalCount($totalCount);
         $this->setPageCount( ceil($this->getTotalCount()/$this->getPerPageCount()) );
         $this->setCurrent(($current > $this->getPageCount()) ? $this->getPageCount() : $current);
@@ -26,7 +31,17 @@ class Model_Core_Pager
         $this->setEndLimit($this->getStartLimit() + $this->getPerPageCount());
     }
 
-    public function setPetPageCount($perPageCount)
+    public function setPerPageCountOption($perPageCountOption)
+    {
+        $this->perPageCountOption = $perPageCountOption;
+    }
+
+    public function getPerPageCountOption()
+    {
+        return $this->perPageCountOption;
+    }
+
+    public function setPerPageCount($perPageCount)
     {
         $this->perPageCount = $perPageCount;
         return $this;

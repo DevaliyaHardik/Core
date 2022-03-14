@@ -1,13 +1,48 @@
-<?php Ccc::loadFile("Model/Core/Adapter.php"); ?>
+<?php Ccc::loadClass("Model_Core_Adapter"); ?>
 <?php
 date_default_timezone_set("Asia/Kolkata");
 
 class Ccc{
     public static $front = null;
-    
+   
+    public static function register($key, $value)
+    {
+        $GLOBALS[$key] = $value;
+    }
+
+    public static function getRegistry($key)
+    {
+        if(array_key_exists($key, $GLOBALS))
+        {
+            return $GLOBALS[$key];
+        }
+        return null;
+    }
+    public static function unregister($key)
+    {
+        if(array_key_exists($key, $GLOBALS))
+        {
+            unset($GLOBALS[$key]);
+        }
+    }
+
+    public static function getConfig($key)
+    {
+        if(!($config = self::getRegistry('config')))
+        {
+            $config = Ccc::loadFile('etc/config.php');
+            self::register('config', $config);
+        }
+        if(array_key_exists($key, self::getRegistry('config')))
+        {
+            return $config[$key];
+        }
+        return null;
+    }
+
     public static function loadFile($path)
     {
-        require_once(getcwd().DIRECTORY_SEPARATOR.$path);
+        return require_once(getcwd().DIRECTORY_SEPARATOR.$path);
     }
 
     public static function loadClass($className)
@@ -53,5 +88,4 @@ class Ccc{
 }
 
 Ccc::init();
-$adapter = new Model_Core_Adapter();
 ?>

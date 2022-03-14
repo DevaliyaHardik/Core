@@ -263,7 +263,7 @@ $address = $this->getAddress();
 	<title>Vendor Edit</title>
 </head>
 <body>
-	<form action="<?php echo $this->getUrl('save','vendor',['id'=>$vendor->vendor_id],true) ?>" method="POST">
+	<form action="<?php echo $this->getUrl('save','vendor',['id'=>$vendor->vendor_id]) ?>" method="POST">
 		<table border="1" width="100%" cellspacing="4">
 			<tr>
 				<td colspan="2"><b>Vendor Information</b></td>
@@ -329,7 +329,7 @@ $address = $this->getAddress();
 				<td width="10%">&nbsp;</td>
 				<td>
 					<input type="submit" name="submit" value="save">
-					<button type="button"><a href="<?php echo $this->getUrl('grid','vendor'); ?>">Cancel</a></button>
+					<button type="button"><a href="<?php echo $this->getUrl('grid','vendor',['id' => null]); ?>">Cancel</a></button>
 				</td>
 			</tr>
 			

@@ -10,7 +10,7 @@ class Block_Salesman_Edit extends Block_Core_Template
 
     public function getSalesman()
     {
-        $salesman = $this->getData('salesman');
+        $salesman = $this->salesman;
 		return $salesman;
     }
 }

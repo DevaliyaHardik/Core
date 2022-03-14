@@ -3,6 +3,8 @@
 
 class Block_Customer_Price_Grid extends Block_Core_Template
 {
+    protected $pager = null;
+
     public function __construct()
     {
         $this->setTemplate("view/customer/price/grid.php");
@@ -10,7 +12,12 @@ class Block_Customer_Price_Grid extends Block_Core_Template
 
     public function getProducts()
     {
-        $request = Ccc::getFront()->getRequest();
+        $request = Ccc::getModel('Core_Request');
+        $this->setPager(Ccc::getModel('Core_Pager'));
+        $current = $request->getRequest('p',1);
+        $perPageCount = $request->getRequest('ppc',20);
+        $totalCount = $this->getAdapter()->fetchOne("SELECT COUNT('product_id') FROM `product`");
+        $this->getPager()->execute($totalCount,$current,$perPageCount);
         $customerId = $request->getRequest('id');
         $productModel = Ccc::getModel('product');
         $customerModel = Ccc::getModel('customer');
@@ -18,7 +25,7 @@ class Block_Customer_Price_Grid extends Block_Core_Template
         if(!$customer){
             return $productModel->getData();
         }
-        $products = $productModel->fetchAll("SELECT * FROM `product` WHERE `status` = '1' ");
+        $products = $productModel->fetchAll("SELECT * FROM `product` WHERE `status` = '1' LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");
         return $products;
     }
 
@@ -49,9 +56,19 @@ class Block_Customer_Price_Grid extends Block_Core_Template
                 return $product[0]->price - $product[0]->price*$salesman[0]->discount/100;
             }
         }
+    }
+    public function setPager($pager)
+    {
+        $this->pager = $pager;
+        return $this;
+    }
 
-
-
+    public function getPager()
+    {
+        if(!$this->pager){
+            $this->setPager(Ccc::getModel('Core_Pager'));
+        }
+        return $this->pager;
     }
 }
 

@@ -1,3 +1,3 @@
-<?php foreach($this->getChildren() as $key => $child): ?>
-<?php $child->toHtml(); ?>
+<?php foreach($this->getChildren() as $child): ?>
+<?php echo $child->toHtml(); ?>
 <?php endforeach; ?>

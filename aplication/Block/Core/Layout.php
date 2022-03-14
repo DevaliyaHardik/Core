@@ -33,6 +33,16 @@ class Block_Core_Layout extends Block_Core_Template{
         return $child;
     }
 
+    public function getHead()
+    {
+        $child = Ccc::getBlock('Core_Layout_Head');
+        if(array_key_exists('head',$this->children))
+        {
+            $child = $this->getChild('head');
+        }
+        $this->children['head'] = $child;
+        return $child;
+    }
 }
 
 ?>

@@ -5,6 +5,7 @@ class Controller_Product extends Controller_Admin_Action{
 
 	public function __construct()
 	{
+		$this->setTitle('Product');
 		if(!$this->authentication()){
 			$this->redirect('login','admin_login');
 		}
@@ -35,7 +36,8 @@ class Controller_Product extends Controller_Admin_Action{
 		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
-		$productEdit = Ccc::getBlock('Product_Edit')->addData('product',$product);
+		$productEdit = Ccc::getBlock('Product_Edit');
+		$productEdit->product = $product;
 		$content->addChild($productEdit);
 
 		$this->randerLayout();
@@ -67,7 +69,8 @@ class Controller_Product extends Controller_Admin_Action{
 		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
-		$productEdit = Ccc::getBlock('Product_Edit')->addData('product',$product);
+		$productEdit = Ccc::getBlock('Product_Edit');
+		$productEdit->product = $product;
 		$content->addChild($productEdit);
 
 		$this->randerLayout();
@@ -102,10 +105,10 @@ class Controller_Product extends Controller_Admin_Action{
 
 				$result = $product->saveCategories($categoryIds);
 				$this->getMessage()->addMessage('product Save Successfully');
-				$this->redirect('grid','product',[],true);	
+				$this->redirect('grid',null,['id' => null]);
 			} 			
 		}catch (Exception $e) {
-			$this->redirect('grid','product',[],true);	
+			$this->redirect('grid',null,['id' => null]);
 		}		
 	}
 
@@ -132,9 +135,9 @@ class Controller_Product extends Controller_Admin_Action{
 				throw new Exception("Error Processing Request", 1);			
 			}
 			$this->getMessage()->addMessage('Your Data Delete Successfully');
-			$this->redirect('grid','product',[],true);	
+			$this->redirect('grid',null,['id' => null]);
 		} catch (Exception $e) {
-			$this->redirect('grid','product',[],true);	
+			$this->redirect('grid',null,['id' => null]);
 		}
 	}
 

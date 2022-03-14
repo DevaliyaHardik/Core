@@ -4,6 +4,12 @@ class Controller_Core_Action{
 
     protected $message;
     protected $layout = null;
+
+    protected function setTitle($title)
+    {
+        $this->getLayout()->getHead()->setTitle($title);
+    }
+
     public function getLayout()
     {
         if(!$this->layout){
@@ -20,7 +26,9 @@ class Controller_Core_Action{
 
     public function randerLayout()
     {
-        return $this->getLayout()->toHtml();
+        $this->getResponse()
+            ->setHeader('Content-type', 'text/html')
+            ->render($this->getLayout()->toHtml());
     }
 
     public function getAdapter()
@@ -52,6 +60,11 @@ class Controller_Core_Action{
     {
         $this->message = $message;
         return $this;
+    }
+
+    public function getResponse()
+    {
+        return Ccc::getFront()->getResponse();
     }
 
 }
