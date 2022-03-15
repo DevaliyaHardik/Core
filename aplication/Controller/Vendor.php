@@ -111,17 +111,12 @@ class Controller_Vendor extends Controller_Admin_Action{
             }
             $postData = $request->getPost('address');
             $addressData = $addressModel->setData($postData);
-
+            $addressData->vendor_id = $vendorId;
             $address = $addressModel->fetchRow("SELECT * FROM `vendor_address` WHERE `vendor_id` = '$vendorId'");
             if($address){
-                $column = null;
-                $addressData->vendor_id = $vendorId;
+                $addressData->address_id = $address->address_id;
             }
-            else{
-                $column = 'address_id';
-                $addressData->vendor_id = $vendorId;
-            }
-            $result = $addressModel->save($column);
+            $result = $addressModel->save();
             if(!$result){
                 $this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
                 throw new Exception("Error Processing Request", 1);

@@ -2,6 +2,10 @@
 
 class Model_Product extends Model_Core_Row
 {
+	protected $media = null;
+	protected $thumbName = null;
+	protected $smallName = null;
+	protected $baseName = null;
 	const STATUS_ENABLED = 1;
 	const STATUS_DISABLED = 2;
 	const STATUS_DEFAULT = 1;
@@ -56,6 +60,109 @@ class Model_Product extends Model_Core_Row
 		return $statuses[self::STATUS_DEFAULT];
 	}
 
+	public function setMedia(Model_Product_Media $media)
+	{
+		$this->media = $media;
+		return $this;
+	}
+
+	public function getMedia($reload = false)
+	{
+		$mediaModel = Ccc::getModel('Product_Media');
+		if(!$this->product_id){
+			return $mediaModel;
+		}
+		if($this->media && !$reload){
+			return $this->media;
+		}
+
+		$media = $mediaModel->fetchRow("SELECT * FROM `product_media` WHERE `product_id` = {$this->product_id}");
+		if(!$media){
+			return $mediaModel;
+		}
+
+		$this->setMedia($media);
+		return $this->media;
+	}
+
+	public function getBase($reload = false)
+	{
+		$mediaModel = Ccc::getModel('product_Media'); 
+		if(!$this->base)
+		{
+			return $mediaModel;
+		}
+		if($this->baseName && !$reload)
+		{
+			return $this->baseName;
+		}
+		$baseName = $mediaModel->fetchRow("SELECT * FROM `product_media` WHERE `media_id` = {$this->base}");
+		if(!$baseName)
+		{
+			return $mediaModel;
+		}
+		$this->setBase($baseName);
+
+		return $this->baseName;
+	}
+	public function setBase(Model_Product_Media $baseName)
+	{
+		$this->baseName =$baseName;
+		return $this;
+	}
+	public function getSmall($reload = false)
+	{
+		$mediaModel = Ccc::getModel('Product_Media'); 
+		if(!$this->small)
+		{
+			return $mediaModel;
+		}
+		if($this->smallName && !$reload)
+		{
+			return $this->smallName;
+		}
+		$smallName = $mediaModel->fetchRow("SELECT * FROM `product_media` WHERE `media_id` = {$this->small}");
+		if(!$smallName)
+		{
+			return $mediaModel;
+		}
+		$this->setSmall($smallName);
+
+		return $this->smallName;
+	}
+	public function setSmall(Model_Product_Media $smallName)
+	{
+		$this->smallName =$smallName;
+		return $this;
+	}
+
+
+	public function getThumb($reload = false)
+	{
+		$mediaModel = Ccc::getModel('Product_Media'); 
+		if(!$this->thumb)
+		{
+			return $mediaModel;
+		}
+		if($this->thumbName && !$reload)
+		{
+			return $this->thumbName;
+		}
+		$thumbName = $mediaModel->fetchRow("SELECT * FROM `product_media` WHERE `media_id` = {$this->thumb}");
+		if(!$thumbName)
+		{
+			return $mediaModel;
+		}
+		$this->setThumb($thumbName);
+
+		return $this->thumbName;
+	}
+
+	public function setThumb(Model_Product_Media $thumbName)
+	{
+		$this->thumbName =$thumbName;
+		return $this;
+	}
 }
 
 ?>

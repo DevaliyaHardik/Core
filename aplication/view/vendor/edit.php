@@ -252,7 +252,7 @@ $countryList = array(
 ?>
 <?php 
 $vendor = $this->getVendor();
-$address = $this->getAddress();
+$address = $vendor->getAddress();
 ?> 
 <!DOCTYPE html>
 <html lang="en">

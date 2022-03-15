@@ -30,7 +30,7 @@ class Controller_Category_Media extends Controller_Admin_Action{
 	{
 		try {
 			$mediaModel = Ccc::getModel('Category_Media');
-			$categoryModel = Ccc::getModel('Category');
+			$categoryModel = $mediaModel->getCategory();
 			$request = $this->getRequest();
 			$categoryId = $request->getRequest('id');
 			if($request->isPost()){

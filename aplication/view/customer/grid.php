@@ -1,6 +1,5 @@
 <?php
 $customers = $this->getCustomer();
-$address = $this->getAddress();
 ?>
 <h1 id="post">customer Details</h1>
 <div id="add"><a href="<?php echo $this->getUrl('add'); ?>">Add Customre</a></div>
@@ -54,6 +53,8 @@ $address = $this->getAddress();
             <th>Email</th>
             <th>Mobile</th>
             <th>Status</th>
+            <th>Biling Address</th>
+			<th>Shiping Address</th>
             <th>Created Date</th>
             <th>Updated Date</th>
             <th>Edit</th>
@@ -73,51 +74,26 @@ $address = $this->getAddress();
             <td><?php echo $customer->email; ?></td>
             <td><?php echo $customer->mobile; ?></td>
             <td><?php echo $customer->getStatus($customer->status); ?></td>
+            <td>
+                <?php $bilingAddress = $customer->getBilingAddress()  ?>
+                <?php echo "Address : ".$bilingAddress->address."<br>"  ?>
+                <?php echo "Postal Code : ".$bilingAddress->postalCode."<br>"  ?>
+                <?php echo "Ciry : ".$bilingAddress->city."<br>"  ?>
+                <?php echo "State : ".$bilingAddress->state."<br>"  ?>
+                <?php echo "Country : ".$bilingAddress->country."<br>" ?>
+			</td>
+            <td><?php $shipingAddress = $customer->getShipingAddress()  ?>
+                <?php echo "Address : ".$shipingAddress->address."<br>"  ?>
+                <?php echo "Postal Code : ".$shipingAddress->postalCode."<br>"  ?>
+                <?php echo "Ciry : ".$shipingAddress->city."<br>"  ?>
+                <?php echo "State : ".$shipingAddress->state."<br>"  ?>
+                <?php echo "Country : ".$shipingAddress->country."<br>" ?>
+            </td>
             <td><?php echo $customer->createdDate; ?></td>
             <td><?php echo $customer->updatedDate; ?></td>
             <td><a href="<?php echo $this->getUrl('edit','customer',['id' => $customer->customer_id]); ?>">Edit</a></td>
             <td><a href="<?php echo $this->getUrl('delete','customer',['id' => $customer->customer_id]); ?>">Delete</a></td>
             <td><a href="<?php echo $this->getUrl('grid','customer_price',['id' => $customer->customer_id]); ?>">Price</a></td>
-        </tr>
-    <?php endforeach; ?>
-    <?php endif; ?>
-    </table>
-    <br><br><br>
-    <h1 id="post">Address Details</h1>
-    <table border=1 width=100%>
-        <tr>
-            <th>Address Id</th>
-            <th>Customer Id</th>
-            <th>Address</th>
-            <th>City</th>
-            <th>State</th>
-            <th>Postal Code</th>
-            <th>Country</th>
-            <th>Biling</th>
-            <th>Shiping</th>
-            <th>Edit</th>
-            <th>Delete</th>
-        </tr>
-        <?php if(!$address): ?>
-            <tr>
-                <td colspan="11">No Recored Found</td>
-            </tr>
-        <?php else: ?>
-        <?php foreach ($address as $address): ?>
-        <?php $biling = ($address->biling == 1) ? 'Yes' : 'No'; ?>
-        <?php $shiping = ($address->shiping == 1) ? 'Yes' : 'No'; ?>
-        <tr>
-            <td><?php echo $address->address_id; ?></td>
-            <td><?php echo $address->customer_id; ?></td>
-            <td><?php echo $address->address; ?></td>
-            <td><?php echo $address->city; ?></td>
-            <td><?php echo $address->state; ?></td>
-            <td><?php echo $address->postalCode; ?></td>
-            <td><?php echo $address->country; ?></td>
-            <td><?php echo $biling; ?></td>
-            <td><?php echo $shiping; ?></td>
-            <td><a href="<?php echo $this->getUrl('edit','customer',['id' => $customer->customer_id]); ?>">Edit</a></td>
-            <td><a href="<?php echo $this->getUrl('delete','customer',['id' => $customer->customer_id]); ?>">Delete</a></td>
         </tr>
     <?php endforeach; ?>
     <?php endif; ?>

@@ -39,12 +39,26 @@ class Block_Category_Grid extends Block_Core_Template
         return $finalPath;
     }
 
-    public function getMedia($mediaId)
-    {
-        $mediaModel = Ccc::getModel('Category_Media');
-        $media = $mediaModel->fetchAll("SELECT * FROM `category_media` WHERE `media_id` = '$mediaId'");
-        return $media[0]->getData();
-    }
+    // public function getBase($baseId)
+    // {
+    //     $categoryModel = Ccc::getModel('Category');
+    //     $base = $categoryModel->getBase($baseId);
+    //     return $base;
+    // }
+
+    // public function getThumb($thumbId)
+    // {
+    //     $categoryModel = Ccc::getModel('Category');
+    //     $thumb = $categoryModel->getThumb($thumbId);
+    //     return $thumb;
+    // }
+
+    // public function getSmall($smallId)
+    // {
+    //     $categoryModel = Ccc::getModel('Category');
+    //     $small = $categoryModel->getSmall($smallId);
+    //     return $small;
+    // }
 
     public function setPager($pager)
     {

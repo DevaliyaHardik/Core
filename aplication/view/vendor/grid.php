@@ -1,6 +1,5 @@
 <?php
 $vendors = $this->getVendor();
-$address = $this->getAddress();
 ?>
 
 <h1>Vendor Details</h1>
@@ -54,6 +53,7 @@ $address = $this->getAddress();
         <th>Email</th>
         <th>Mobile</th>
         <th>Status</th>
+        <th>Address</th>
         <th>Created Date</th>
         <th>Updated Date</th>
         <th>Edit</th>
@@ -72,41 +72,18 @@ $address = $this->getAddress();
         <td><?php echo $vendor->email; ?></td>
         <td><?php echo $vendor->mobile; ?></td>
         <td><?php echo $vendor->getStatus($vendor->status); ?></td>
+        <td><?php $address = $vendor->getAddress(); ?>
+            <?php
+                echo "Address : ".$address->address."<br>";
+                echo "Postal Code : ".$address->postalCode."<br>";
+                echo "Ciry : ".$address->city."<br>";
+                echo "State : ".$address->state."<br>";
+                echo "Country : ".$address->country."<br>";
+            ?>
+		</td>
+
         <td><?php echo $vendor->createdDate; ?></td>
         <td><?php echo $vendor->updatedDate; ?></td>
-        <td><a href="<?php echo $this->getUrl('edit','vendor',['id' => $vendor->vendor_id]) ?>">Edit</a></td>
-        <td><a href="<?php echo $this->getUrl('delete','vendor',['id' => $vendor->vendor_id]) ?>">Delete</a></td>
-    </tr>
-    <?php endforeach; ?>
-    <?php endif; ?>
-</table>
-<br><br>
-<table border="1" align="center" width="100%">
-    <tr>
-        <th>Address Id</th>
-        <th>Vendor Id</th>
-        <th>Address</th>
-        <th>City</th>
-        <th>State</th>
-        <th>Postal Code</th>
-        <th>Country</th>
-        <th>Edit</th>
-        <th>Delete</th>
-    </tr>
-    <?php if(!$address): ?>
-    <tr>
-        <td colspan="9"> No Data Fount</td>
-    </tr>
-    <?php else: ?>
-    <?php foreach($address as $address): ?>
-    <tr>
-        <td><?php echo $address->address_id; ?></td>
-        <td><?php echo $address->vendor_id; ?></td>
-        <td><?php echo $address->address; ?></td>
-        <td><?php echo $address->city; ?></td>
-        <td><?php echo $address->state; ?></td>
-        <td><?php echo $address->postalCode; ?></td>
-        <td><?php echo $address->country; ?></td>
         <td><a href="<?php echo $this->getUrl('edit','vendor',['id' => $vendor->vendor_id]) ?>">Edit</a></td>
         <td><a href="<?php echo $this->getUrl('delete','vendor',['id' => $vendor->vendor_id]) ?>">Delete</a></td>
     </tr>

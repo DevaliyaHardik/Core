@@ -23,12 +23,12 @@ class Block_Product_Grid extends Block_Core_Template
         return $product;
     }
 
-    public function getMedia($mediaId)
-    {
-        $mediaModel = Ccc::getModel('Product_Media');
-        $media = $mediaModel->fetchAll("SELECT * FROM `product_media` WHERE `media_id` = '$mediaId'");
-        return $media[0]->getData();
-    }
+    // public function getMedia($mediaId)
+    // {
+    //     $mediaModel = Ccc::getModel('Product_Media');
+    //     $media = $mediaModel->fetchAll("SELECT * FROM `product_media` WHERE `media_id` = '$mediaId'");
+    //     return $media[0]->getData();
+    // }
 
     public function setPager($pager)
     {

@@ -2,6 +2,7 @@
 
 class Model_Vendor extends Model_Core_Row
 {
+	protected $address;
 	const STATUS_ENABLED = 1;
 	const STATUS_DISABLED = 2;
 	const STATUS_DEFAULT = 1;
@@ -31,6 +32,31 @@ class Model_Vendor extends Model_Core_Row
 		return $statuses[self::STATUS_DEFAULT];
 	}
 
+	public function getAddress($reload = false)
+	{
+		$addressModel = Ccc::getModel('Vendor_Address'); 
+		if(!$this->vendor_id)
+		{
+			return $addressModel;
+		}
+		if($this->address && !$reload)
+		{
+			return $this->address;
+		}
+		$address = $addressModel->fetchRow("SELECT * FROM `vendor_address` WHERE `vendor_id` = {$this->vendor_id}");
+		if(!$address)
+		{
+			return $addressModel;
+		}
+		$this->setAddress($address);
+
+		return $this->address;
+	}
+	public function setAddress($address)
+	{
+		$this->address = $address;
+		return $this;
+	}
 }
 
 ?>

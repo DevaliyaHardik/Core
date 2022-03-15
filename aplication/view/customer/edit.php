@@ -252,7 +252,8 @@ $countryList = array(
 ?>
 <?php 
 $customer = $this->getCustomer();
-$address = $this->getAddress();
+$bilingAddress = $customer->getBilingAddress();
+$shipingAddress = $customer->getShipingAddress();
 ?> 
 <form action="<?php echo $this->getUrl('save','customer',['id'=>$customer->customer_id]) ?>" method="POST">
         <table border="1" width="100%" cellspacing="4">
@@ -286,46 +287,101 @@ $address = $this->getAddress();
 			</td>
                 </tr>
                 <tr>
-                        <td colspan="2"><b>Address Information</b></td>
+                        <td colspan="2"><b>Biling Address</b></td>
                 </tr>
                 <tr>
                         <td width="10%">Address</td>
-                        <td><input type="text" name="address[address]" value=<?php echo $address->address; ?>></td>
+                        <td><input type="text" id = "address" name="bilingAddress[address]" value=<?php echo $bilingAddress->address; ?>></td>
                 </tr>
                 
                 <tr>
                         <td width="10%">City</td>
-                        <td><input type="text" name="address[city]" value=<?php echo $address->city; ?>></td>
+                        <td><input type="text" id="city" name="bilingAddress[city]" value=<?php echo $bilingAddress->city; ?>></td>
                 </tr>
                 <tr>
                         <td width="10%">State</td>
-                        <td><input type="text" name="address[state]" value=<?php echo $address->state; ?>></td>
+                        <td><input type="text" id="state" name="bilingAddress[state]" value=<?php echo $bilingAddress->state; ?>></td>
                 </tr>
                 <tr>
                         <td width="10%">Postal Code</td>
-                        <td><input type="text" name="address[postalCode]" value=<?php echo $address->postalCode; ?>></td>
+                        <td><input type="text" id="postalCode" name="bilingAddress[postalCode]" value=<?php echo $bilingAddress->postalCode; ?>></td>
+                        <input type="hidden" name="bilingAddress[biling]" value="1">
+                        <input type="hidden" name="bilingAddress[shiping]" value="2">
                 </tr>
                 <tr>
                         <td width="10%">Country</td>
                         <td>
-                                <select  name="address[country]">
+                                <select  id="country" name="bilingAddress[country]">
                                         <option>select</option>
                                         <?php for($i=0;$i<=count($countryList)-1;$i++){ ?>
-                                                <?php $select = ($countryList[$i] == $address->country) ? 'selected' : ''; ?>
+                                                <?php $select = ($countryList[$i] == $bilingAddress->country) ? 'selected' : ''; ?>
                                                 <option value=<?php echo $countryList[$i]; ?> <?php echo $select; ?>><?php echo $countryList[$i]; ?></option>
                                         <?php } ?>
                                 </select>
                         </td>
                 </tr>
+                <script type="text/javascript">
+                function same() {
+                        var checkedBox = document.getElementById("hardik");
+                        if(checkedBox.checked == true){
+                                var address = document.getElementById("address").value;
+                                var city = document.getElementById("city").value;
+                                var state = document.getElementById("state").value;
+                                var postalCode = document.getElementById("postalCode").value;
+                                var country = document.getElementById("country").value;
+
+                                document.getElementById("address1").value = address; 
+                                document.getElementById("city1").value = city; 
+                                document.getElementById("state1").value = state; 
+                                document.getElementById("postalCode1").value = postalCode; 
+                                document.getElementById("country1").value = country; 
+                        }
+                        else{
+                                document.getElementById("address1").value = null; 
+                                document.getElementById("city1").value = null; 
+                                document.getElementById("state1").value = null; 
+                                document.getElementById("postalCode1").value = null; 
+                                document.getElementById("country1").value = null; 
+                        }
+                }
+                </script>
                 <tr>
-                        <td width="10%">Biling</td>
-                        <?php $checked = ($address->biling == 1) ? 'checked' : ''; ?>
-                        <td><input type="checkbox" name="address[biling]" value="1" <?php echo $checked; ?>> is Biling</td>
+                        <td><input type="checkbox" id="hardik" onclick="same()">same as Biling</td>
+                </tr>
+                
+                <tr>
+                        <td colspan="2"><b>Shiping Address</b></td>
                 </tr>
                 <tr>
-                        <td width="10%">Shiping</td>
-                        <?php $checked1 = ($address->shiping == 1) ? 'checked' : ''; ?>
-                        <td><input type="checkbox" name="address[shiping]" value="1" <?php echo $checked1; ?>> is Shiping</td>
+                        <td width="10%">Address</td>
+                        <td><input type="text" id = "address1" name="shipingAddress[address]" value=<?php echo $shipingAddress->address; ?>></td>
+                </tr>
+                
+                <tr>
+                        <td width="10%">City</td>
+                        <td><input type="text" id="city1" name="shipingAddress[city]" value=<?php echo $shipingAddress->city; ?>></td>
+                </tr>
+                <tr>
+                        <td width="10%">State</td>
+                        <td><input type="text" id="state1" name="shipingAddress[state]" value=<?php echo $shipingAddress->state; ?>></td>
+                </tr>
+                <tr>
+                        <td width="10%">Postal Code</td>
+                        <td><input type="text" id="postalCode1" name="shipingAddress[postalCode]" value=<?php echo $shipingAddress->postalCode; ?>></td>
+                        <input type="hidden" name="shipingAddress[shiping]" value="1">
+                        <input type="hidden" name="shipingAddress[biling]" value="2">
+                </tr>
+                <tr>
+                        <td width="10%">Country</td>
+                        <td>
+                                <select id="country1" name="shipingAddress[country]">
+                                        <option>select</option>
+                                        <?php for($i=0;$i<=count($countryList)-1;$i++){ ?>
+                                                <?php $select = ($countryList[$i] == $shipingAddress->country) ? 'selected' : ''; ?>
+                                                <option value=<?php echo $countryList[$i]; ?> <?php echo $select; ?>><?php echo $countryList[$i]; ?></option>
+                                        <?php } ?>
+                                </select>
+                        </td>
                 </tr>
                 <tr>
                         <td width="10%">&nbsp;</td>
