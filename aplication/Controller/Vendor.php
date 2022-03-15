@@ -96,27 +96,27 @@ class Controller_Vendor extends Controller_Admin_Action{
             }
             $this->getMessage()->addMessage('Your Data Save Successfully');
 
-            return $vendor->vendor_id;
+            return $vendor;
         }
     }
 
-    public function saveAddress($vendorId)
+    public function saveAddress($vendor)
     {
-        $addressModel = Ccc::getModel('Vendor_Address');
-        $request = $this->getRequest('id');
+        $address = $vendor->getAddress();
+        $request = $this->getRequest();
         if($request->isPost()){
             if(!$request->getPost('address')){
                 $this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
                 throw new Exception("Error Processing Request", 1);
             }
             $postData = $request->getPost('address');
-            $addressData = $addressModel->setData($postData);
-            $addressData->vendor_id = $vendorId;
-            $address = $addressModel->fetchRow("SELECT * FROM `vendor_address` WHERE `vendor_id` = '$vendorId'");
-            if($address){
-                $addressData->address_id = $address->address_id;
+            if(!$address->address_id)
+            {
+                unset($address->address_id);
             }
-            $result = $addressModel->save();
+            $address->setData($postData);
+            $address->vendor_id=$vendor->vendor_id;
+            $result = $address->save();
             if(!$result){
                 $this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
                 throw new Exception("Error Processing Request", 1);
@@ -131,13 +131,13 @@ class Controller_Vendor extends Controller_Admin_Action{
     {
 		try {
             $request = $this->getRequest();
-            $vendorId = $this->saveVendor();
-            if(!$vendorId){
+            $vendor = $this->saveVendor();
+            if(!$vendor){
                 $this->getMessage()->addMessage('Your data con not be inserted', Model_Core_Message::MESSAGE_ERROR);
                 throw new Exception("Error Processing Request", 1);
             }
             if(!empty($request->getPost('address')['address'])){
-                $result = $this->saveAddress($vendorId);
+                $result = $this->saveAddress($vendor);
                 if(!$result){
                     $this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
                     throw new Exception("Error Processing Request", 1);

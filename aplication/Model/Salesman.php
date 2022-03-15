@@ -2,6 +2,7 @@
 
 class Model_Salesman extends Model_Core_Row
 {
+	protected $customer = null;
 	const STATUS_ENABLED = 1;
 	const STATUS_DISABLED = 2;
 	const STATUS_DEFAULT = 1;
@@ -31,6 +32,29 @@ class Model_Salesman extends Model_Core_Row
 		return $statuses[self::STATUS_DEFAULT];
 	}
 
+	public function setCustomer(Mode_Customer $customer)
+	{
+		$this->customer = $customer;
+		return $this;
+	}
+
+	public function getCustomer($reload = false)
+	{
+		$customerModal = Ccc::getModel('Customer');
+		if(!$this->customer_id){
+			return $customerModal;
+		}
+		if($this->customer && !$reload){
+			return $this->customer;
+		}
+
+		$customer = $customerModal->fetchRow("SELECT * FROM `customer` WHERE `customer_id` = {$this->customer_id}");
+		if(!$customer){
+			return $customerModal;
+		}
+		$this->setCustomer($customer);
+		return $this->customer;
+	}
 }
 
 ?>

@@ -109,30 +109,40 @@ class Controller_Customer extends Controller_Admin_Action{
 			$this->getMessage()->addMessage('Your Data Save Successfully');
 
 		}
-		return $customer->customer_id;
+		return $customer;
 
 	}
 
-	protected function saveAddress($customerId,$type)
+	protected function saveAddress($customer)
 	{
 		$addressModel = Ccc::getModel('Customer_Address');
 		$request = $this->getRequest();
 		if($request->isPost()){
-			$postData = $request->getpost($type."Address");
-			$addressData = $addressModel->setData($postData);
-			$addressData->customer_id = $customerId;
-			$address = $addressModel->fetchRow("SELECT * FROM `customer_address` WHERE `customer_id` = '$customerId' AND `$type` = 1");
-			if($address){
-				$addressData->address_id = $address->address_id;
+			$postBiling = $request->getPost('bilingAddress');
+			$postShiping = $request->getPost('shipingAddress');
+			$biling = $customer->getBilingAddress();
+			$shiping = $customer->getShipingAddress();
+			if(!$biling->addressId){
+				unset($biling->addressId);
 			}
-			$result = $addressData->save();
-			if(!$result){
-				$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
+			if(!$shiping->addressId){
+				unset($shiping->addressId);
 			}
-			$this->getMessage()->addMessage('Your Data Save Successfully');
-
-			return $result;
+			$biling->setData($postBiling);
+			$biling->customer_id = $customer->customer_id;
+			$shiping->setData($postShiping);	
+			$shiping->customer_id = $customer->customer_id;
+			$save = $biling->save();
+			if(!$save){
+				$this->getMessage()->addMessage('Customer Details Not Saved.',3);
+				throw new Exception("System is unable to Save.", 1);
+			}
+			$save = $shiping->save();
+			if(!$save){
+				$this->getMessage()->addMessage('Customer Details Not Saved.',3);
+				throw new Exception("System is unable to Save.", 1);
+			}
+			return $save;
 		}
 	}
 
@@ -140,24 +150,15 @@ class Controller_Customer extends Controller_Admin_Action{
 	{
 		try {
 				$request = $this->getRequest();
-				$customerId = $this->saveCustomer();
-				if(!$customerId){
+				$customer = $this->saveCustomer();
+				if(!$customer){
 					$this->getMessage()->addMessage('Your data con not be inserted', Model_Core_Message::MESSAGE_ERROR);
 					throw new Exception("Error Processing Request", 1);			
 				}
-				if(!empty($request->getPost('bilingAddress')['address'])){
-					$biling = $this->saveAddress($customerId,'biling');
-					if(!$biling){
-						$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
-						throw new Exception("Error Processing Request", 1);			
-					}
-				}
-				if(!empty($request->getPost('shipingAddress')['address'])){
-					$shiping = $this->saveAddress($customerId,'shiping');
-					if(!$shiping){
-						$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
-						throw new Exception("Error Processing Request", 1);			
-					}
+				$shiping = $this->saveAddress($customer);
+				if(!$shiping){
+					$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
+					throw new Exception("Error Processing Request", 1);			
 				}
 				$this->redirect('grid',null,['id' => null]);
 				} catch (Exception $e) {
