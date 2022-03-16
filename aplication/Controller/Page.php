@@ -45,34 +45,40 @@ class Controller_Page extends Controller_Admin_Action{
 
 	public function editAction()
 	{
-		$pageModel = Ccc::getModel("Page");
-		$request = $this->getRequest();
-		$pageId = $request->getRequest('id');
-		if(!$pageId){
-			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-			throw new Exception("Error Processing Request", 1);			
-		}
-		if(!(int)$pageId){
-			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-			throw new Exception("Error Processing Request", 1);			
-		}
-		$page = $pageModel->load($pageId);
-		if(!$page){
-			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-			throw new Exception("Error Processing Request", 1);			
-		}
-
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
-
-		$content = $this->getLayout()->getContent();
-		$pageEdit = Ccc::getBlock('Page_Edit');
-		$page = $pageEdit->page = $page;
-		$content->addChild($pageEdit);
-
-		$this->randerLayout();
+		try {
+			$pageModel = Ccc::getModel("Page");
+			$request = $this->getRequest();
+			$pageId = $request->getRequest('id');
+			if(!$pageId){
+				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				throw new Exception("Error Processing Request", 1);			
+			}
+			if(!(int)$pageId){
+				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				throw new Exception("Error Processing Request", 1);			
+			}
+			$page = $pageModel->load($pageId);
+			if(!$page){
+				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				throw new Exception("Error Processing Request", 1);			
+			}
+	
+			$header = $this->getLayout()->getHeader();
+			$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+			$message = Ccc::getBlock('Core_Layout_Header_Message');
+			$header->addChild($menu)->addChild($message);
+	
+			$content = $this->getLayout()->getContent();
+			$pageEdit = Ccc::getBlock('Page_Edit');
+			$page = $pageEdit->page = $page;
+			$content->addChild($pageEdit);
+	
+			$this->randerLayout();		
+		}catch (Exception $e){
+			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+			$this->redirect('grid','customer');
+		}	
+		
 	}
 
 	public function saveAction()
@@ -85,8 +91,7 @@ class Controller_Page extends Controller_Admin_Action{
 				$postData = $request->getPost('page');
 				if(!$postData)
 				{
-					$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);			
+					throw new Exception('Your data con not be updated', 1);			
 				}
 
 				$pageData = $pageModel->setData($postData);
@@ -101,17 +106,15 @@ class Controller_Page extends Controller_Admin_Action{
 
 				$pageId = $pageModel->save();	
 				if(!$pageId){
-					$this->getMessage()->addMessage('Page con not be saved', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);			
+					throw new Exception('Page con not be saved', 1);			
 				}
 				$this->getMessage()->addMessage('Page save successfully');
 		}
 			$this->redirect('grid',null,['id' => null]);
-		}
-		catch(Exception $e){
-			$this->redirect('grid',null,['id' => null]);
-		}
-
+		}catch (Exception $e){
+			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+			$this->redirect('grid','customer',['id' => null]);
+		}	
 	}
 
 	public function deleteAction()
@@ -121,20 +124,19 @@ class Controller_Page extends Controller_Admin_Action{
 		if(!$request->isPost()){
 			try {
 				if(!$request->getRequest('id')){
-					$this->getMessage()->addMessage('Your Data can not be Deleted', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);			
+					throw new Exception('Your Data can not be Deleted', 1);			
 				}
 				$pageId = $request->getRequest('id');
 				$result = $pageModel->load($pageId)->delete();
 				if(!$result){
-					$this->getMessage()->addMessage('Your Data can not be Deleted', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);			
+					throw new Exception('Your Data can not be Deleted', 1);			
 				}
 				$this->getMessage()->addMessage('Your Data Delete Successfully');
 				$this->redirect('grid',null,['id' => null]);
 
-			} catch (Exception $e) {
-				$this->redirect('grid',null,['id' => null]);
+			}catch (Exception $e){
+				$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+				$this->redirect('grid','customer',['id' => null]);
 			}	
 		}
 	}

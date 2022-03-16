@@ -87,12 +87,14 @@ class Controller_cart extends Controller_Admin_Action{
 			if($cart){
 				$this->redirect('edit');
 			}
-			$cartModel->customer_id = $customerId;
-			$cart = $cartModel->save();
-			if(!$cart){
-				$this->getMessage()->addMessage('Cart not added');
+			else{
+				$cartModel->customer_id = $customerId;
+				$cart = $cartModel->save();
+				if(!$cart){
+					$this->getMessage()->addMessage('Cart not added');
+				}
+				$this->redirect('edit');
 			}
-			$this->redirect('edit');
 		} catch (Exception $e) {
 			$this->redirect('edit');
 		}

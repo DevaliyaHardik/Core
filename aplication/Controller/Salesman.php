@@ -44,33 +44,38 @@ class Controller_Salesman extends Controller_Admin_Action{
 
 	public function editAction()
 	{
-		$salesmanModel = Ccc::getModel("Salesman");
-		$request = $this->getRequest();
-		$salesmanId = $request->getRequest('id');
-		if(!$salesmanId){
-			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-			throw new Exception("Error Processing Request", 1);			
-		}
-		if(!(int)$salesmanId){
-			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-			throw new Exception("Error Processing Request", 1);			
-		}
-		$salesman = $salesmanModel->load($salesmanId);
-		if(!$salesman){
-			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-			throw new Exception("Error Processing Request", 1);			
-		}
-
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
-
-		$content = $this->getLayout()->getContent();
-		$salesmanEdit = Ccc::getBlock('Salesman_Edit');
-		$salesmanEdit->salesman = $salesman;
-		$content->addChild($salesmanEdit);
-
-		$this->randerLayout();
+		try {
+			$salesmanModel = Ccc::getModel("Salesman");
+			$request = $this->getRequest();
+			$salesmanId = $request->getRequest('id');
+			if(!$salesmanId){
+				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				throw new Exception("Error Processing Request", 1);			
+			}
+			if(!(int)$salesmanId){
+				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				throw new Exception("Error Processing Request", 1);			
+			}
+			$salesman = $salesmanModel->load($salesmanId);
+			if(!$salesman){
+				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				throw new Exception("Error Processing Request", 1);			
+			}
+	
+			$header = $this->getLayout()->getHeader();
+			$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+			$header->addChild($menu);
+	
+			$content = $this->getLayout()->getContent();
+			$salesmanEdit = Ccc::getBlock('Salesman_Edit');
+			$salesmanEdit->salesman = $salesman;
+			$content->addChild($salesmanEdit);
+	
+			$this->randerLayout();
+		}catch (Exception $e){
+			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+			$this->redirect('grid','customer');
+		}	
 	}
 
 	public function saveAction()
@@ -82,8 +87,7 @@ class Controller_Salesman extends Controller_Admin_Action{
 			$salesmanId = $request->getRequest('id');
 			if($request->isPost()){
 				if(!$request->getPost()){
-					$this->getMessage()->addMessage('Your data con not be inserted', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);	
+					throw new Exception('Your data con not be inserted', 1);	
 				}
 				$postData = $request->getPost('salesman');
 				$salesmanData = $salesmanModel->setData($postData);
@@ -97,15 +101,15 @@ class Controller_Salesman extends Controller_Admin_Action{
 				}
 				$salesmanId = $salesmanModel->save();
 				if(!$salesmanId){
-					$this->getMessage()->addMessage('Salesman Can not saved', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);
+					throw new Exception('Salesman Can not saved', 1);
 				}
 				$this->getMessage()->addMessage('Salesman Saved Successfully');
 			}
 			$this->redirect('grid',null,['id' => null]);
-		} catch (Exception $e){
-			$this->redirect('grid',null,['id' => null]);
-		}
+		}catch (Exception $e){
+			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+			$this->redirect('grid','customer',['id' => null]);
+		}	
 	}
 
 	public function deleteAction()
@@ -117,8 +121,7 @@ class Controller_Salesman extends Controller_Admin_Action{
 		if(!$request->isPost()){
 			try {
 				if(!$request->getRequest('id')){
-					$this->getMessage()->addMessage('Your Data can not be Deleted', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);
+					throw new Exception('Your Data can not be Deleted', 1);
 				}
 				
 				$salesmanId=$request->getRequest('id');
@@ -132,15 +135,15 @@ class Controller_Salesman extends Controller_Admin_Action{
 
 				$result = $salesmanModel->load($salesmanId)->delete();
 				if(!$result){
-					$this->getMessage()->addMessage('Your Data can not Saved', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);
+					throw new Exception('Your Data can not Saved', 1);
 				}
 
 				$this->getMessage()->addMessage('Your Data Saved Successfully');
 				$this->redirect('grid',null,['id' => null]);
 
-			} catch (Exception $e) {
-				$this->redirect('grid',null,['id' => null]);
+			}catch (Exception $e){
+				$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+				$this->redirect('grid','customer',['id' => null]);
 			}	
 		}
 	}

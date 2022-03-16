@@ -47,37 +47,42 @@ class Controller_Customer extends Controller_Admin_Action{
 
 	public function editAction()
 	{
-		$customerModel = Ccc::getModel("Customer");
-		$addressModel = Ccc::getModel("Customer_Address");
-		$request = $this->getRequest();
-		$customerId = $request->getRequest('id');
-		if(!$customerId){
-			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-			throw new Exception("Error Processing Request", 1);			
-		}
-		if(!(int)$customerId){
-			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-			throw new Exception("Error Processing Request", 1);			
-		}
-		$customer = $customerModel->load($customerId);
-		$address = $addressModel->load($customerId);
-		if(!$customer){
-			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-			throw new Exception("Error Processing Request", 1);			
-		}
-
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
-
-		$content = $this->getLayout()->getContent();
-		$customerEdit = Ccc::getBlock('Customer_Edit');
-		$customerEdit->customer = $customer;
-		$customerEdit->address = $address;
-		$content->addChild($customerEdit);
-
-		$this->randerLayout();
+		try {
+			$customerModel = Ccc::getModel("Customer");
+			$addressModel = Ccc::getModel("Customer_Address");
+			$request = $this->getRequest();
+			$customerId = $request->getRequest('id');
+			if(!$customerId){
+				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				throw new Exception("Error Processing Request", 1);			
+			}
+			if(!(int)$customerId){
+				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				throw new Exception("Error Processing Request", 1);			
+			}
+			$customer = $customerModel->load($customerId);
+			$address = $addressModel->load($customerId);
+			if(!$customer){
+				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				throw new Exception("Error Processing Request", 1);			
+			}
+	
+			$header = $this->getLayout()->getHeader();
+			$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+			$message = Ccc::getBlock('Core_Layout_Header_Message');
+			$header->addChild($menu)->addChild($message);
+	
+			$content = $this->getLayout()->getContent();
+			$customerEdit = Ccc::getBlock('Customer_Edit');
+			$customerEdit->customer = $customer;
+			$customerEdit->address = $address;
+			$content->addChild($customerEdit);
+	
+			$this->randerLayout();
+		}catch (Exception $e){
+			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+			$this->redirect('grid','customer');
+		}	
 	}
 
 	protected function saveCustomer()
@@ -87,8 +92,7 @@ class Controller_Customer extends Controller_Admin_Action{
 		$customerId = $request->getRequest('id');
 		if($request->isPost()){
 			if(!$request->getPost()){
-				$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
+				throw new Exception('Your data con not be updated', 1);			
 			}
 			$postData = $request->getPost('customer');
 			$customerData = $customerModel->setData($postData);
@@ -103,8 +107,7 @@ class Controller_Customer extends Controller_Admin_Action{
 			$customer = $customerModel->save();
 
 			if(!$customer){
-				$this->getMessage()->addMessage('Your data con not be saved', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
+				throw new Exception('Your data con not be saved', 1);			
 			}
 			$this->getMessage()->addMessage('Your Data Save Successfully');
 
@@ -134,13 +137,11 @@ class Controller_Customer extends Controller_Admin_Action{
 			$shiping->customer_id = $customer->customer_id;
 			$save = $biling->save();
 			if(!$save){
-				$this->getMessage()->addMessage('Customer Details Not Saved.',3);
-				throw new Exception("System is unable to Save.", 1);
+				throw new Exception('Customer Details Not Saved.', 1);
 			}
 			$save = $shiping->save();
 			if(!$save){
-				$this->getMessage()->addMessage('Customer Details Not Saved.',3);
-				throw new Exception("System is unable to Save.", 1);
+				throw new Exception('Customer Details Not Saved.', 1);
 			}
 			return $save;
 		}
@@ -152,19 +153,18 @@ class Controller_Customer extends Controller_Admin_Action{
 				$request = $this->getRequest();
 				$customer = $this->saveCustomer();
 				if(!$customer){
-					$this->getMessage()->addMessage('Your data con not be inserted', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);			
+					throw new Exception('Your data con not be inserted', 1);			
 				}
 				$shiping = $this->saveAddress($customer);
 				if(!$shiping){
-					$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);			
+					throw new Exception('Your data con not be updated', 1);			
 				}
 				$this->redirect('grid',null,['id' => null]);
-				} catch (Exception $e) {
-					$this->redirect('grid',null,['id' => null]);
-				}
-	}
+			}catch (Exception $e){
+				$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+				$this->redirect('grid','customer',['id' => null]);
+			}	
+		}
 
 	public function deleteAction()
 	{
@@ -173,20 +173,19 @@ class Controller_Customer extends Controller_Admin_Action{
 		if(!$request->isPost()){
 			try {
 				if(!$request->getRequest('id')){
-					$this->getMessage()->addMessage('Your Data can not be Deleted', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);			
+					throw new Exception('Your Data can not be Deleted', 1);			
 				}
 				$customerId=$request->getRequest('id');
 				$result = $deleteModel->load($customerId)->delete();
 				if(!$result){
-					$this->getMessage()->addMessage('Your Data can not be Deleted', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);			
+					throw new Exception('Your Data can not be Deleted', 1);			
 				}
 				$this->getMessage()->addMessage('Your Data Delete Successfully');
 				$this->redirect('grid',null,['id' => null]);
 
-			} catch (Exception $e) {
-				$this->redirect('grid',null,['id' => null]);
+			}catch (Exception $e){
+				$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+				$this->redirect('grid','customer',['id' => null]);
 			}	
 		}
 	}

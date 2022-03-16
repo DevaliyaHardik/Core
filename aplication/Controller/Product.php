@@ -45,35 +45,40 @@ class Controller_Product extends Controller_Admin_Action{
 
 	public function editAction()
 	{
-		$productModel = Ccc::getModel('Product');
-		$request = $this->getRequest();
-		$productId = $request->getRequest('id');
-		if(!$productId){
-			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-			throw new Exception("Error Processing Request", 1);			
-		}
-		if(!(int)$productId){
-			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-			throw new Exception("Error Processing Request", 1);			
-		}
-
-		$product = $productModel->load($productId);
-		if(!$product){
-			$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-			throw new Exception("Error Processing Request", 1);			
-		}
-
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
-
-		$content = $this->getLayout()->getContent();
-		$productEdit = Ccc::getBlock('Product_Edit');
-		$productEdit->product = $product;
-		$content->addChild($productEdit);
-
-		$this->randerLayout();
+		try {
+			$productModel = Ccc::getModel('Product');
+			$request = $this->getRequest();
+			$productId = $request->getRequest('id');
+			if(!$productId){
+				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				throw new Exception("Error Processing Request", 1);			
+			}
+			if(!(int)$productId){
+				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				throw new Exception("Error Processing Request", 1);			
+			}
+	
+			$product = $productModel->load($productId);
+			if(!$product){
+				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				throw new Exception("Error Processing Request", 1);			
+			}
+	
+			$header = $this->getLayout()->getHeader();
+			$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+			$message = Ccc::getBlock('Core_Layout_Header_Message');
+			$header->addChild($menu)->addChild($message);
+	
+			$content = $this->getLayout()->getContent();
+			$productEdit = Ccc::getBlock('Product_Edit');
+			$productEdit->product = $product;
+			$content->addChild($productEdit);
+	
+			$this->randerLayout();
+		}catch (Exception $e){
+			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+			$this->redirect('grid','customer');
+		}	
 	}
 
 	public function saveAction()
@@ -86,8 +91,7 @@ class Controller_Product extends Controller_Admin_Action{
 				$postData = $request->getPost('product');
 				$categoryIds = $request->getPost('category');
 				if(!$postData){
-					$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);			
+					throw new Exception('Your data con not be updated', 1);			
 				}
 				$productData = $productModel->setData($postData);
 				if(!empty($productId)){
@@ -99,17 +103,17 @@ class Controller_Product extends Controller_Admin_Action{
 
 				$product = $productModel->save();
 				if(!$product){
-					$this->getMessage()->addMessage('product con not be saved', Model_Core_Message::MESSAGE_ERROR);
-					throw new Exception("Error Processing Request", 1);			
+					throw new Exception('product con not be saved', 1);			
 				}
 
 				$result = $product->saveCategories($categoryIds);
 				$this->getMessage()->addMessage('product Save Successfully');
 				$this->redirect('grid',null,['id' => null]);
 			} 			
-		}catch (Exception $e) {
-			$this->redirect('grid',null,['id' => null]);
-		}		
+		}catch (Exception $e){
+			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+			$this->redirect('grid','customer',['id' => null]);
+		}	
 	}
 
 	public function deleteAction()
@@ -119,8 +123,7 @@ class Controller_Product extends Controller_Admin_Action{
 			$mediaModel = Ccc::getModel('Product_Media');
 			$request = $this->getRequest();
 			if(!$request->getRequest('id')){
-				$this->getMessage()->addMessage('Your Data can not be Deleted', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
+				throw new Exception('Your Data can not be Deleted', 1);			
 			}
 			$productId = $request->getRequest('id');
 
@@ -131,17 +134,15 @@ class Controller_Product extends Controller_Admin_Action{
 
 			$result = $productModel->load($productId)->delete();
 			if(!$result){
-				$this->getMessage()->addMessage('Your Data can not be Deleted', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
+				throw new Exception('Your Data can not be Deleted', 1);			
 			}
 			$this->getMessage()->addMessage('Your Data Delete Successfully');
 			$this->redirect('grid',null,['id' => null]);
-		} catch (Exception $e) {
-			$this->redirect('grid',null,['id' => null]);
-		}
+		}catch (Exception $e){
+			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+			$this->redirect('grid','customer',['id' => null]);
+		}	
 	}
-
-
 }
 
 ?>
