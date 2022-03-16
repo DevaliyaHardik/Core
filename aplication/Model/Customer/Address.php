@@ -17,17 +17,17 @@ class Model_Customer_Address extends Model_Core_Row
 
 	public function getCustomer($reload = false)
 	{
-		$customerModal = Ccc::getModel('Customer');
+		$customerModel = Ccc::getModel('Customer');
 		if(!$this->customer_id){
-			return $customerModal;
+			return $customerModel;
 		}
 		if($this->customer && !$reload){
 			return $this->customer;
 		}
 
-		$customer = $customerModal->fetchRow("SELECT * FROM `customer` WHERE `customer_id` = {$this->customer_id}");
+		$customer = $customerModel->fetchRow("SELECT * FROM `customer` WHERE `customer_id` = {$this->customer_id}");
 		if(!$customer){
-			return $customerModal;
+			return $customerModel;
 		}
 		$this->setCustomer($customer);
 		return $this->customer;
