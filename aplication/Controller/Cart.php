@@ -1,6 +1,6 @@
 <?php Ccc::loadClass("Controller_Admin_Action"); ?>
 <?php
-
+echo "<pre>";
 class Controller_cart extends Controller_Admin_Action{
 
 	public function __construct()
@@ -93,14 +93,133 @@ class Controller_cart extends Controller_Admin_Action{
 				if(!$cart){
 					$this->getMessage()->addMessage('Cart not added');
 				}
-				$this->redirect('edit');
+				$this->saveAddressAction($cart);
 			}
+			$this->redirect('edit');
+
 		} catch (Exception $e) {
 			$this->redirect('edit');
 		}
 		
 	}
 
+	public function saveAddressAction($cart)
+	{
+		try {
+			$request = $this->getRequest();
+			$customerId = $request->getRequest('id');
+			$customer = $cart->getCustomer();
+			$customerBilingAddress = $customer->getBilingAddress();
+			$customerShipingAddress = $customer->getShipingAddress();
+			if($customerBilingAddress){
+				$bilingAddress = $cart->getBilingAddress();
+				$bilingAddress->cart_id = $cart->cart_id;
+				$bilingAddress->firstName = $customer->firstName;
+				$bilingAddress->lastName = $customer->lastName;
+				$bilingAddress->setData($customerBilingAddress->getData());
+				unset($bilingAddress->address_id);
+				unset($bilingAddress->customer_id);
+				$bilingAddress->save();
+			}
+			if($customerShipingAddress){
+				$shipingAddress = $cart->getShipingAddress();
+				$shipingAddress->cart_id = $cart->cart_id;
+				$shipingAddress->firstName = $customer->firstName;
+				$shipingAddress->lastName = $customer->lastName;
+				$shipingAddress->setData($customerShipingAddress->getData());
+				unset($shipingAddress->address_id);
+				unset($shipingAddress->customer_id);
+				$shipingAddress->save();
+			}		} catch (Exveption $e) {
+			echo $e->message();
+		}
+	}
+
+	public function saveCartAddressAction()
+	{
+		$request = $this->getRequest();
+		$customerId = $request->getRequest('id');
+		$cartModel = Ccc::getModel('Cart');
+		$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
+		$bilingData = $request->getPost('bilingAddress');
+		$shipingData = $request->getPost('shipingAddress');
+		$bilingAddress = $cart->getBilingAddress();
+		$shipingAddress = $cart->getShipingAddress();
+		$bilingAddress->setData($bilingData);
+		$shipingAddress->setData($shipingData);
+		$bilingAddress->save();
+		$shipingAddress->save();
+		if($request->getPost('saveInBilingBook')){
+			$customer = $cart->getCustomer();
+			$customerBilingAddress = $customer->getBilingAddress();
+			$customerBilingAddress->setData($bilingData);
+			unset($customerBilingAddress->firstName);
+			unset($customerBilingAddress->lastName);
+			$customerBilingAddress->save();
+		}
+		if($request->getPost('saveInShipingBook')){
+			$customer = $cart->getCustomer();
+			$customerShipingAddress = $customer->getShipingAddress();
+			$customerShipingAddress->setData($shipingData);
+			unset($customerShipingAddress->firstName);
+			unset($customerShipingAddress->lastName);
+			$customerShipingAddress->save();
+		}
+		$this->redirect('edit');
+	}
+
+	public function savePaymentMethodAction()
+	{
+		$request = $this->getRequest();
+		$customerId = $request->getRequest('id');
+		$cartModel = Ccc::getModel('Cart');
+		$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
+		$paymentData = $request->getPost('paymentMethod');
+		$cart->setData(['paymentMethod' => $paymentData]);
+		$cart->save();
+		$this->redirect('edit');
+	}
+
+	public function saveShipingMethodAction()
+	{
+		$request = $this->getRequest();
+		$customerId = $request->getRequest('id');
+		$cartModel = Ccc::getModel('Cart');
+		$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
+		$shipingCharge = $request->getPost('shipingMethod');
+		if($shipingCharge == 100){
+			$shipingMethod = 'same day delivery';
+		}
+		elseif($shipingCharge == 70){
+			$shipingMethod = 'express delivery';
+		}
+		else{
+			$shipingMethod = 'normal delivery';
+		}
+		$cart->setData(['shipingMethod' => $shipingMethod, 'shipingCharge' => $shipingCharge]);
+		$cart->save();
+		$this->redirect('edit');
+	}
+
+	public function addCartItemAction()
+	{
+		$request = $this->getRequest();
+		$productModel = Ccc::getModel('Product');
+		$customerId = $request->getRequest('id');
+		$cartModel = Ccc::getModel('Cart');
+		$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
+		$cartData = $request->getPost('cartItem');
+		$item = $cart->getItem();
+		$item->cart_id = $cart->cart_id;
+		foreach($cartData as $cartItem){
+			if(array_key_exists('product_id',$cartItem)){
+				$item->setData($cartItem);
+				$item->save();
+				unset($item->item_id);
+			}
+		}
+		$this->redirect('edit');
+	}
 	// public function saveAction()
 	// {
 	// 	try{

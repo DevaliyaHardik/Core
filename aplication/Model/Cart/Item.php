@@ -51,7 +51,7 @@ class Model_Cart_Item extends Model_Core_Row
 		}
 
 		$product = $productModel->fetchRow("SELECT * FROM `product` WHERE `product_id` = {$this->product_id}");
-		if(!$cart){
+		if(!$product){
 			return $productModel;
 		}
 		$this->setProduct($product);

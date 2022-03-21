@@ -29,5 +29,16 @@ class Block_Cart_Edit extends Block_Core_Template
 		return $products;
 	}
 
+	public function getItems()
+	{
+		$itemModel = Ccc::getModel('Cart_Item');
+		$cartId = !($this->cart->item->cart_id) ? null : $this->cart->item->cart_id;
+		if($cartId){
+			$items = $itemModel->fetchAll("SELECT * FROM `cart_item` WHERE `cart_id` = {$cartId} ");
+			return $items;
+		}
+		return null;
+	}
+
 }
 ?>
