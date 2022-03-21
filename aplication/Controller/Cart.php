@@ -1,6 +1,6 @@
 <?php Ccc::loadClass("Controller_Admin_Action"); ?>
 <?php
-echo "<pre>";
+
 class Controller_cart extends Controller_Admin_Action{
 
 	public function __construct()
@@ -24,24 +24,6 @@ class Controller_cart extends Controller_Admin_Action{
 		$this->randerLayout();
 	}
 
-	public function addAction()
-	{
-		$cartModel = Ccc::getModel('cart');
-		$cart = $cartModel;
-
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
-
-		$content = $this->getLayout()->getContent();
-		$cartEdit = Ccc::getBlock('cart_Edit');
-		$cart = $cartEdit->cart = $cart;
-		$content->addChild($cartEdit);
-
-		$this->randerLayout();
-	}
-
 	public function editAction()
 	{
 		$request = $this->getRequest();
@@ -58,6 +40,7 @@ class Controller_cart extends Controller_Admin_Action{
 			$item = $cartModel->getItem();
 			$bilingAddress = $cartModel->getBilingAddress();
 			$shipingAddress = $cartModel->getShipingAddress();
+			$cart = $cartModel;
 		}
 		else{
 			$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
@@ -70,6 +53,7 @@ class Controller_cart extends Controller_Admin_Action{
 		$cartModel->item = $item;
 		$cartModel->bilingAddress = $bilingAddress;
 		$cartModel->shipingAddress = $shipingAddress;
+		$cartModel->cart = $cart;
 		$cartEdit = Ccc::getBlock('Cart_Edit')->setData(['cart' => $cartModel]);
 		$content->addChild($cartEdit);
 
@@ -188,13 +172,13 @@ class Controller_cart extends Controller_Admin_Action{
 		$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
 		$shipingCharge = $request->getPost('shipingMethod');
 		if($shipingCharge == 100){
-			$shipingMethod = 'same day delivery';
+			$shipingMethod = '1';
 		}
 		elseif($shipingCharge == 70){
-			$shipingMethod = 'express delivery';
+			$shipingMethod = '2';
 		}
 		else{
-			$shipingMethod = 'normal delivery';
+			$shipingMethod = '3';
 		}
 		$cart->setData(['shipingMethod' => $shipingMethod, 'shipingCharge' => $shipingCharge]);
 		$cart->save();
@@ -213,79 +197,121 @@ class Controller_cart extends Controller_Admin_Action{
 		$item->cart_id = $cart->cart_id;
 		foreach($cartData as $cartItem){
 			if(array_key_exists('product_id',$cartItem)){
-				$item->setData($cartItem);
-				$item->save();
-				unset($item->item_id);
+				$product = $productModel->load($cartItem['product_id']);
+				if($product->quntity >= $cartItem['quantity']){
+					unset($item->item_id);
+					$item->setData($cartItem);
+					$item->itemTotal = $product->price * $cartItem['quantity'];
+					$item->save();
+					unset($item->item_id);
+				}
 			}
 		}
 		$this->redirect('edit');
 	}
-	// public function saveAction()
-	// {
-	// 	try{
-	// 		$cartModel = Ccc::getModel('cart');
-	// 		$request = $this->getRequest();
-	// 		$cartId = $request->getRequest('id');
-	// 		if($request->isPost()){
-	// 			$postData = $request->getPost('cart');
-	// 			if(!$postData)
-	// 			{
-	// 				$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
-	// 				throw new Exception("Error Processing Request", 1);			
-	// 			}
 
-	// 			$cartData = $cartModel->setData($postData);
-	// 			$cartData->password = md5($cartData->password);
-	// 			if(!empty($cartId)){
-	// 				$cartData->cart_id = $cartId;
-	// 				$cartData->updatedDate = date("Y-m-d h:i:s");
-	// 			}
-	// 			else{
-	// 				unset($cartData->cart_id);
-	// 				$cartData->createdDate = date("Y-m-d h:i:s");
-	// 			}
+	public function deleteCartItemAction()
+	{
+		$request = $this->getRequest();
+		$itemId = $request->getRequest('item_id');
+		$item = Ccc::getModel('Cart_Item');
+		$result = $item->load($itemId)->delete();
+		if($result){
+			$this->redirect('edit',null,['item_id' => null]);
+		}
+		$this->redirect('edit',null,['item_id' => null]);
+	}
 
-	// 			$cartId = $cartModel->save();
-	// 			if(!$cartId){
-	// 				$this->getMessage()->addMessage('cart con not be saved', Model_Core_Message::MESSAGE_ERROR);
-	// 				throw new Exception("Error Processing Request", 1);			
-	// 			}
-	// 			$this->getMessage()->addMessage('cart Save Successfully');
-	// 		}
-	// 		$this->redirect('grid',null,['id' => null]);
-	// 	}
-	// 	catch(Exception $e){
-	// 		$this->redirect('grid',null,['id' => null]);
-	// 	}
+	public function cartItemUpdateAction()
+	{
+		$request = $this->getRequest();
+		$productModel = Ccc::getModel('Product');
+		$customerId = $request->getRequest('id');
+		$cartModel = Ccc::getModel('Cart');
+		$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
+		$cartData = $request->getPost('cartItem');
+		$item = $cart->getItem();
+		foreach($cartData as $cartItem){
+			$product = $productModel->load($cartItem['product_id']);
+			if($product->quntity >= $cartItem['quantity']){
+				$item->setData($cartItem);
+				$item->itemTotal = $product->price * $cartItem['quantity'];
+				$item->save();
+			}
+		}
+		$this->redirect('edit');
+	}
 
-	// }
+	public function placeOrderAction()
+	{
+		echo "<pre>";
+		$request = $this->getRequest();
+		$productModel = Ccc::getModel('Product');
+		$customerId = $request->getRequest('id');
+		$cartModel = Ccc::getModel('Cart');
+		$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
+		$customer = $cart->getCustomer();
+		$orderModel = Ccc::getModel('order');
+		$orderModel->customer_id = $customerId;
+		$orderModel->firstName = $customer->firstName;
+		$orderModel->lastName = $customer->lastName;
+		$orderModel->email = $customer->email;
+		$orderModel->mobile = $customer->mobile;
+		$orderModel->shiping_id = $cart->shipingMethod;
+		$orderModel->shipingCharge = $cart->shipingCharge;
+		$orderModel->payment_id = $cart->paymentMethod;
+		$orderModel->grandTotal = $request->getPost('grandTotal');
+		$order = $orderModel->save();
 
-	// public function deleteAction()
-	// {
-	// 	$cartModel = Ccc::getModel('cart');
-	// 	$request = $this->getRequest();
-	// 	if(!$request->isPost()){
-	// 		try {
-	// 			if(!$request->getRequest('id')){
-	// 				$this->getMessage()->addMessage('Your Data can not be Deleted');
-	// 				throw new Exception("Error Processing Request", 1);			
-	// 			}
-	// 			$cartId = $request->getRequest('id');
-	// 			$result = $cartModel->load($cartId)->delete();
-	// 			if(!$result){
-	// 				$this->getMessage()->addMessage('Your Data can not Deleted', Model_Core_Message::MESSAGE_ERROR);
-	// 				throw new Exception("Error Processing Request", 1);			
-	// 			}
-	// 			$this->getMessage()->addMessage('Your Data Delete Successfully');
-	// 			$this->redirect('grid',null,['id' => null]);
+		$items = $cart->getItems();
+		foreach($items as $item){
+			$product = $item->getProduct();
+			$itemModel = Ccc::getModel('Order_Item');
+			$itemModel->order_id = $order->order_id;
+			$itemModel->product_id = $product->product_id;
+			$itemModel->name = $product->name;
+			$itemModel->sku = $product->sku;
+			$itemModel->price = $item->itemTotal;
+			$itemModel->quantity = $item->quantity;
+			$result = $itemModel->save();
+			if($result){
+				$item->delete();
+			}
+	
+		}
+		$addressModel = Ccc::getModel('Order_Address');
+		$bilingData = $cart->getBilingAddress();
+		$shipingData = $cart->getShipingAddress();
+		$bilingAddress = $order->getBilingAddress();
+		$shipingAddress = $order->getShipingAddress();
+		unset($bilingData->cart_id);
+		unset($bilingData->address_id);
+		unset($shipingData->cart_id);
+		unset($shipingData->address_id);
+		$bilingAddress->setData($bilingData->getData());
+		$bilingAddress->email = $customer->email;
+		$bilingAddress->mobile = $customer->mobile;
+		$bilingAddress->order_id = $order->order_id;
+		$shipingAddress->setData($shipingData->getData());
+		$shipingAddress->email = $customer->email;
+		$shipingAddress->mobile = $customer->mobile;
+		$shipingAddress->order_id = $order->order_id;
 
-	// 		} catch (Exception $e) {
-	// 			$this->redirect('grid',null,['id' => null]);
-	// 		}	
-	// 	}
-	// }
+		$bilingResult = $bilingAddress->save();
+		$shipinhResult = $shipingAddress->save();
 
-
+		if($order){
+			$cart->delete();
+		}
+		if($bilingResult){
+			$bilingData->delete();
+		}
+		if($shipinhResult){
+			$shipingData->delete();
+		}
+		
+		$this->redirect('grid',null,[],true);
+	}
 }
 
 ?>

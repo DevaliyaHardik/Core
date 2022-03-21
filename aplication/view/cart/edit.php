@@ -160,6 +160,11 @@ $products = $this->getProducts();
 			<th>Row Tatal</th>
 			<th>Action</th>
 		</tr>
+		<?php if(!$products): ?>
+		<tr>
+			<td colspan="6">No more products availabel</td>
+		</tr>
+		<?php else: ?>
 		<?php $i = 0; ?>
 		<?php foreach($products as $product): ?>
 		<tr>
@@ -172,9 +177,10 @@ $products = $this->getProducts();
 		</tr>
 		<?php $i++; ?>
 		<?php endforeach; ?>
+		<?php endif; ?>
 	</table>
 </form>
-<form action="" method="post">
+<form action="<?php echo $this->getUrl('cartItemUpdate'); ?>" method="post">
 		<input type="submit" value="update">
 		<button value="use js">New Item</button>
 		<table border="1">
@@ -191,17 +197,50 @@ $products = $this->getProducts();
 				<td colspan="6">no item found</td>
 			</tr>
 			<?php else: ?>
+			<?php $i = 0; ?>
 			<?php foreach($items as $item): ?>
 			<tr>
+				<input type="hidden" name="cartItem[<?php echo $i ?>][item_id]" value="<?php echo $item->item_id ?>">
+				<input type="hidden" name="cartItem[<?php echo $i ?>][product_id]" value="<?php echo $item->product_id ?>">
 				<td><img src="Media/Product/<?php echo $item->getProduct()->getBase()->name; ?>" alt="image not found" width="50" hight="50"></td>
 				<td><?php echo $item->getProduct()->name; ?></td>
-				<td><input type="number" name="quantity" value="<?php echo $item->quantity; ?>"></td>
+				<td><input type="number" name="cartItem[<?php echo $i ?>][quantity]" value="<?php echo $item->quantity; ?>"></td>
 				<td><?php echo $item->getProduct()->price; ?></td>
-				<td><?php echo $item->quantity * $item->getProduct()->price; ?></td>
-				<td><a href="<?php echo $this->getUrl('deleteCartItem',null,['item_id' => $item->item_id]) ?>"><button>Remove</button></a></td>
+				<td><?php echo $item->itemTotal; ?></td>
+				<td><a href="<?php echo $this->getUrl('deleteCartItem',null,['item_id' => $item->item_id]) ?>">Remove</a></td>
 			</tr>
+			<?php $i++; ?>
 			<?php endforeach; ?>
 			<?php endif;?>
+			<tr>
+				<td colspan="6" align="right"><?php echo $this->getTotal(); ?></td>
+			</tr>
+		</table>
+	</form>
+	<form action="<?php echo $this->getUrl('placeOrder') ?>" method="post">
+		<table border="1">
+			<tr>
+				<td>Sub Total</td>
+				<td><?php echo $this->getTotal(); ?></td>
+			</tr>
+			<tr>
+				<td>Shiping Charge</td>
+				<td><?php echo $cart->cart->shipingCharge; ?></td>
+			</tr><tr>
+				<td>Tax</td>
+				<td><?php echo $this->getTotal() * 20 / 100; ?></td>
+			</tr><tr>
+				<td>Discount</td>
+				<td>50</td>
+			</tr><tr>
+				<td>Grand Total</td>
+				<td><?php echo $this->getTotal() + $cart->cart->shipingCharge + $this->getTotal() * 20 / 100 + 50; ?></td>
+				<input type="hidden" name="grandTotal" value="<?php echo $this->getTotal() + $cart->cart->shipingCharge + $this->getTotal() * 20 / 100 + 50; ?>">
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="submit" value="Place Order"></td>
+			</tr>
 		</table>
 	</form>
 <script type="text/javascript">

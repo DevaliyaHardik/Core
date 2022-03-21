@@ -25,8 +25,15 @@ class Block_Cart_Edit extends Block_Core_Template
 	public function getProducts()
 	{
 		$productModel = Ccc::getModel('Product');
-		$products = $productModel->fetchAll("SELECT * FROM `product` WHERE `status` = 1");
-		return $products;
+		$cartId = !($this->cart->item->cart_id) ? null : $this->cart->item->cart_id;
+		if($cartId){
+			$products = $productModel->fetchAll("SELECT * FROM `product` WHERE `product_id` NOT IN (SELECT `product_id` FROM `cart_item` WHERE `cart_id` = $cartId)");
+			return $products;
+		}
+		else{
+			$products = $productModel->fetchAll("SELECT * FROM `product`");
+			return $products;
+		}
 	}
 
 	public function getItems()
@@ -35,6 +42,17 @@ class Block_Cart_Edit extends Block_Core_Template
 		$cartId = !($this->cart->item->cart_id) ? null : $this->cart->item->cart_id;
 		if($cartId){
 			$items = $itemModel->fetchAll("SELECT * FROM `cart_item` WHERE `cart_id` = {$cartId} ");
+			return $items;
+		}
+		return null;
+	}
+
+	public function getTotal()
+	{
+		$itemModel = Ccc::getModel('Cart_Item');
+		$cartId = !($this->cart->item->cart_id) ? null : $this->cart->item->cart_id;
+		if($cartId){
+			$items = $this->getAdapter()->fetchOne("SELECT sum(`itemTotal`) FROM `cart_item` WHERE `cart_id` = {$cartId} ");
 			return $items;
 		}
 		return null;

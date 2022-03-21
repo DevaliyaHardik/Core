@@ -3,6 +3,7 @@
 class Model_Cart extends Model_Core_Row
 {
 	protected $item;
+	protected $items;
 	protected $bilingAdress;
 	protected $shipingAddress;
 	protected $customer;
@@ -56,7 +57,7 @@ class Model_Cart extends Model_Core_Row
 		return $this->bilingAddress;
 	}
 
-	public function setBilingAddress(model_cart_address $address)
+	public function setBilingAddress(Model_Cart_Address $address)
 	{
 		$this->bilingAddress = $address;
 		return $this;
@@ -140,6 +141,34 @@ class Model_Cart extends Model_Core_Row
 		}
 		$this->setCustomer($customer);
 		return $this->customer;
+	}
+
+	public function getItems($reload = false)
+	{
+
+		$itemModel = Ccc::getModel('Cart_Item');
+		if(!$this->cart_id)
+		{
+			return $itemModel;
+		}
+		if($this->items && !$reload)
+		{
+			return $this->items;
+		}
+		$items=$itemModel->fetchAll("SELECT * FROM `cart_item` WHERE `cart_id` = {$this->cart_id}");
+		if(!$items)
+		{
+			return $itemModel;
+		}
+		$this->setItems($items);
+
+		return $this->item;
+	}
+
+	public function setItems($items)
+	{
+		$this->item = $items;
+		return $this;
 	}
 
 }
