@@ -130,59 +130,28 @@ $products = $this->getProducts();
 	<tr>
 		<td>
 			<form action="<?php echo $this->getUrl('savePaymentMethod') ?>" method="post">
-				<input type="radio" name="paymentMethod" value="1">Credit/Debit <br>
-				<input type="radio" name="paymentMethod" value="2">UPI <br>
-				<input type="radio" name="paymentMethod" value="3">QR <br>
 				<input type="radio" name="paymentMethod" value="4" checked>Case On Delivery <br>
+				<input type="radio" name="paymentMethod" value="1" <?php echo ($cart->cart->paymentMethod == 1) ? "checked" : "";?>>Credit/Debit <br>
+				<input type="radio" name="paymentMethod" value="2" <?php echo ($cart->cart->paymentMethod == 2) ? "checked" : "";?>>UPI <br>
+				<input type="radio" name="paymentMethod" value="3" <?php echo ($cart->cart->paymentMethod == 3) ? "checked" : "";?>>QR <br>
 				<input type="submit" value="Update">
 			</form>
 		</td>
 		<td>
 			<form action="<?php echo $this->getUrl('saveShipingMethod') ?>" method="post">
-				<input type="radio" name="shipingMethod" value="100">Same Day Delivery <br>
-				<input type="radio" name="shipingMethod" value="70">Express <br>
-				<input type="radio" name="shipingMethod" value="50">Normal Delivery <br>
+				<input type="radio" name="shipingMethod" value="100" checked>Same Day Delivery <br>
+				<input type="radio" name="shipingMethod" value="70" <?php echo ($cart->cart->shipingMethod == 2) ? "checked" : "";?>>Express <br>
+				<input type="radio" name="shipingMethod" value="50" <?php echo ($cart->cart->shipingMethod == 3) ? "checked" : "";?>>Normal Delivery <br>
 				<input type="submit" value="Update">
 			</form>
 		</td>
 	</tr>
 </table>
 
-<form action="<?php echo $this->getUrl('addCartItem') ?>" method="post">
-	<input type="submit" value="Add Item">
-	<button value="use js">Cancel</button>
-	<table border="1">
-		<tr>
-			<th>Image</th>
-			<th>Name</th>
-			<th>Quantity</th>
-			<th>Price</th>
-			<th>Row Tatal</th>
-			<th>Action</th>
-		</tr>
-		<?php if(!$products): ?>
-		<tr>
-			<td colspan="6">No more products availabel</td>
-		</tr>
-		<?php else: ?>
-		<?php $i = 0; ?>
-		<?php foreach($products as $product): ?>
-		<tr>
-			<td><img src="Media/Product/<?php echo $product->getBase()->name; ?>" alt="image not found" width="50" hight="50"></td>
-			<td><?php echo $product->name; ?></td>
-			<td><input type="number" name="cartItem[<?php echo $i ?>][quantity]"></td>
-			<td><?php echo $product->price; ?></td>
-			<td>200</td>
-			<td><input type="checkbox" name="cartItem[<?php echo $i ?>][product_id]" value="<?php echo $product->product_id ?>"></td>
-		</tr>
-		<?php $i++; ?>
-		<?php endforeach; ?>
-		<?php endif; ?>
-	</table>
-</form>
-<form action="<?php echo $this->getUrl('cartItemUpdate'); ?>" method="post">
-		<input type="submit" value="update">
-		<button value="use js">New Item</button>
+<div id="productTable">
+	<form action="<?php echo $this->getUrl('addCartItem') ?>" method="post">
+		<input type="submit" value="Add Item">
+		<button type="button" id="hideProduct">Cancel</button>
 		<table border="1">
 			<tr>
 				<th>Image</th>
@@ -192,31 +161,65 @@ $products = $this->getProducts();
 				<th>Row Tatal</th>
 				<th>Action</th>
 			</tr>
-			<?php if(!$items): ?>
+			<?php if(!$products): ?>
 			<tr>
-				<td colspan="6">no item found</td>
+				<td colspan="6">No more products availabel</td>
 			</tr>
 			<?php else: ?>
 			<?php $i = 0; ?>
-			<?php foreach($items as $item): ?>
+			<?php foreach($products as $product): ?>
 			<tr>
-				<input type="hidden" name="cartItem[<?php echo $i ?>][item_id]" value="<?php echo $item->item_id ?>">
-				<input type="hidden" name="cartItem[<?php echo $i ?>][product_id]" value="<?php echo $item->product_id ?>">
-				<td><img src="Media/Product/<?php echo $item->getProduct()->getBase()->name; ?>" alt="image not found" width="50" hight="50"></td>
-				<td><?php echo $item->getProduct()->name; ?></td>
-				<td><input type="number" name="cartItem[<?php echo $i ?>][quantity]" value="<?php echo $item->quantity; ?>"></td>
-				<td><?php echo $item->getProduct()->price; ?></td>
-				<td><?php echo $item->itemTotal; ?></td>
-				<td><a href="<?php echo $this->getUrl('deleteCartItem',null,['item_id' => $item->item_id]) ?>">Remove</a></td>
+				<td><img src="Media/Product/<?php echo $product->getBase()->name; ?>" alt="image not found" width="50" hight="50"></td>
+				<td><?php echo $product->name; ?></td>
+				<td><input type="number" name="cartItem[<?php echo $i ?>][quantity]"></td>
+				<td><?php echo $product->price; ?></td>
+				<td>200</td>
+				<td><input type="checkbox" name="cartItem[<?php echo $i ?>][product_id]" value="<?php echo $product->product_id ?>"></td>
 			</tr>
 			<?php $i++; ?>
 			<?php endforeach; ?>
-			<?php endif;?>
-			<tr>
-				<td colspan="6" align="right"><?php echo $this->getTotal(); ?></td>
-			</tr>
+			<?php endif; ?>
 		</table>
 	</form>
+</div>
+<form action="<?php echo $this->getUrl('cartItemUpdate'); ?>" method="post">
+	<input type="submit" value="update">
+	<button type="button" id="showProduct">New Item</button>
+	<table border="1">
+		<tr>
+			<th>Image</th>
+			<th>Name</th>
+			<th>Quantity</th>
+			<th>Price</th>
+			<th>Row Tatal</th>
+			<th>Action</th>
+		</tr>
+		<?php if(!$items): ?>
+		<tr>
+			<td colspan="6">no item found</td>
+		</tr>
+		<?php else: ?>
+		<?php $i = 0; ?>
+		<?php foreach($items as $item): ?>
+		<tr>
+			<input type="hidden" name="cartItem[<?php echo $i ?>][item_id]" value="<?php echo $item->item_id ?>">
+			<input type="hidden" name="cartItem[<?php echo $i ?>][product_id]" value="<?php echo $item->product_id ?>">
+			<td><img src="Media/Product/<?php echo $item->getProduct()->getBase()->name; ?>" alt="image not found" width="50" hight="50"></td>
+			<td><?php echo $item->getProduct()->name; ?></td>
+			<td><input type="number" name="cartItem[<?php echo $i ?>][quantity]" value="<?php echo $item->quantity; ?>"></td>
+			<td><?php echo $item->getProduct()->price; ?></td>
+			<td><?php echo $item->itemTotal; ?></td>
+			<td><a href="<?php echo $this->getUrl('deleteCartItem',null,['item_id' => $item->item_id]) ?>">Remove</a></td>
+		</tr>
+		<?php $i++; ?>
+		<?php endforeach; ?>
+		<?php endif;?>
+		<tr>
+			<td>Total</td>
+			<td colspan="5" align="right"><?php echo $this->getTotal(); ?></td>
+		</tr>
+	</table>
+</form>
 	<form action="<?php echo $this->getUrl('placeOrder') ?>" method="post">
 		<table border="1">
 			<tr>
@@ -279,4 +282,15 @@ $products = $this->getProducts();
 					}
                 }
 
+</script>
+<script>
+    $(document).ready(function(){
+        $("#productTable").hide();
+        $("#showProduct").click(function(){
+            $("#productTable").show();
+        });
+        $("#hideProduct").click(function(){
+            $("#productTable").hide();
+        });
+    });
 </script>

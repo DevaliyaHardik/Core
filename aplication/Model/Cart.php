@@ -162,12 +162,12 @@ class Model_Cart extends Model_Core_Row
 		}
 		$this->setItems($items);
 
-		return $this->item;
+		return $this->items;
 	}
 
 	public function setItems($items)
 	{
-		$this->item = $items;
+		$this->items = $items;
 		return $this;
 	}
 
