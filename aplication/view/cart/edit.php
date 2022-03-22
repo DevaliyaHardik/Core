@@ -175,7 +175,7 @@ $products = $this->getProducts();
 			<tr>
 				<td><img src="Media/Product/<?php echo $product->getBase()->name; ?>" alt="image not found" width="50" hight="50"></td>
 				<td><?php echo $product->name; ?></td>
-				<td><input type="number" name="cartItem[<?php echo $i ?>][quantity]"></td>
+				<td><input type="number" name="cartItem[<?php echo $i ?>][quantity]" value="1" min="1"></td>
 				<td><?php echo $product->price; ?></td>
 				<td>200</td>
 				<td><input type="checkbox" name="cartItem[<?php echo $i ?>][product_id]" value="<?php echo $product->product_id ?>"></td>
@@ -210,7 +210,7 @@ $products = $this->getProducts();
 			<input type="hidden" name="cartItem[<?php echo $i ?>][product_id]" value="<?php echo $item->product_id ?>">
 			<td><img src="Media/Product/<?php echo $item->getProduct()->getBase()->name; ?>" alt="image not found" width="50" hight="50"></td>
 			<td><?php echo $item->getProduct()->name; ?></td>
-			<td><input type="number" name="cartItem[<?php echo $i ?>][quantity]" value="<?php echo $item->quantity; ?>"></td>
+			<td><input type="number" name="cartItem[<?php echo $i ?>][quantity]" value="<?php echo $item->quantity; ?>" min="1"></td>
 			<td><?php echo $item->getProduct()->price; ?></td>
 			<td><?php echo $item->itemTotal; ?></td>
 			<td><a href="<?php echo $this->getUrl('deleteCartItem',null,['item_id' => $item->item_id]) ?>">Remove</a></td>
