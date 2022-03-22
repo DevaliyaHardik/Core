@@ -7,11 +7,12 @@ $shipingAddress = $cart->shipingAddress;
 $item = $cart->item;
 $items = $this->getItems();
 $products = $this->getProducts();
+$disabled = (!$items)?'disabled':"";
 ?>
 <select onchange="change(this.value)">
 	<option value="">Select</option>
 	<?php foreach($customers as $cust): ?>
-	<option value="<?php echo $cust->customer_id ?>"><?php echo $cust->firstName." ".$cust->email; ?></option>
+	<option value="<?php echo $cust->customer_id ?>" <?php echo ($cust->customer_id == $customer->customer_id) ? "selected" : "";?>><?php echo $cust->firstName." ".$cust->email; ?></option>
 	<?php endforeach; ?>
 </select>
 <h3>Customer Data</h3>
@@ -246,7 +247,7 @@ $products = $this->getProducts();
 			</tr>
 			<tr>
 				<td></td>
-				<td><input type="submit" value="Place Order"></td>
+				<td><input type="submit" value="Place Order" <?php echo $disabled; ?>></td>
 			</tr>
 		</table>
 	</form>
