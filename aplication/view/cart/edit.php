@@ -19,10 +19,14 @@ $products = $this->getProducts();
 	<tr>
 		<td>First Name</td>
 		<td>Last Name</td>
+		<td>Email</td>
+		<td>Mobile</td>
 	</tr>
 	<tr>
 		<td><?php echo $customer->firstName; ?></td>
 		<td><?php echo $customer->lastName; ?></td>
+		<td><?php echo $customer->email; ?></td>
+		<td><?php echo $customer->mobile; ?></td>
 	</tr>
 </table>
 <form action="<?php   echo $this->getUrl('saveCartAddress'); ?>" method="post">
