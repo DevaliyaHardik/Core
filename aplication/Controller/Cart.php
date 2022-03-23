@@ -78,6 +78,7 @@ class Controller_cart extends Controller_Admin_Action{
 			}
 			else{
 				$cartModel->customer_id = $customerId;
+				$cartModel->status = 1;
 				$cart = $cartModel->save();
 				if(!$cart){
 					$this->getMessage()->addMessage('Cart can not created');
@@ -251,13 +252,26 @@ class Controller_cart extends Controller_Admin_Action{
 						unset($item->item_id);
 						$item->setData($cartItem);
 						$item->itemTotal = $product->price * $cartItem['quantity'];
+						$item->tax = $product->tax;
+						$item->taxAmount = ($product->price * $product->tax / 100) * $cartItem['quantity'];
+						$item->discount = $product->discount * $cartItem['quantity'];
 						$item->save();
+						$taxAmount += ($product->price * $product->tax / 100) * $cartItem['quantity'];
+						$discount += $product->discount * $cartItem['quantity'];
 						unset($item->item_id);
 					}
 				}
 			}
-			$this->redirect('edit');
+			$subTotal = $item->fetchRow("SELECT sum(`itemTotal`) as subTotal FROM `cart_item`");
+			$cart->subTotal = $subTotal->subTotal;
+			$cart->taxAmount = $taxAmount;
+			$cart->discount = $discount;
+			$result = $cart->save();
+			if(!$result){
+				throw new Exception("subTotal not updated", 1);
+			}
 			$this->getMessage()->addMessage("Cart Item added successfully.");
+			$this->redirect('edit');
 		}catch (Exception $e)
 		{
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
@@ -270,8 +284,13 @@ class Controller_cart extends Controller_Admin_Action{
 		try {
 			$request = $this->getRequest();
 			$itemId = $request->getRequest('item_id');
-			$item = Ccc::getModel('Cart_Item');
-			$result = $item->load($itemId)->delete();
+			$item = Ccc::getModel('Cart_Item')->load($itemId);
+			$cart = Ccc::getModel('Cart')->load($item->cart_id);
+			$cart->subTotal = $cart->subTotal - $item->itemTotal;
+			$cart->taxAmount = $cart->taxAmount - $item->taxAmount;
+			$cart->discount = $cart->discount - $item->discount;
+			$cart->save();
+			$result = $item->delete();
 			if(!$result){
 				throw new Exception("Cart item not deleted.", 1);
 			}
@@ -299,8 +318,21 @@ class Controller_cart extends Controller_Admin_Action{
 				if($product->quntity >= $cartItem['quantity']){
 					$item->setData($cartItem);
 					$item->itemTotal = $product->price * $cartItem['quantity'];
+					$item->tax = $product->tax;
+					$item->taxAmount = ($product->price * $product->tax / 100) * $cartItem['quantity'];
+					$item->discount = $product->discount * $cartItem['quantity'];
+					$taxAmount += ($product->price * $product->tax / 100) * $cartItem['quantity'];
+					$discount += $product->discount * $cartItem['quantity'];
 					$item->save();
 				}
+			}
+			$subTotal = $item->fetchRow("SELECT sum(`itemTotal`) as subTotal FROM `cart_item`");
+			$cart->subTotal = $subTotal->subTotal;
+			$cart->taxAmount = $taxAmount;
+			$cart->discount = $discount;
+			$result = $cart->save();
+			if(!$result){
+				throw new Exception("subTotal not updated", 1);
 			}
 			$this->getMessage()->addMessage("Cart item updated successfully.");
 			$this->redirect('edit');
@@ -330,6 +362,8 @@ class Controller_cart extends Controller_Admin_Action{
 			$orderModel->shipingCharge = $cart->shipingCharge;
 			$orderModel->payment_id = $cart->paymentMethod;
 			$orderModel->grandTotal = $request->getPost('grandTotal');
+			$orderModel->taxAmount = $request->getPost('taxAmount');
+			$orderModel->discount = $request->getPost('discount');
 			$order = $orderModel->save();
 			if(!$order){
 				throw new Exception("Order not added.", 1);
@@ -344,13 +378,15 @@ class Controller_cart extends Controller_Admin_Action{
 				$itemModel->name = $product->name;
 				$itemModel->sku = $product->sku;
 				$itemModel->price = $item->itemTotal;
+				$itemModel->tax = $product->tax;
+				$itemModel->taxAmount = ($product->price * $product->tax / 100) * $item->quantity;
+				$itemModel->discount = $product->discount;
 				$itemModel->quantity = $item->quantity;
 				$result = $itemModel->save();
 				if($result){
 					$item->delete();
 				}
 			}
-
 			$addressModel = Ccc::getModel('Order_Address');
 			$bilingData = $cart->getBilingAddress();
 			$shipingData = $cart->getShipingAddress();

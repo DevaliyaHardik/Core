@@ -55,6 +55,9 @@ $products = $this->getProduct();
             <th>Thumb Image</th>
             <th>Small Image</th>
             <th>Prize</th>
+            <th>Cost</th>
+            <th>Discount</th>
+            <th>Tax</th>
             <th>Quntity</th>
             <th>Status</th>
             <th>Created Date</th>
@@ -90,7 +93,10 @@ $products = $this->getProduct();
             <?php endif; ?>
 
             <td><?php echo $product->price; ?></td>
+            <td><?php echo $product->cost; ?></td>
+            <td><?php echo $product->discount; ?></td>
             <td><?php echo $product->quntity; ?></td>
+            <td><?php echo $product->tax; ?></td>
             <td><?php echo $product->getStatus($product->status); ?></td>
             <td><?php echo $product->createdDate; ?></td>
             <td><?php echo $product->updatedDate; ?></td>

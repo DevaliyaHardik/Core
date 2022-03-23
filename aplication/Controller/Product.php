@@ -87,6 +87,7 @@ class Controller_Product extends Controller_Admin_Action{
 			$productModel = Ccc::getModel('Product');
 			$request = $this->getRequest();
 			$productId = $request->getRequest('id');
+			$type = $request->getPost('discountMethod');
 			if($request->isPost()){
 				$postData = $request->getPost('product');
 				$categoryIds = $request->getPost('category');
@@ -94,6 +95,12 @@ class Controller_Product extends Controller_Admin_Action{
 					throw new Exception('Your data con not be updated', 1);			
 				}
 				$productData = $productModel->setData($postData);
+				if($type == 1){
+					$productData->discount = $productData->price * $productData->discount / 100;
+				}
+				if(!($productData->cost <= ($productData->price - $productData->discount) && $productData->price - $productData->discount <= $productData->price) || $productData->discount<0){
+					throw new Exception("Invalid discount", 1);
+				}
 				if(!empty($productId)){
 					$productData->product_id = $productId;
 					$productData->updatedDate = date('Y-m-d h:i:s');
@@ -112,7 +119,7 @@ class Controller_Product extends Controller_Admin_Action{
 			} 			
 		}catch (Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('grid','customer',['id' => null]);
+			$this->redirect('grid','product',['id' => null]);
 		}	
 	}
 

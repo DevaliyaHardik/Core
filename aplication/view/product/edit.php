@@ -19,6 +19,22 @@
                 <td><input type="float" name="product[price]" value="<?php echo $product->price;?>"></td>
             </tr>
             <tr>
+                <td width="10%">Cost</td>
+                <td><input type="float" name="product[cost]" value="<?php echo $product->cost;?>"></td>
+            </tr>
+            <tr>
+                <td width="10%">Discount</td>
+                <td>
+                    <input type="float" name="product[discount]" value="<?php echo $product->discount;?>">
+                    In Percentage:<input type="radio" name="discountMethod" value="1">&nbsp;&nbsp;&nbsp;
+                    In Money:<input type="radio" name="discountMethod" value="2" checked>
+                </td>
+		    </tr>
+		    <tr>
+                <td width="10%">Tax</td>
+                <td><input type="text" name="product[tax]" value="<?php echo $product->tax ?>"></td>
+            </tr>
+            <tr>
                 <td width="10%">Quntity</td>
                 <td><input type="number" name="product[quntity]" id="quntity" value="<?php echo $product->quntity;?>"></td>
             </tr>

@@ -58,5 +58,14 @@ class Block_Cart_Edit extends Block_Core_Template
 		return null;
 	}
 
+	public function getTax($cartId)
+	{
+		if($cartId){
+			$tax =$this->getAdapter()->fetchOne("SELECT sum(ci.itemTotal * p.tax / 100) FROM `cart_item` as ci JOIN `product` as p ON ci.product_id = p.product_id WHERE ci.cart_id = {$cartId}");
+			return $tax;	
+		}
+		return null;
+	}
+
 }
 ?>

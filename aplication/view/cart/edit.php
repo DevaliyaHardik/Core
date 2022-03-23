@@ -85,31 +85,31 @@ $disabled = (!$items)?'disabled':"";
 							<input type="hidden" name="shipingAddress[biling]" value="2">
 							<input type="hidden" name="shipingAddress[shiping]" value="1">
 							<td>First Name</td>
-							<td><input type="text" name="shipingAddress[firstName]" id="firstName1" value="<?php echo $bilingAddress->firstName; ?>"></td>
+							<td><input type="text" name="shipingAddress[firstName]" id="firstName1" value="<?php echo $shipingAddress->firstName; ?>"></td>
 						</tr>
 						<tr>
 							<td>Last Name</td>
-							<td><input type="text" name="shipingAddress[lastName]" id="lastName1" value="<?php echo $bilingAddress->lastName; ?>"></td>
+							<td><input type="text" name="shipingAddress[lastName]" id="lastName1" value="<?php echo $shipingAddress->lastName; ?>"></td>
 						</tr>
 						<tr>
 							<td>Address</td>
-							<td><input type="text" name="shipingAddress[address]" id="address1" value="<?php echo $bilingAddress->address; ?>"></td>
+							<td><input type="text" name="shipingAddress[address]" id="address1" value="<?php echo $shipingAddress->address; ?>"></td>
 						</tr>
 						<tr>
 							<td>City</td>
-							<td><input type="text" name="shipingAddress[city]" id="city1" value="<?php echo $bilingAddress->city; ?>"></td>
+							<td><input type="text" name="shipingAddress[city]" id="city1" value="<?php echo $shipingAddress->city; ?>"></td>
 						</tr>
 						<tr>
 							<td>State</td>
-							<td><input type="text" name="shipingAddress[state]" id="state1" value="<?php echo $bilingAddress->state; ?>"></td>
+							<td><input type="text" name="shipingAddress[state]" id="state1" value="<?php echo $shipingAddress->state; ?>"></td>
 						</tr>
 						<tr>
 							<td>Postal Code</td>
-							<td><input type="text" name="shipingAddress[postalCode]" id="postalCode1" value="<?php echo $bilingAddress->postalCode; ?>"></td>
+							<td><input type="text" name="shipingAddress[postalCode]" id="postalCode1" value="<?php echo $shipingAddress->postalCode; ?>"></td>
 						</tr>
 						<tr>
 							<td>Country</td>
-							<td><input type="text" name="shipingAddress[country]" id="country1" value="<?php echo $bilingAddress->country; ?>"></td>
+							<td><input type="text" name="shipingAddress[country]" id="country1" value="<?php echo $shipingAddress->country; ?>"></td>
 						</tr>
 						<tr>
 							<td></td>
@@ -234,16 +234,21 @@ $disabled = (!$items)?'disabled':"";
 			<tr>
 				<td>Shiping Charge</td>
 				<td><?php echo $cart->cart->shipingCharge; ?></td>
-			</tr><tr>
+			</tr>
+			<tr>
 				<td>Tax</td>
-				<td><?php echo $this->getTotal() * 20 / 100; ?></td>
-			</tr><tr>
+				<td><?php echo $this->getTax($cart->cart->cart_id); ?></td>
+			</tr>
+			<tr>
 				<td>Discount</td>
-				<td>50</td>
-			</tr><tr>
+				<td><?php echo $cart->cart->discount; ?></td>
+			</tr>
+			<tr>
 				<td>Grand Total</td>
-				<td><?php echo $this->getTotal() + $cart->cart->shipingCharge + $this->getTotal() * 20 / 100 + 50; ?></td>
-				<input type="hidden" name="grandTotal" value="<?php echo $this->getTotal() + $cart->cart->shipingCharge + $this->getTotal() * 20 / 100 + 50; ?>">
+				<td><?php echo $this->getTotal() + $cart->cart->shipingCharge + $this->getTax($cart->cart->cart_id) - $cart->cart->discount; ?></td>
+				<input type="hidden" name="grandTotal" value="<?php echo $this->getTotal() + $cart->cart->shipingCharge + $this->getTax($cart->cart->cart_id) - $cart->cart->discount; ?>">
+				<input type="hidden" name="taxAmount" value="<?php echo $this->getTax($cart->cart->cart_id); ?>">
+				<input type="hidden" name="discount" value="<?php echo $cart->cart->discount; ?>">
 			</tr>
 			<tr>
 				<td></td>
