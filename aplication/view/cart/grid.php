@@ -1,5 +1,5 @@
 <?php $orders = $this->getOrders(); ?>
-<a href="<?php echo $this->getUrl('edit','cart') ?>"><button>Add New</button></a>
+<a href="<?php echo $this->getUrl('edit','cart') ?>"><button>Add New Order</button></a>
 
 <table border="1">
     <tr>
@@ -16,7 +16,7 @@
     </tr>
     <?php if(!$orders): ?>
     <tr>
-        <td colspan="7">No order found</td>
+        <td colspan="10">No order found</td>
     </tr>
     <?php else: ?>
     <?php foreach($orders as $order): ?>

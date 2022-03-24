@@ -2,6 +2,7 @@
 
 class Controller_Core_Action{
 
+    protected $cart;
     protected $message;
     protected $layout = null;
 
@@ -59,6 +60,20 @@ class Controller_Core_Action{
     public function setMessage($message)
     {
         $this->message = $message;
+        return $this;
+    }
+
+    public function getCart()
+    {
+        if(!$this->cart){
+            $this->cart = Ccc::getModel('Admin_Cart');
+        }
+        return $this->cart;
+    }
+
+    public function setCart($cart)
+    {
+        $this->cart = $cart;
         return $this;
     }
 

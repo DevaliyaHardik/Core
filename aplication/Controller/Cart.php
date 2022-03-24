@@ -12,6 +12,7 @@ class Controller_cart extends Controller_Admin_Action{
 	}
 	public function gridAction()
 	{
+		$this->getCart()->unsetCart();
 		$header = $this->getLayout()->getHeader();
 		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
 		$message = Ccc::getBlock('Core_Layout_Header_Message');
@@ -28,7 +29,14 @@ class Controller_cart extends Controller_Admin_Action{
 	{
 		try{
 			$request = $this->getRequest();
-			$customerId = $request->getRequest('id');
+			if($this->getCart()->getCart()){
+				$cartId = $this->getCart()->getCart()['cart_id'];
+				$cartModel = Ccc::getModel('Cart');
+				$cart = $cartModel->load($cartId);
+			}
+			else{
+				$cartId = null;
+			}
 			$header = $this->getLayout()->getHeader();
 			$menu = Ccc::getBlock('Core_Layout_Header_Menu');
 			$message = Ccc::getBlock('Core_Layout_Header_Message');
@@ -36,7 +44,7 @@ class Controller_cart extends Controller_Admin_Action{
 	
 			$cartModel = Ccc::getModel('Cart');
 			$content = $this->getLayout()->getContent();
-			if(!$customerId){
+			if(!$cartId){
 				$customer = $cartModel->getCustomer();
 				$item = $cartModel->getItem();
 				$bilingAddress = $cartModel->getBilingAddress();
@@ -44,7 +52,7 @@ class Controller_cart extends Controller_Admin_Action{
 				$cart = $cartModel;
 			}
 			else{
-				$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
+				$cart = $cart;
 				$customer = $cart->getCustomer(true);
 				$item = $cart->getItem(true);
 				$bilingAddress = $cart->getBilingAddress(true);
@@ -71,22 +79,28 @@ class Controller_cart extends Controller_Admin_Action{
 		try {
 			$request = $this->getRequest();
 			$customerId = $request->getRequest('id');
-			$cartModel = Ccc::getModel('Cart');
-			$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
-			if($cart){
+			if($this->getCart()->getCart()){
 				$this->redirect('edit');
 			}
 			else{
-				$cartModel->customer_id = $customerId;
-				$cartModel->status = 1;
-				$cart = $cartModel->save();
-				if(!$cart){
-					$this->getMessage()->addMessage('Cart can not created');
+				$cartModel = Ccc::getModel('Cart');
+				$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
+				if($cart){
+					$this->getCart()->addCart($cart->cart_id);
+					$this->redirect('edit');
 				}
-				$this->saveAddressAction($cart);
+				else{
+					$cartModel->customer_id = $customerId;
+					$cartModel->status = 1;
+					$cart = $cartModel->save();
+					if(!$cart){
+						$this->getMessage()->addMessage('Cart can not created');
+					}
+					$this->saveAddressAction($cart);
+					$this->getCart()->addCart($cart->cart_id);
+				}
+				$this->redirect('edit');	
 			}
-			$this->redirect('edit');
-
 		}catch (Exception $e)
 		{
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
@@ -99,7 +113,6 @@ class Controller_cart extends Controller_Admin_Action{
 	{
 		try {
 			$request = $this->getRequest();
-			$customerId = $request->getRequest('id');
 			$customer = $cart->getCustomer();
 			$customerBilingAddress = $customer->getBilingAddress();
 			$customerShipingAddress = $customer->getShipingAddress();
@@ -140,9 +153,9 @@ class Controller_cart extends Controller_Admin_Action{
 	{
 		try {
 			$request = $this->getRequest();
-			$customerId = $request->getRequest('id');
+			$cartId = $this->getCart()->getCart()['cart_id'];
 			$cartModel = Ccc::getModel('Cart');
-			$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
+			$cart = $cartModel->load($cartId);
 			$bilingData = $request->getPost('bilingAddress');
 			$shipingData = $request->getPost('shipingAddress');
 			$bilingAddress = $cart->getBilingAddress();
@@ -185,9 +198,9 @@ class Controller_cart extends Controller_Admin_Action{
 	{
 		try {
 			$request = $this->getRequest();
-			$customerId = $request->getRequest('id');
+			$cartId = $this->getCart()->getCart()['cart_id'];
 			$cartModel = Ccc::getModel('Cart');
-			$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
+			$cart = $cartModel->load($cartId);
 			$paymentData = $request->getPost('paymentMethod');
 			$cart->setData(['paymentMethod' => $paymentData]);
 			$result = $cart->save();
@@ -207,9 +220,9 @@ class Controller_cart extends Controller_Admin_Action{
 	{
 		try {
 			$request = $this->getRequest();
-			$customerId = $request->getRequest('id');
+			$cartId = $this->getCart()->getCart()['cart_id'];
 			$cartModel = Ccc::getModel('Cart');
-			$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
+			$cart = $cartModel->load($cartId);
 			$shipingCharge = $request->getPost('shipingMethod');
 			if($shipingCharge == 100){
 				$shipingMethod = '1';
@@ -238,10 +251,10 @@ class Controller_cart extends Controller_Admin_Action{
 	{
 		try {
 			$request = $this->getRequest();
-			$productModel = Ccc::getModel('Product');
-			$customerId = $request->getRequest('id');
+			$cartId = $this->getCart()->getCart()['cart_id'];
 			$cartModel = Ccc::getModel('Cart');
-			$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
+			$cart = $cartModel->load($cartId);
+			$productModel = Ccc::getModel('Product');
 			$cartData = $request->getPost('cartItem');
 			$item = $cart->getItem();
 			$item->cart_id = $cart->cart_id;
@@ -264,8 +277,8 @@ class Controller_cart extends Controller_Admin_Action{
 			}
 			$subTotal = $item->fetchRow("SELECT sum(`itemTotal`) as subTotal FROM `cart_item`");
 			$cart->subTotal = $subTotal->subTotal;
-			$cart->taxAmount = $taxAmount;
-			$cart->discount = $discount;
+			$cart->taxAmount += $taxAmount;
+			$cart->discount += $discount;
 			$result = $cart->save();
 			if(!$result){
 				throw new Exception("subTotal not updated", 1);
@@ -285,7 +298,7 @@ class Controller_cart extends Controller_Admin_Action{
 			$request = $this->getRequest();
 			$itemId = $request->getRequest('item_id');
 			$item = Ccc::getModel('Cart_Item')->load($itemId);
-			$cart = Ccc::getModel('Cart')->load($item->cart_id);
+			$cart = $item->getCart();
 			$cart->subTotal = $cart->subTotal - $item->itemTotal;
 			$cart->taxAmount = $cart->taxAmount - $item->taxAmount;
 			$cart->discount = $cart->discount - $item->discount;
@@ -307,10 +320,10 @@ class Controller_cart extends Controller_Admin_Action{
 	{
 		try {
 			$request = $this->getRequest();
-			$productModel = Ccc::getModel('Product');
-			$customerId = $request->getRequest('id');
+			$cartId = $this->getCart()->getCart()['cart_id'];
 			$cartModel = Ccc::getModel('Cart');
-			$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
+			$cart = $cartModel->load($cartId);
+			$productModel = Ccc::getModel('Product');
 			$cartData = $request->getPost('cartItem');
 			$item = $cart->getItem();
 			foreach($cartData as $cartItem){
@@ -347,13 +360,12 @@ class Controller_cart extends Controller_Admin_Action{
 	{
 		try {
 			$request = $this->getRequest();
-			$productModel = Ccc::getModel('Product');
-			$customerId = $request->getRequest('id');
+			$cartId = $this->getCart()->getCart()['cart_id'];
 			$cartModel = Ccc::getModel('Cart');
-			$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
+			$cart = $cartModel->load($cartId);
 			$customer = $cart->getCustomer();
 			$orderModel = Ccc::getModel('order');
-			$orderModel->customer_id = $customerId;
+			$orderModel->customer_id = $customer->customer_id;
 			$orderModel->firstName = $customer->firstName;
 			$orderModel->lastName = $customer->lastName;
 			$orderModel->email = $customer->email;
@@ -363,7 +375,7 @@ class Controller_cart extends Controller_Admin_Action{
 			$orderModel->payment_id = $cart->paymentMethod;
 			$orderModel->grandTotal = $request->getPost('grandTotal');
 			$orderModel->taxAmount = $request->getPost('taxAmount');
-			$orderModel->discount = $request->getPost('discount');
+			$orderModel->discount = $request->getPost('discount');	
 			$order = $orderModel->save();
 			if(!$order){
 				throw new Exception("Order not added.", 1);
