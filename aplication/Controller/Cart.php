@@ -27,51 +27,15 @@ class Controller_cart extends Controller_Admin_Action{
 
 	public function editAction()
 	{
-		try{
-			$request = $this->getRequest();
-			if($this->getCart()->getCart()){
-				$cartId = $this->getCart()->getCart()['cart_id'];
-				$cartModel = Ccc::getModel('Cart');
-				$cart = $cartModel->load($cartId);
-			}
-			else{
-				$cartId = null;
-			}
-			$header = $this->getLayout()->getHeader();
-			$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-			$message = Ccc::getBlock('Core_Layout_Header_Message');
-			$header->addChild($menu)->addChild($message);
-	
-			$cartModel = Ccc::getModel('Cart');
-			$content = $this->getLayout()->getContent();
-			if(!$cartId){
-				$customer = $cartModel->getCustomer();
-				$item = $cartModel->getItem();
-				$bilingAddress = $cartModel->getBilingAddress();
-				$shipingAddress = $cartModel->getShipingAddress();
-				$cart = $cartModel;
-			}
-			else{
-				$cart = $cart;
-				$customer = $cart->getCustomer(true);
-				$item = $cart->getItem(true);
-				$bilingAddress = $cart->getBilingAddress(true);
-				$shipingAddress = $cart->getShipingAddress(true);
-			}
-			$cartModel->customer = $customer;
-			$cartModel->item = $item;
-			$cartModel->bilingAddress = $bilingAddress;
-			$cartModel->shipingAddress = $shipingAddress;
-			$cartModel->cart = $cart;
-			$cartEdit = Ccc::getBlock('Cart_Edit')->setData(['cart' => $cartModel]);
-			$content->addChild($cartEdit);
-			
-			$this->randerLayout();
-		}catch (Exception $e)
-		{
-			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('grid','customer');
-		}
+		$header = $this->getLayout()->getHeader();
+		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
+		$message = Ccc::getBlock('Core_Layout_Header_Message');
+		$header->addChild($menu)->addChild($message);
+		$content = $this->getLayout()->getContent();
+		$cartEdit = Ccc::getBlock('Cart_Edit');
+		$content->addChild($cartEdit);
+		
+		$this->randerLayout();
 	}
 
 	public function addCartAction()
@@ -99,12 +63,12 @@ class Controller_cart extends Controller_Admin_Action{
 					$this->saveAddressAction($cart);
 					$this->getCart()->addCart($cart->cart_id);
 				}
-				$this->redirect('edit');	
+				$this->redirect('edit',null,[],true);	
 			}
 		}catch (Exception $e)
 		{
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('edit');
+			$this->redirect('edit',null,[],true);
 		}
 		
 	}

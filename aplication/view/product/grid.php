@@ -75,19 +75,19 @@ $products = $this->getProduct();
             <td><?php echo $product->sku ?></td>
             <td><?php echo $product->name; ?></td>
             <?php if($product->base ): ?>
-            <td><img src="<?php echo 'Media/Product/'.$product->getBase()->name; ?>" alt="No Image found" width=50 height=50></td>
+            <td><img src="<?php echo $product->getBase()->getImagePath(); ?>" alt="No Image found" width=50 height=50></td>
             <?php else: ?>
             <td>No base image</td>
             <?php endif; ?>
 
             <?php if($product->thumb ): ?>
-            <td><img src="<?php echo 'Media/Product/'.$product->getThumb()->name; ?>" alt="No Image found" width=50 height=50></td>
+            <td><img src="<?php echo $product->getThumb()->getImagePath(); ?>" alt="No Image found" width=50 height=50></td>
             <?php else: ?>
             <td>No thumb image</td>
             <?php endif; ?>
 
             <?php if($product->small ): ?>
-            <td><img src="<?php echo 'Media/Product/'.$product->getSmall()->name; ?>" alt="No Image found" width=50 height=50></td>
+            <td><img src="<?php echo $product->getSmall()->getImagePath(); ?>" alt="No Image found" width=50 height=50></td>
             <?php else: ?>
             <td>No small image</td>
             <?php endif; ?>

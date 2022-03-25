@@ -1,9 +1,9 @@
 <?php 
 
 $order = $this->getOrder();
-$bilingAddress = $order->bilingAddress;
-$shipingAddress = $order->shipingAddress;
-$items = $order->items;
+$bilingAddress = $order->getBilingAddress();
+$shipingAddress = $order->getShipingAddress();
+$items = $order->getItems();
 
 ?>
 </table>

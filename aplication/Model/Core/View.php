@@ -82,7 +82,7 @@ class Model_Core_View{
 
     public function getBaseUrl($subUrl = null)
     {
-        $url = "C:/php/htdocs/php/Core/aplication";
+        $url = getcwd();
         if($subUrl){
             $url = $url."/".$subUrl;
         }

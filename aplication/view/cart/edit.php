@@ -1,10 +1,10 @@
 <?php 
 $customers = $this->getCustomers(); 
 $cart = $this->getCart();
-$customer = $cart->customer;
-$bilingAddress = $cart->bilingAddress;
-$shipingAddress = $cart->shipingAddress;
-$item = $cart->item;
+$customer = $cart->getCustomer();
+$bilingAddress = $cart->getBilingAddress();
+$shipingAddress = $cart->getShipingAddress();
+$item = $cart->getItem();
 $items = $this->getItems();
 $products = $this->getProducts();
 $disabled = (!$items)?'disabled':"";
@@ -136,17 +136,17 @@ $disabled = (!$items)?'disabled':"";
 		<td>
 			<form action="<?php echo $this->getUrl('savePaymentMethod') ?>" method="post">
 				<input type="radio" name="paymentMethod" value="4" checked>Case On Delivery <br>
-				<input type="radio" name="paymentMethod" value="1" <?php echo ($cart->cart->paymentMethod == 1) ? "checked" : "";?>>Credit/Debit <br>
-				<input type="radio" name="paymentMethod" value="2" <?php echo ($cart->cart->paymentMethod == 2) ? "checked" : "";?>>UPI <br>
-				<input type="radio" name="paymentMethod" value="3" <?php echo ($cart->cart->paymentMethod == 3) ? "checked" : "";?>>QR <br>
+				<input type="radio" name="paymentMethod" value="1" <?php echo ($cart->paymentMethod == 1) ? "checked" : "";?>>Credit/Debit <br>
+				<input type="radio" name="paymentMethod" value="2" <?php echo ($cart->paymentMethod == 2) ? "checked" : "";?>>UPI <br>
+				<input type="radio" name="paymentMethod" value="3" <?php echo ($cart->paymentMethod == 3) ? "checked" : "";?>>QR <br>
 				<input type="submit" value="Update">
 			</form>
 		</td>
 		<td>
 			<form action="<?php echo $this->getUrl('saveShipingMethod') ?>" method="post">
-				<input type="radio" name="shipingMethod" value="100" checked>Same Day Delivery <br>
-				<input type="radio" name="shipingMethod" value="70" <?php echo ($cart->cart->shipingMethod == 2) ? "checked" : "";?>>Express <br>
-				<input type="radio" name="shipingMethod" value="50" <?php echo ($cart->cart->shipingMethod == 3) ? "checked" : "";?>>Normal Delivery <br>
+				<input type="radio" name="shipingMethod" value="100" checked>Same Day Delivery-100<br>
+				<input type="radio" name="shipingMethod" value="70" <?php echo ($cart->shipingMethod == 2) ? "checked" : "";?>>Express-70<br>
+				<input type="radio" name="shipingMethod" value="50" <?php echo ($cart->shipingMethod == 3) ? "checked" : "";?>>Normal Delivery-50<br>
 				<input type="submit" value="Update">
 			</form>
 		</td>
@@ -174,7 +174,7 @@ $disabled = (!$items)?'disabled':"";
 			<?php $i = 0; ?>
 			<?php foreach($products as $product): ?>
 			<tr>
-				<td><img src="Media/Product/<?php echo $product->getBase()->name; ?>" alt="image not found" width="50" hight="50"></td>
+				<td><img src="<?php echo $product->getBase()->getImagePath(); ?>" alt="image not found" width="50" hight="50"></td>
 				<td><?php echo $product->name; ?></td>
 				<td><input type="number" name="cartItem[<?php echo $i ?>][quantity]" value="1" min="1"></td>
 				<td><?php echo $product->price; ?></td>
@@ -209,7 +209,7 @@ $disabled = (!$items)?'disabled':"";
 		<tr>
 			<input type="hidden" name="cartItem[<?php echo $i ?>][item_id]" value="<?php echo $item->item_id ?>">
 			<input type="hidden" name="cartItem[<?php echo $i ?>][product_id]" value="<?php echo $item->product_id ?>">
-			<td><img src="Media/Product/<?php echo $item->getProduct()->getBase()->name; ?>" alt="image not found" width="50" hight="50"></td>
+			<td><img src="<?php echo $item->getProduct()->getBase()->getImagePath(); ?>" alt="image not found" width="50" hight="50"></td>
 			<td><?php echo $item->getProduct()->name; ?></td>
 			<td><input type="number" name="cartItem[<?php echo $i ?>][quantity]" value="<?php echo $item->quantity; ?>" min="1"></td>
 			<td><?php echo $item->getProduct()->price; ?></td>
@@ -233,22 +233,22 @@ $disabled = (!$items)?'disabled':"";
 			</tr>
 			<tr>
 				<td>Shiping Charge</td>
-				<td><?php echo $cart->cart->shipingCharge; ?></td>
+				<td><?php echo $cart->shipingCharge; ?></td>
 			</tr>
 			<tr>
 				<td>Tax</td>
-				<td><?php echo $this->getTax($cart->cart->cart_id); ?></td>
+				<td><?php echo $this->getTax($cart->cart_id); ?></td>
 			</tr>
 			<tr>
 				<td>Discount</td>
-				<td><?php echo $cart->cart->discount; ?></td>
+				<td><?php echo $cart->discount; ?></td>
 			</tr>
 			<tr>
 				<td>Grand Total</td>
-				<td><?php echo $this->getTotal() + $cart->cart->shipingCharge + $this->getTax($cart->cart->cart_id) - $cart->cart->discount; ?></td>
-				<input type="hidden" name="grandTotal" value="<?php echo $this->getTotal() + $cart->cart->shipingCharge + $this->getTax($cart->cart->cart_id) - $cart->cart->discount; ?>">
-				<input type="hidden" name="taxAmount" value="<?php echo $this->getTax($cart->cart->cart_id); ?>">
-				<input type="hidden" name="discount" value="<?php echo $cart->cart->discount; ?>">
+				<td><?php echo $this->getTotal() + $cart->shipingCharge + $this->getTax($cart->cart_id) - $cart->discount; ?></td>
+				<input type="hidden" name="grandTotal" value="<?php echo $this->getTotal() + $cart->shipingCharge + $this->getTax($cart->cart_id) - $cart->discount; ?>">
+				<input type="hidden" name="taxAmount" value="<?php echo $this->getTax($cart->cart_id); ?>">
+				<input type="hidden" name="discount" value="<?php echo $cart->discount; ?>">
 			</tr>
 			<tr>
 				<td></td>

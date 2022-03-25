@@ -69,10 +69,6 @@ class Controller_Order extends Controller_Admin_Action{
 	
 			$content = $this->getLayout()->getContent();
 			$orderEdit = Ccc::getBlock('Order_Edit');
-			$order->bilingAddress = $order->getBilingAddress();
-			$order->shipingAddress = $order->getShipingAddress();
-			$order->items = $order->getItems();
-
 			$orderEdit = Ccc::getBlock('Order_Edit')->setData(['order' => $order]);
 			$content->addChild($orderEdit);
 	
