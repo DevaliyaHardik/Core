@@ -38,9 +38,10 @@ class Controller_Customer extends Controller_Admin_Action{
 
 		$content = $this->getLayout()->getContent();
 		$customerEdit = Ccc::getBlock('Customer_Edit');
-		$customerEdit->customer = $customer;
-		$customerEdit->address = $address;
-		$content->addChild($customerEdit);
+		Ccc::register('customer',$customer);
+		Ccc::register('bilingAddress',$address);
+		Ccc::register('shipingAddress',$address);
+	$content->addChild($customerEdit);
 
 		$this->randerLayout();
 	}
@@ -61,7 +62,8 @@ class Controller_Customer extends Controller_Admin_Action{
 				throw new Exception("Error Processing Request", 1);			
 			}
 			$customer = $customerModel->load($customerId);
-			$address = $addressModel->load($customerId);
+			$bilingAddress = $customer->getBilingAddress();
+			$shipingAddress = $customer->getShipingAddress();
 			if(!$customer){
 				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
 				throw new Exception("Error Processing Request", 1);			
@@ -74,8 +76,9 @@ class Controller_Customer extends Controller_Admin_Action{
 	
 			$content = $this->getLayout()->getContent();
 			$customerEdit = Ccc::getBlock('Customer_Edit');
-			$customerEdit->customer = $customer;
-			$customerEdit->address = $address;
+			Ccc::register('customer',$customer);
+			Ccc::register('bilingAddress',$bilingAddress);
+			Ccc::register('shipingAddress',$shipingAddress);
 			$content->addChild($customerEdit);
 	
 			$this->randerLayout();
@@ -96,7 +99,6 @@ class Controller_Customer extends Controller_Admin_Action{
 			}
 			$postData = $request->getPost('customer');
 			$customerData = $customerModel->setData($postData);
-
 			if(!empty($customerId)){
 				$customerData->customer_id = $customerId;
 				$customerData->updatedDate = date("Y-m-d h:i:s");					;
@@ -116,25 +118,31 @@ class Controller_Customer extends Controller_Admin_Action{
 
 	}
 
-	protected function saveAddress($customer)
+	protected function saveAddress($customer = null)
 	{
-		$addressModel = Ccc::getModel('Customer_Address');
 		$request = $this->getRequest();
+		$customerId = $request->getRequest('id');
+		if(!$customer){
+			$customer = Ccc::getModel('Customer')->load($customerId);
+		}
+		$addressModel = Ccc::getModel('Customer_Address');
 		if($request->isPost()){
 			$postBiling = $request->getPost('bilingAddress');
 			$postShiping = $request->getPost('shipingAddress');
 			$biling = $customer->getBilingAddress();
 			$shiping = $customer->getShipingAddress();
-			if(!$biling->addressId){
-				unset($biling->addressId);
+			if($postBiling){
+				$biling->setData($postBiling);
 			}
-			if(!$shiping->addressId){
-				unset($shiping->addressId);
-			}
-			$biling->setData($postBiling);
 			$biling->customer_id = $customer->customer_id;
-			$shiping->setData($postShiping);	
+			$biling->biling = 1;
+			$biling->shiping = 2;
+			if($postShiping){
+				$shiping->setData($postShiping);	
+			}
 			$shiping->customer_id = $customer->customer_id;
+			$shiping->biling = 2;
+			$shiping->shiping = 1;
 			$save = $biling->save();
 			if(!$save){
 				throw new Exception('Customer Details Not Saved.', 1);
@@ -151,18 +159,23 @@ class Controller_Customer extends Controller_Admin_Action{
 	{
 		try {
 				$request = $this->getRequest();
-				$customer = $this->saveCustomer();
-				if(!$customer){
-					throw new Exception('Your data con not be inserted', 1);			
+				if($request->getPost('customer')){
+					$customer = $this->saveCustomer();
+					if(!$customer){
+						throw new Exception('Your data con not be inserted', 1);			
+					}
+					$address = $this->saveAddress($customer);
 				}
-				$shiping = $this->saveAddress($customer);
-				if(!$shiping){
-					throw new Exception('Your data con not be updated', 1);			
+				if($request->getPost('bilingAddress') || $request->getPost('shipingAddress')){
+					$address = $this->saveAddress();
+					if(!$address){
+						throw new Exception('Your data con not be updated', 1);			
+					}
 				}
-				$this->redirect('grid',null,['id' => null]);
+				$this->redirect('grid',null,['id' => null,'tab' => null]);
 			}catch (Exception $e){
 				$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-				$this->redirect('grid','customer',['id' => null]);
+				$this->redirect('grid','customer',['id' => null,'tab' => null]);
 			}	
 		}
 

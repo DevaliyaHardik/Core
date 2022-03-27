@@ -1,11 +1,11 @@
-<?php Ccc::loadClass('Block_Core_Template'); ?>
+<?php Ccc::loadClass('Block_Core_Edit'); ?>
 <?php
 
-class Block_Customer_Edit extends Block_Core_Template
+class Block_Customer_Edit extends Block_Core_Edit
 {
     public function __construct()
     {
-        $this->setTemplate("view/customer/edit.php");
+        parent::__construct();
     }
 
     public function getCustomer()
@@ -21,6 +21,11 @@ class Block_Customer_Edit extends Block_Core_Template
             return Ccc::getModel('Customer_Address');
         }
         return $address;
+    }
+
+    public function getEditUrl()
+    {
+        return $this->getUrl('save','customer');
     }
 }
 

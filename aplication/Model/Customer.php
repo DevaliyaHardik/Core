@@ -50,7 +50,6 @@ class Model_Customer extends Model_Core_Row
 			return $addressModel;
 		}
 		$this->setBilingAddress($address);
-
 		return $this->bilingAddress;
 	}
 
@@ -88,6 +87,25 @@ class Model_Customer extends Model_Core_Row
 		return $this;
 	}
 
+	public function callActionMethod($methodName)
+	{
+		if($methodName == 'getEditUrl()'){
+			return $this->getEditUrl();
+		}
+		if($methodName == 'getDeleteUrl()'){
+			return $this->getDeleteUrl();
+		}
+	}
+
+	public function getEditUrl()
+	{
+		return Ccc::getModel('Core_View')->getUrl('edit','customer',['id'=>$this->customer_id]);
+	}
+
+	public function getDeleteUrl()
+	{
+		return Ccc::getModel('Core_View')->getUrl('delete','customer',['id'=>$this->customer_id]);
+	}
 }
 
 ?>

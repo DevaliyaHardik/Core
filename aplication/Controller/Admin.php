@@ -36,7 +36,7 @@ class Controller_Admin extends Controller_Admin_Action{
 
 		$content = $this->getLayout()->getContent();
 		$adminEdit = Ccc::getBlock('Admin_Edit');
-		$admin = $adminEdit->admin = $admin;
+        Ccc::register('admin',$adminModel);
 		$content->addChild($adminEdit);
 
 		$this->randerLayout();
@@ -69,7 +69,7 @@ class Controller_Admin extends Controller_Admin_Action{
 	
 			$content = $this->getLayout()->getContent();
 			$adminEdit = Ccc::getBlock('Admin_Edit');
-			$admin = $adminEdit->admin = $admin;
+            Ccc::register('admin',$admin);
 			$content->addChild($adminEdit);
 	
 			$this->randerLayout();
