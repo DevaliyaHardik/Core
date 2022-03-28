@@ -10,6 +10,11 @@ class Block_Customer_Grid extends Block_Core_Grid
         parent::__construct();
     }
 
+    public function getCollectionData()
+    {
+        return $this->getCollection();
+    }
+
     // public function getCustomer()
     // {
     //     $customerModel = Ccc::getModel('customer');
@@ -37,19 +42,19 @@ class Block_Customer_Grid extends Block_Core_Grid
     //     return $address;
     // }
 
-    // public function setPager($pager)
-    // {
-    //     $this->pager = $pager;
-    //     return $this;
-    // }
+    public function setPager($pager)
+    {
+        $this->pager = $pager;
+        return $this;
+    }
 
-    // public function getPager()
-    // {
-    //     if(!$this->pager){
-    //         $this->setPager(Ccc::getModel('Core_Pager'));
-    //     }
-    //     return $this->pager;
-    // }
+    public function getPager()
+    {
+        if(!$this->pager){
+            $this->setPager(Ccc::getModel('Core_Pager'));
+        }
+        return $this->pager;
+    }
 }
 
 ?>

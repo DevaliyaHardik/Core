@@ -10,6 +10,21 @@ class Block_Customer_Grid_Collection extends Block_Core_Grid_Collection
 
     public function prepareCollections()
     {
+        $customerColumn = $this->getCustomers();
+        $this->addCollection([
+            'title' => 'Personal Info',
+            'block' => 'Customer_Grid_Collections_Personal',
+            'action' => ['Edit' => ['title' => 'edit','method' => 'getEditUrl()'],
+                        'Delete' => ['title' => 'delete','method' => 'getDeleteUrl()']
+            ],
+            'header' => ['Customer Id','First Name','Last Name','Email','Mobile','Status','Salesman Id','Created Date','Updated Date','Biling Address','Shiping Address'],
+            'columns' => $customerColumn,
+            'url' => $this->getUrl(null,null,['collection' => 'personal'])
+        ],'personal');
+    }
+
+    public function getCustomers()
+    {
         $customerModel = Ccc::getModel('Customer');
         $request = Ccc::getModel('Core_Request');
         $this->setPager(Ccc::getModel('Core_Pager'));
@@ -36,31 +51,7 @@ class Block_Customer_Grid_Collection extends Block_Core_Grid_Collection
             $customer->setData(['shiping' => $shiping]);
             array_push($customerColumn,$customer);
         }        
-
-        $this->addCollection([
-            'title' => 'Personal Info',
-            'block' => 'Customer_Grid_Collections_Personal',
-            'action' => ['Edit' => ['title' => 'edit','method' => 'getEditUrl()'],
-                        'Delete' => ['title' => 'delete','method' => 'getDeleteUrl()']
-            ],
-            'header' => ['Customer Id','First Name','Last Name','Email','Mobile','Status','Salesman Id','Created Date','Updated Date','Biling Address','Shiping Address'],
-            'columns' => $customerColumn,
-            'url' => $this->getUrl(null,null,['collection' => 'personal'])
-        ],'personal');
-    }
-
-    public function setPager($pager)
-    {
-        $this->pager = $pager;
-        return $this;
-    }
-
-    public function getPager()
-    {
-        if(!$this->pager){
-            $this->setPager(Ccc::getModel('Core_Pager'));
-        }
-        return $this->pager;
+        return $customerColumn;
     }
 
 }

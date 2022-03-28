@@ -3,6 +3,7 @@
 class Block_Core_Grid_Collection extends Block_Core_Template   
 {
     protected $collections = [];
+    protected $pager = null;
     protected $grid = null;
     protected $currentCollection = null;
 
@@ -19,7 +20,7 @@ class Block_Core_Grid_Collection extends Block_Core_Template
 
     public function getSelectedCollection()
     {
-        $collectionKey = Ccc::getModel('Core_Request')->getRequest('tab');
+        $collectionKey = Ccc::getModel('Core_Request')->getRequest('collection');
         $collection = $this->getCollection($collectionKey);
         if(!$collection)
         {
@@ -60,9 +61,9 @@ class Block_Core_Grid_Collection extends Block_Core_Template
         return $this->currentCollection;
     }
 
-    /*public function setTabs($tabs)
+    /*public function setCollections($collections)
     {
-        $this->tabs = $tabs;
+        $this->collections = $collections;
         return $this;
     }*/
 
@@ -93,5 +94,19 @@ class Block_Core_Grid_Collection extends Block_Core_Template
             unset($this->collections[$key]);
         }
         return $this;
+    }
+
+    public function setPager($pager)
+    {
+        $this->pager = $pager;
+        return $this;
+    }
+
+    public function getPager()
+    {
+        if(!$this->pager){
+            $this->setPager(Ccc::getModel('Core_Pager'));
+        }
+        return $this->pager;
     }
 }

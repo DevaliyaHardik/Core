@@ -1,5 +1,5 @@
 <pre>
-<?php 
+<?php
 $columns = $this->getCollection($this->getCurrentCollection())['columns']; 
 $actions = $this->getCollection($this->getCurrentCollection())['action'];
 $headers = $this->getCollection($this->getCurrentCollection())['header'];
