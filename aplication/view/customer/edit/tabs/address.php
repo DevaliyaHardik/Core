@@ -329,7 +329,7 @@ $shipingAddress = $this->getShipingAddress();
     <tr>
         <td width="10%">&nbsp;</td>
         <td>
-            <input type="submit" name="submit" value="save">
+            <input type="button" id="submit" name="submit" value="save">
             <button type="button"><a href="<?php echo $this->getUrl('grid','customer',['id' => null]); ?>">Cancel</a></button>
         </td>
     </tr>
@@ -359,4 +359,14 @@ $shipingAddress = $this->getShipingAddress();
             }
     }
 </script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#submit").click(function(){
+            var data = $("#form").serializeArray();
+            customer.setData(data);
+            customer.validate();
+        });
+    });
+</script>
+
 

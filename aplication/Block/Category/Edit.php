@@ -1,17 +1,11 @@
-<?php Ccc::loadClass("Block_Core_Template"); ?>
+<?php Ccc::loadClass("Block_Core_Edit"); ?>
 <?php
 
-class Block_Category_Edit extends Block_Core_Template
+class Block_Category_Edit extends Block_Core_Edit
 {
     public function __construct()
     {
-        $this->setTemplate("view/category/edit.php");
-    }
-
-    public function getcategory()
-    {
-        $category = $this->category;
-		return $category;
+        parent::__construct();
     }
 
     public function getCategories()

@@ -111,8 +111,8 @@ class Controller_Customer extends Controller_Admin_Action{
 			if(!$customer){
 				throw new Exception('Your data con not be saved', 1);			
 			}
-			$this->getMessage()->addMessage('Your Data Save Successfully');
-
+			$message = $this->getMessage()->addMessage('Your Data Save Successfully');
+			echo $message->getMessages()['success'];
 		}
 		return $customer;
 
@@ -172,10 +172,12 @@ class Controller_Customer extends Controller_Admin_Action{
 						throw new Exception('Your data con not be updated', 1);			
 					}
 				}
-				$this->redirect('grid',null,['id' => null,'tab' => null]);
+				//$this->redirect('grid',null,['id' => null,'tab' => null]);
 			}catch (Exception $e){
-				$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-				$this->redirect('grid','customer',['id' => null,'tab' => null]);
+				$message = $this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+				echo $message->getMessages()['error'];
+
+				//$this->redirect('grid','customer',['id' => null,'tab' => null]);
 			}	
 		}
 

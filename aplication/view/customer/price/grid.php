@@ -46,6 +46,7 @@ $products = $this->getProducts();
 
 <form action="<?php echo $this->getUrl('save','customer_price') ?>" method="post">
     <input type="submit" value="save">
+    <a href="<?php echo $this->getUrl('grid','customer',[],true); ?>"><button type="button">Cancel</button></a>
     <table border="1" width="100%">
         <tr>
             <th>Product Id</th>

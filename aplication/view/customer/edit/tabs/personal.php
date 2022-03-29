@@ -1,5 +1,5 @@
 <?php $customer = $this->getCustomer(); ?>
-
+<p id="done"></p>
 <table border="1" width="100%" cellspacing="4">
     <tr>
         <td colspan="2"><b>Personal Information</b></td>
@@ -18,8 +18,8 @@
         <td><input type="text" name="customer[email]" value=<?php echo $customer->email ?>></td>
     </tr>
     <tr>
-        <td width="10%">Mobile</td>
-        <td><input type="text" name="customer[mobile]" value=<?php echo $customer->mobile ?>></td>
+        <td width="10%" >Mobile</td>
+        <td><input type="text" name="customer[mobile]" id="mobile" value=<?php echo $customer->mobile ?>></td>
     </tr>
     <tr>
         <td width="10%">Status</td>
@@ -33,7 +33,7 @@
     <tr>
         <td width="10%">&nbsp;</td>
         <td>
-                <input type="submit" name="submit" value="save">
+                <input type="button" id="submit" name="submit" value="save">
                 <button type="button"><a href="<?php echo $this->getUrl('grid','customer',['id' => null]); ?>">Cancel</a></button>
         </td>
     </tr>

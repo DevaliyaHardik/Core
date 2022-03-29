@@ -31,16 +31,6 @@ class Model_Admin extends Model_Core_Row
 		return $statuses[self::STATUS_DEFAULT];
 	}
 
-	public function callActionMethod($methodName)
-	{
-		if($methodName == 'getEditUrl()'){
-			return $this->getEditUrl();
-		}
-		if($methodName == 'getDeleteUrl()'){
-			return $this->getDeleteUrl();
-		}
-	}
-
 	public function getEditUrl()
 	{
 		return Ccc::getModel('Core_View')->getUrl('edit','admin',['id'=>$this->admin_id]);

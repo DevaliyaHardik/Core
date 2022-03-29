@@ -87,16 +87,6 @@ class Model_Customer extends Model_Core_Row
 		return $this;
 	}
 
-	public function callActionMethod($methodName)
-	{
-		if($methodName == 'getEditUrl()'){
-			return $this->getEditUrl();
-		}
-		if($methodName == 'getDeleteUrl()'){
-			return $this->getDeleteUrl();
-		}
-	}
-
 	public function getEditUrl()
 	{
 		return Ccc::getModel('Core_View')->getUrl('edit','customer',['id'=>$this->customer_id]);
@@ -105,6 +95,11 @@ class Model_Customer extends Model_Core_Row
 	public function getDeleteUrl()
 	{
 		return Ccc::getModel('Core_View')->getUrl('delete','customer',['id'=>$this->customer_id]);
+	}
+
+	public function getPriceUrl()
+	{
+		return Ccc::getModel('Core_View')->getUrl('grid','customer_price',['id' => $this->customer_id]);
 	}
 }
 

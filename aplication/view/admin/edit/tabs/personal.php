@@ -36,7 +36,7 @@ $hidden = ($admin->password) ? 'hidden' : 'password';
     </tr>
         <td width="10%">&nbsp;</td>
         <td>
-            <input type="submit" name="submit" value="save">
+            <input type="button" id="submit" name="submit" value="save">
             <button type="button"><a href="<?php echo $this->getUrl('grid','admin',['id' => null]) ?>">Cancel</a></button>
         </td>
     </tr>		
