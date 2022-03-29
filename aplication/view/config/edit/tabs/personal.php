@@ -1,7 +1,10 @@
-<?php $config=$this->getConfig(); ?>
 
-<form action="<?php echo $this->getUrl('save','config',['id'=>$config->config_id]) ?>" method="POST">
-	<table border="1" width="100%" cellspacing="4">
+<?php $config=$this->getConfig(); 
+$hidden = ($config->password) ? 'hidden' : 'password'; 
+?>
+
+
+<table border="1" width="100%" cellspacing="4">
 		<tr>
 			<td colspan="2"><b>Config Information</b></td>
 		</tr>
@@ -36,4 +39,3 @@
 		</tr>
 		
 	</table>	
-</form>

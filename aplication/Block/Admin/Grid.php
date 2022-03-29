@@ -76,7 +76,6 @@ class Block_Admin_Grid extends Block_Core_Grid {
         $admins = $adminModel->fetchAll("SELECT * FROM `admin` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");
         $adminColumn = [];
         foreach ($admins as $admin) {
-            $admin->status = $admin->getStatus($admin->status);
             array_push($adminColumn,$admin);
         }        
 

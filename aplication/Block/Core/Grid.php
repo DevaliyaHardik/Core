@@ -88,7 +88,8 @@ class Block_Core_Grid extends Block_Core_Template
     {
         if($key == 'status')
         {
-            return $collection->getStatus($key);
+
+            return $collection->getStatus($collection->$key);
         }
         return $collection->$key;
     }

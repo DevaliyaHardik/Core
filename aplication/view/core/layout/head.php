@@ -136,9 +136,7 @@
             admin.setData({'id' : data});
             admin.callDeleteAjax();
         });
-    });
 
-    $(document).ready(function(){
         $("#submit").click(function(){
             var data = $("#form").serializeArray();
             admin.setData(data);

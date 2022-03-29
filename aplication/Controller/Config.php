@@ -39,7 +39,7 @@ class Controller_Config extends Controller_Admin_Action{
 
 		$content = $this->getLayout()->getContent();
 		$configEdit = Ccc::getBlock('Config_Edit');
-		$configEdit->config = $config;
+		Ccc::register('config',$config);
 		$content->addChild($configEdit);
 
 		$this->randerLayout();
@@ -73,7 +73,7 @@ class Controller_Config extends Controller_Admin_Action{
 	
 			$content = $this->getLayout()->getContent();
 			$configEdit = Ccc::getBlock('Config_Edit');
-			$configEdit->config = $config;
+            Ccc::register('config',$config);
 			$content->addChild($configEdit);
 	
 			$this->randerLayout();

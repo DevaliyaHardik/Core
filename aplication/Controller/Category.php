@@ -36,7 +36,7 @@ class Controller_Category extends Controller_Admin_Action{
 
 		$content = $this->getLayout()->getContent();
 		$categoryEdit = Ccc::getBlock('Category_Edit');
-		$categoryEdit->category = $category;
+		Ccc::register('category',$category);
 		$content->addChild($categoryEdit);
 
 		$this->randerLayout();
@@ -69,7 +69,7 @@ class Controller_Category extends Controller_Admin_Action{
 	
 			$content = $this->getLayout()->getContent();
 			$categoryEdit = Ccc::getBlock('Category_Edit');
-			$categoryEdit->category = $category;
+			Ccc::register('category',$category);
 			$content->addChild($categoryEdit);
 	
 			$this->randerLayout();
