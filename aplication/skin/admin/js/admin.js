@@ -75,7 +75,7 @@ var admin = {
             type: this.getType(),
             data: this.getData(),
             success: function(data){
-                alert("Data Submited.")
+                alert("Data Submited.");
             }             
         });
     },
