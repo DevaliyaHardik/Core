@@ -25,6 +25,15 @@ class Controller_Customer extends Controller_Admin_Action{
 		$this->randerLayout();
 	}
 
+	public function grid1Action()
+	{
+		$content = $this->getLayout()->getContent();
+		$customerGrid = Ccc::getBlock('Customer_Grid');
+		$content->addChild($customerGrid);
+
+		$this->randerContent();
+	}
+
 	public function addAction()
 	{
 		$customerModel = Ccc::getModel("Customer");
@@ -41,9 +50,25 @@ class Controller_Customer extends Controller_Admin_Action{
 		Ccc::register('customer',$customer);
 		Ccc::register('bilingAddress',$address);
 		Ccc::register('shipingAddress',$address);
-	$content->addChild($customerEdit);
+		$content->addChild($customerEdit);
 
 		$this->randerLayout();
+	}
+
+	public function add1Action()
+	{
+		$customerModel = Ccc::getModel("Customer");
+		$customer = $customerModel;
+		$address = $customerModel;
+
+		$content = $this->getLayout()->getContent();
+		$customerEdit = Ccc::getBlock('Customer_Edit');
+		Ccc::register('customer',$customer);
+		Ccc::register('bilingAddress',$address);
+		Ccc::register('shipingAddress',$address);
+		$content->addChild($customerEdit);
+
+		$this->randerContent();
 	}
 
 	public function editAction()
@@ -84,7 +109,44 @@ class Controller_Customer extends Controller_Admin_Action{
 			$this->randerLayout();
 		}catch (Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('grid','customer');
+			//$this->redirect('grid','customer');
+		}	
+	}
+
+	public function edit1Action()
+	{
+		try {
+			$customerModel = Ccc::getModel("Customer");
+			$addressModel = Ccc::getModel("Customer_Address");
+			$request = $this->getRequest();
+			$customerId = $request->getRequest('id');
+			if(!$customerId){
+				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				throw new Exception("Error Processing Request", 1);			
+			}
+			if(!(int)$customerId){
+				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				throw new Exception("Error Processing Request", 1);			
+			}
+			$customer = $customerModel->load($customerId);
+			$bilingAddress = $customer->getBilingAddress();
+			$shipingAddress = $customer->getShipingAddress();
+			if(!$customer){
+				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				throw new Exception("Error Processing Request", 1);			
+			}
+	
+			$content = $this->getLayout()->getContent();
+			$customerEdit = Ccc::getBlock('Customer_Edit');
+			Ccc::register('customer',$customer);
+			Ccc::register('bilingAddress',$bilingAddress);
+			Ccc::register('shipingAddress',$shipingAddress);
+			$content->addChild($customerEdit);
+	
+			$this->randerContent();
+		}catch (Exception $e){
+			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+			//$this->redirect('grid','customer');
 		}	
 	}
 
@@ -111,8 +173,7 @@ class Controller_Customer extends Controller_Admin_Action{
 			if(!$customer){
 				throw new Exception('Your data con not be saved', 1);			
 			}
-			$message = $this->getMessage()->addMessage('Your Data Save Successfully');
-			echo $message->getMessages()['success'];
+			$this->getMessage()->addMessage('Your Data Save Successfully');
 		}
 		return $customer;
 
@@ -174,9 +235,7 @@ class Controller_Customer extends Controller_Admin_Action{
 				}
 				//$this->redirect('grid',null,['id' => null,'tab' => null]);
 			}catch (Exception $e){
-				$message = $this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-				echo $message->getMessages()['error'];
-
+				$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
 				//$this->redirect('grid','customer',['id' => null,'tab' => null]);
 			}	
 		}
@@ -200,7 +259,7 @@ class Controller_Customer extends Controller_Admin_Action{
 
 			}catch (Exception $e){
 				$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-				$this->redirect('grid','customer',['id' => null]);
+				//$this->redirect('grid','customer',['id' => null]);
 			}	
 		}
 	}

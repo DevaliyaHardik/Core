@@ -88,8 +88,21 @@ class Block_Core_Grid extends Block_Core_Template
     {
         if($key == 'status')
         {
-
             return $collection->getStatus($collection->$key);
+        }
+        if($key == 'path'){
+            return $collection->getPath();
+        }
+        if($key == 'base'){
+            $image = $collection->getBase()->getImagePath();
+            return "<img src='{$image}' alt='' width='50' height='50'>";
+        }
+        if($key == 'thumb'){
+            $image = $collection->getThumb()->getImagePath();
+            return "<img src='{$image}' alt='' width='50' height='50'>";
+        }if($key == 'small'){
+            $image = $collection->getSmall()->getImagePath();
+            return "<img src='{$image}' alt='' width='50' height='50'>";
         }
         return $collection->$key;
     }

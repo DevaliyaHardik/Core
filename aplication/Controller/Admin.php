@@ -10,6 +10,40 @@ class Controller_Admin extends Controller_Admin_Action{
 			$this->redirect('login','admin_login');
 		}
 	}
+
+	public function indexAction()
+	{
+		$content = $this->getLayout()->getContent();
+		$adminGrid = Ccc::getBlock('Admin_Index');
+		$content->addChild($adminGrid);
+
+		$this->randerLayout();
+	}
+
+	public function grid1Action()
+	{
+		$this->randerJson(['status' => 'success']);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public function gridAction()
 	{
 		$header = $this->getLayout()->getHeader();

@@ -146,6 +146,40 @@ class Model_Category extends Model_Core_Row
 
 		return $thumbName;
 	}
+
+	public function getPath()
+    {
+		$categoryId = $this->category_id;
+		$path = $this->path;
+        $finalPath = NULL;
+        $path = explode("/",$path);
+        foreach ($path as $path1) {
+            $categoryModel = Ccc::getModel('Category');
+            $category = $categoryModel->fetchRow("SELECT * FROM `category` WHERE `category_id` = '$path1' ");
+            if($path1 != $categoryId){
+                $finalPath .= $category->name ."=>";
+            }else{
+                $finalPath .= $category->name;
+            }
+        }
+        return $finalPath;
+    }
+
+	public function getEditUrl()
+	{
+		return Ccc::getModel('Core_View')->getUrl('edit','category',['id'=>$this->category_id]);
+	}
+
+	public function getDeleteUrl()
+	{
+		return Ccc::getModel('Core_View')->getUrl('delete','category',['id'=>$this->category_id]);
+	}
+
+	public function getMediaUrl()
+	{
+		return Ccc::getModel('Core_View')->getUrl('grid','category_media',['id'=>$this->category_id]);
+	}
+
 }
 
 ?>

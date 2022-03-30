@@ -34,8 +34,22 @@
         <td width="10%">&nbsp;</td>
         <td>
                 <input type="button" id="submit" name="submit" value="save">
-                <button type="button"><a href="<?php echo $this->getUrl('grid','customer',['id' => null]); ?>">Cancel</a></button>
+                <button type="button" id="cancel">Cancel</button>
         </td>
     </tr>
 
 </table>
+
+<script>
+    $("#submit").click(function(){
+        admin.setForm($("#form"));
+        admin.callSaveAjax();
+        admin.setUrl("<?php echo $this->getUrl('grid1'); ?>");
+        admin.load();
+    });
+
+    $("#cancel").click(function(){
+        admin.setUrl("<?php echo $this->getUrl('grid1','customer'); ?>");
+        admin.load();
+    });
+</script>

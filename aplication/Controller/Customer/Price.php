@@ -24,6 +24,15 @@ class Controller_Customer_Price extends Controller_Admin_Action{
 		$this->randerLayout();
 	}
 
+	public function grid1Action()
+	{
+		$content = $this->getLayout()->getContent();
+		$customerPriceGrid = Ccc::getBlock('Customer_Price_Grid');
+		$content->addChild($customerPriceGrid);
+
+		$this->randerContent();
+	}
+
 	public function saveAction()
 	{
 		try {

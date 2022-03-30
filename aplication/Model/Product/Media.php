@@ -40,4 +40,5 @@ class Model_Product_Media extends Model_Core_Row
     }
 }
 
+
 ?>
