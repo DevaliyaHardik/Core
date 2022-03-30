@@ -52,22 +52,6 @@ class Controller_Customer extends Controller_Admin_Action{
 		Ccc::register('shipingAddress',$address);
 		$content->addChild($customerEdit);
 
-		$this->randerLayout();
-	}
-
-	public function add1Action()
-	{
-		$customerModel = Ccc::getModel("Customer");
-		$customer = $customerModel;
-		$address = $customerModel;
-
-		$content = $this->getLayout()->getContent();
-		$customerEdit = Ccc::getBlock('Customer_Edit');
-		Ccc::register('customer',$customer);
-		Ccc::register('bilingAddress',$address);
-		Ccc::register('shipingAddress',$address);
-		$content->addChild($customerEdit);
-
 		$this->randerContent();
 	}
 
@@ -98,43 +82,6 @@ class Controller_Customer extends Controller_Admin_Action{
 			$menu = Ccc::getBlock('Core_Layout_Header_Menu');
 			$message = Ccc::getBlock('Core_Layout_Header_Message');
 			$header->addChild($menu)->addChild($message);
-	
-			$content = $this->getLayout()->getContent();
-			$customerEdit = Ccc::getBlock('Customer_Edit');
-			Ccc::register('customer',$customer);
-			Ccc::register('bilingAddress',$bilingAddress);
-			Ccc::register('shipingAddress',$shipingAddress);
-			$content->addChild($customerEdit);
-	
-			$this->randerLayout();
-		}catch (Exception $e){
-			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			//$this->redirect('grid','customer');
-		}	
-	}
-
-	public function edit1Action()
-	{
-		try {
-			$customerModel = Ccc::getModel("Customer");
-			$addressModel = Ccc::getModel("Customer_Address");
-			$request = $this->getRequest();
-			$customerId = $request->getRequest('id');
-			if(!$customerId){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
-			}
-			if(!(int)$customerId){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
-			}
-			$customer = $customerModel->load($customerId);
-			$bilingAddress = $customer->getBilingAddress();
-			$shipingAddress = $customer->getShipingAddress();
-			if(!$customer){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
-			}
 	
 			$content = $this->getLayout()->getContent();
 			$customerEdit = Ccc::getBlock('Customer_Edit');

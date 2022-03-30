@@ -48,7 +48,7 @@
 </table>
 <script>
     $("#addNew").click(function(){
-        var url = "<?php echo $this->getUrl('add1'); ?>";
+        var url = "<?php echo $this->getUrl('add'); ?>";
         admin.setUrl(url);
         admin.setType('POST');
         admin.setData($(this).val());
@@ -61,13 +61,14 @@
         admin.setUrl("<?php echo $this->getUrl('delete'); ?>");
         admin.callDeleteAjax();
         admin.setUrl("<?php echo $this->getUrl('grid1'); ?>");
+        admin.setData({});
         admin.load();
     });
 
     $(".edit").click(function(){
         var data = $(this).val();
         admin.setData({'id' : data});
-        admin.setUrl("<?php echo $this->getUrl('edit1'); ?>");
+        admin.setUrl("<?php echo $this->getUrl('edit'); ?>");
         admin.setType('GET');
         admin.load();
     });
