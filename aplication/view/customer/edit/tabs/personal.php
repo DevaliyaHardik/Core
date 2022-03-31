@@ -33,7 +33,7 @@
     <tr>
         <td width="10%">&nbsp;</td>
         <td>
-            <input type="button" id="customerSubmitBtn" name="submit" value="save">
+            <input type="button" id="customerSubmitBtn" name="submit" value="save & continue">
             <button type="button" id="customerGridBlockBtn">Cancel</button>
         </td>
     </tr>

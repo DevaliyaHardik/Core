@@ -73,13 +73,20 @@ var admin = {
     },
 
     manageElemants : function(elements) {
+        const self = this;
         jQuery(elements).each(function(index,element) {
-            console.log(element);
-            jQuery(element.element).html(element.content);
-            if(element.classAdd != undefined){
-                console.log(element.classAdd);
-                jQuery(element.element).addClass(element.classAdd);
+            if(element.url != undefined){
+                self.setUrl(element.url);
+                self.setData({});
+                self.setType('GET');
+                self.load();
+                //jQuery(element.element).addClass(element.classAdd);
             }
+            else{
+                jQuery(element.element).html(element.content);
+                if(element.classAdd != undefined){
+                jQuery(element.element).addClass(element.classAdd);
+            }            }
         });
     }
 

@@ -199,25 +199,6 @@ class Controller_Admin extends Controller_Admin_Action{
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	// public function gridAction()
 	// {
 	// 	$content = $this->getLayout()->getContent();

@@ -85,7 +85,7 @@
 
     $("#ppc").change(function(){
         var data = $(this).val();
-        admin.setUrl("<?php echo $this->getUrl('gridBlock','customer',['p'=>1,'ppc'=>null]); ?>&ppc="+data);
+        admin.setUrl("<?php echo $this->getUrl('gridBlock',null,['p'=>1,'ppc'=>null]); ?>&ppc="+data);
         admin.setType('GET');
         admin.load();
     });

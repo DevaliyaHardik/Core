@@ -252,6 +252,9 @@ class Controller_Customer extends Controller_Admin_Action{
 	public function saveAction()
 	{
 		try {
+				$customer = null;
+				$url = null;
+
 				$request = $this->getRequest();
 				if($request->getPost('customer')){
 					$customer = $this->saveCustomer();
@@ -267,8 +270,27 @@ class Controller_Customer extends Controller_Admin_Action{
 					}
 				}
 
-				$this->gridBlockAction();
-					
+				$customerGrid = Ccc::getBlock('Customer_Grid')->toHtml();
+				$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+				if($customer){
+					$url = Ccc::getModel('Core_View')->getUrl('editBlock',null,['id' => $customer->customer_id,'tab'=>'address']);
+				}
+				$response = [
+					'status' => 'success',
+					'elements' => [
+						[
+							'element' => '#indexContent',
+							'content' => $customerGrid,
+							'url' => $url
+						],
+						[
+							'element' => '#adminMessage',
+							'content' => $messageBlock
+						]
+					]
+				];
+				$this->randerJson($response);
+							
 				//$this->redirect('grid',null,['id' => null,'tab' => null]);
 			}catch (Exception $e){
 				$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
