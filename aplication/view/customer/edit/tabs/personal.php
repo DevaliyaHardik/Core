@@ -33,23 +33,22 @@
     <tr>
         <td width="10%">&nbsp;</td>
         <td>
-                <input type="button" id="submit" name="submit" value="save">
-                <button type="button" id="cancel">Cancel</button>
+            <input type="button" id="customerSubmitBtn" name="submit" value="save">
+            <button type="button" id="customerGridBlockBtn">Cancel</button>
         </td>
     </tr>
 
 </table>
 
 <script>
-    $("#submit").click(function(){
-        admin.setForm($("#form"));
-        admin.callSaveAjax();
-        admin.setUrl("<?php echo $this->getUrl('grid1'); ?>");
+    $("#customerSubmitBtn").click(function(){
+        admin.setForm($("#indexForm"));
+        admin.setUrl("<?php echo $this->getEdit()->getSaveUrl(); ?>");
         admin.load();
     });
 
-    $("#cancel").click(function(){
-        admin.setUrl("<?php echo $this->getUrl('grid1','customer'); ?>");
+    $("#customerGridBlockBtn").click(function(){
+        admin.setUrl("<?php echo $this->getUrl('gridBlock','customer'); ?>");
         admin.load();
     });
 </script>

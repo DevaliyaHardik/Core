@@ -27,6 +27,11 @@ class Block_Customer_Edit extends Block_Core_Edit
     {
         return $this->getUrl('save','customer');
     }
+
+    public function getSaveUrl()
+    {
+        return $this->getUrl('save','customer');
+    }
 }
 
 ?>

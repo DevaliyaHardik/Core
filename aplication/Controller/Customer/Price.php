@@ -24,13 +24,24 @@ class Controller_Customer_Price extends Controller_Admin_Action{
 		$this->randerLayout();
 	}
 
-	public function grid1Action()
+	public function gridBlockAction()
 	{
-		$content = $this->getLayout()->getContent();
-		$customerPriceGrid = Ccc::getBlock('Customer_Price_Grid');
-		$content->addChild($customerPriceGrid);
-
-		$this->randerContent();
+		$customerGrid = Ccc::getBlock('Customer_Price_Grid')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' => $customerGrid
+				],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->randerJson($response);
 	}
 
 	public function saveAction()

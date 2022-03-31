@@ -3,10 +3,11 @@
 
 class Block_Core_Template extends Model_Core_View{
     protected $children = [];
+    protected $layout = null;
 
     public function __construct()
     {
-        $this->setTemplate("view/core/layout.php");
+
     }
 
     public function setChildren($children)
@@ -18,6 +19,17 @@ class Block_Core_Template extends Model_Core_View{
     public function getChildren()
     {
         return $this->children;
+    }
+
+    public function setLayout($layout)
+    {
+        $this->layout = $layout;
+        return $this;
+    }
+
+    public function getLayout()
+    {
+        return $this->layout;
     }
 
     public function setChild($key,$value)
@@ -40,6 +52,7 @@ class Block_Core_Template extends Model_Core_View{
             $key = get_class($object);
         }
         $this->children[$key] = $object;
+        $object->setLayout($this->getLayout());
         return $this;
     }
 
@@ -49,6 +62,20 @@ class Block_Core_Template extends Model_Core_View{
             unset($this->children[$key]);
         }
         return $this;
+    }
+
+    public function getBlock($key)
+    {
+        $block = $this->getChild($key);
+        if($block){
+            return $block;
+        }
+        $block = Ccc::getBlock($key);
+        if($block){
+            $block->setLayout($this->getLayout());
+            return $block;
+        }
+        return null;
     }
  
 }

@@ -73,24 +73,6 @@ class Block_Category_Grid extends Block_Core_Grid
         return $this;
     }
 
-    public function getAdmins()
-    {
-        $adminModel = Ccc::getModel('Category');
-        $request = Ccc::getModel('Core_Request');
-        $this->setPager(Ccc::getModel('Core_Pager'));
-        $current = $request->getRequest('p',1);
-        $perPageCount = $request->getRequest('ppc',20);
-        $totalCount = $this->getAdapter()->fetchOne("SELECT COUNT('admin_id') FROM `admin`");
-        $this->getPager()->execute($totalCount,$current,$perPageCount);
-        $admins = $adminModel->fetchAll("SELECT * FROM `admin` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");
-        $adminColumn = [];
-        foreach ($admins as $admin) {
-            array_push($adminColumn,$admin);
-        }        
-
-        return $adminColumn;
-    }
-
     public function getCategory()
     {
         $categoryModel = Ccc::getModel('category');

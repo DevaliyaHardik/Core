@@ -13,10 +13,6 @@ class Controller_cart extends Controller_Admin_Action{
 	public function gridAction()
 	{
 		$this->getCart()->unsetCart();
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$cartGrid = Ccc::getBlock('Cart_Grid');
@@ -27,10 +23,6 @@ class Controller_cart extends Controller_Admin_Action{
 
 	public function editAction()
 	{
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
 		$content = $this->getLayout()->getContent();
 		$cartEdit = Ccc::getBlock('Cart_Edit');
 		$content->addChild($cartEdit);

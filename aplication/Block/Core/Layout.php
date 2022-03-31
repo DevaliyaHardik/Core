@@ -3,6 +3,13 @@
 
 class Block_Core_Layout extends Block_Core_Template{
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->setTemplate("view/core/layout.php");
+        $this->setLayout($this);
+    }
+
     public function getHeader()
     {
         $child = Ccc::getBlock('Core_Layout_Header');

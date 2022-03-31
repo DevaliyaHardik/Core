@@ -13,11 +13,6 @@ class Controller_Product extends Controller_Admin_Action{
 
 	public function gridAction()
 	{
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
-
 		$content = $this->getLayout()->getContent();
 		$productGrid = Ccc::getBlock('Product_Grid');
 		$content->addChild($productGrid);
@@ -29,11 +24,6 @@ class Controller_Product extends Controller_Admin_Action{
 	{
 		$productModel = Ccc::getModel('Product');
 		$product = $productModel;
-
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$productEdit = Ccc::getBlock('Product_Edit');
@@ -63,11 +53,6 @@ class Controller_Product extends Controller_Admin_Action{
 				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
 				throw new Exception("Error Processing Request", 1);			
 			}
-	
-			$header = $this->getLayout()->getHeader();
-			$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-			$message = Ccc::getBlock('Core_Layout_Header_Message');
-			$header->addChild($menu)->addChild($message);
 	
 			$content = $this->getLayout()->getContent();
 			$productEdit = Ccc::getBlock('Product_Edit');

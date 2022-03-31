@@ -12,11 +12,6 @@ class Controller_Order extends Controller_Admin_Action{
 	}
 	public function gridAction()
 	{
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
-
 		$content = $this->getLayout()->getContent();
 		$orderGrid = Ccc::getBlock('Order_Grid');
 		$content->addChild($orderGrid);
@@ -61,11 +56,6 @@ class Controller_Order extends Controller_Admin_Action{
 				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
 				throw new Exception('Invalid Request', 1);
 			}
-			
-			$header = $this->getLayout()->getHeader();
-			$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-			$message = Ccc::getBlock('Core_Layout_Header_Message');
-			$header->addChild($menu)->addChild($message);
 	
 			$content = $this->getLayout()->getContent();
 			$orderEdit = Ccc::getBlock('Order_Edit');

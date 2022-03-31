@@ -13,11 +13,6 @@ class Controller_Salesman extends Controller_Admin_Action{
 
 	public function gridAction()
 	{
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
-
 		$content = $this->getLayout()->getContent();
 		$salesmanGrid = Ccc::getBlock('Salesman_Grid');
 		$content->addChild($salesmanGrid);
@@ -29,10 +24,6 @@ class Controller_Salesman extends Controller_Admin_Action{
 	{
 		$salesmanModel = Ccc::getModel("Salesman");
 		$salesman = $salesmanModel;
-
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$header->addChild($menu);
 
 		$content = $this->getLayout()->getContent();
 		$salesmanEdit = Ccc::getBlock('Salesman_Edit');
@@ -61,10 +52,6 @@ class Controller_Salesman extends Controller_Admin_Action{
 				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
 				throw new Exception("Error Processing Request", 1);			
 			}
-	
-			$header = $this->getLayout()->getHeader();
-			$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-			$header->addChild($menu);
 	
 			$content = $this->getLayout()->getContent();
 			$salesmanEdit = Ccc::getBlock('Salesman_Edit');

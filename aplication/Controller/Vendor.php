@@ -13,11 +13,6 @@ class Controller_Vendor extends Controller_Admin_Action{
 
     public function gridAction()
     {
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
-
 		$content = $this->getLayout()->getContent();
 		$vendorGrid = Ccc::getBlock('Vendor_Grid');
 		$content->addChild($vendorGrid);
@@ -30,11 +25,6 @@ class Controller_Vendor extends Controller_Admin_Action{
         $vendorModel = Ccc::getModel('Vendor');
         $vendor = $vendorModel;
         $address = $vendorModel;
-
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$vendorEdit = Ccc::getBlock('Vendor_Edit');
@@ -55,11 +45,6 @@ class Controller_Vendor extends Controller_Admin_Action{
     
             $vendor = $vendorModel->load($vendorId);
             $address = $addressModel->load($vendorId);
-    
-            $header = $this->getLayout()->getHeader();
-            $menu = Ccc::getBlock('Core_Layout_Header_Menu');
-            $message = Ccc::getBlock('Core_Layout_Header_Message');
-            $header->addChild($menu)->addChild($message);
     
             $content = $this->getLayout()->getContent();
             $vendorEdit = Ccc::getBlock('Vendor_Edit');

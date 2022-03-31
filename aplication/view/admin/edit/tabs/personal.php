@@ -36,8 +36,22 @@ $hidden = ($admin->password) ? 'hidden' : 'password';
     </tr>
         <td width="10%">&nbsp;</td>
         <td>
-            <input type="button" id="submit" name="submit" value="save">
-            <button type="button"><a href="<?php echo $this->getUrl('grid','admin',['id' => null]) ?>">Cancel</a></button>
+            <input type="button" id="adminFormSubmitBtn" name="submit" value="save">
+            <button type="button" id="adminFromCancelBtn" >Cancel</button>
         </td>
     </tr>		
 </table>	
+
+<script type="text/javascript">
+    
+    jQuery("#adminFromCancelBtn").click(function(){
+        admin.setUrl("<?php echo $this->getUrl('gridBlock','admin',['id' => null]); ?>");
+        admin.load();
+    });
+
+    jQuery("#adminFormSubmitBtn").click(function(){
+        admin.setForm(jQuery("#indexForm"));
+        admin.setUrl("<?php echo $this->getEdit()->getSaveUrl();?>");
+        admin.load();
+    });
+</script>

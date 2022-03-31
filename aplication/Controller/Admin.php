@@ -20,10 +20,92 @@ class Controller_Admin extends Controller_Admin_Action{
 		$this->randerLayout();
 	}
 
-	public function grid1Action()
+	public function gridBlockAction()
 	{
-		$this->randerJson(['status' => 'success']);
+		$adminGrid = Ccc::getBlock('Admin_Grid')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' => $adminGrid,
+					'classAdd' => 'bgred'
+				],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->randerJson($response);
 	}
+
+	public function addBlockAction()
+	{
+		$adminModel = Ccc::getModel('Admin');
+        Ccc::register('admin',$adminModel);
+
+		$adminEdit = $this->getLayout()->getBlock('Admin_Edit')->toHtml();
+
+		$response = [
+			'status' => 'success',
+			'content' => $adminEdit
+		];
+		$this->randerJson($response);
+	}
+
+	public function save1Action()
+	{
+		$adminGrid = Ccc::getBlock('Admin_Grid')->toHtml();
+		$response = [
+			'status' => 'success',
+			'content' => $adminGrid
+		];
+		$this->randerJson($response);
+	}
+
+	public function deleteAction()
+	{
+		$adminModel = Ccc::getModel('Admin');
+		$request = $this->getRequest();
+		if(!$request->isPost()){
+			try {
+				if(!$request->getRequest('id')){
+					throw new Exception('Your Data can not be Deleted', 1);			
+				}
+				$adminId = $request->getRequest('id');
+				$result = $adminModel->load($adminId)->delete();
+				if(!$result){
+					throw new Exception('Your Data can not Deleted', 1);			
+				}
+				$this->getMessage()->addMessage('Your Data Delete Successfully');
+				//$this->redirect('grid',null,['id' => null]);
+				$adminGrid = Ccc::getBlock('Admin_Grid')->toHtml();
+				$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+				$response = [
+					'status' => 'success',
+					'content' => $adminGrid,
+					'message' => $messageBlock
+				];
+				$this->randerJson($response);
+
+			}catch (Exception $e)
+	        {
+	            $this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+	            //$this->redirect('grid','customer',['id' => null]);
+	            $adminGrid = Ccc::getBlock('Admin_Grid')->toHtml();
+	            $messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+	            $response = [
+					'status' => 'failed',
+					'content' => $adminGrid,
+					'message' => $messageBlock
+				];
+	            $this->randerJson($response);
+	        }	
+		}
+	}
+
 
 
 
@@ -46,11 +128,6 @@ class Controller_Admin extends Controller_Admin_Action{
 
 	public function gridAction()
 	{
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
-
 		$content = $this->getLayout()->getContent();
 		$adminGrid = Ccc::getBlock('Admin_Grid');
 		$content->addChild($adminGrid);
@@ -62,11 +139,6 @@ class Controller_Admin extends Controller_Admin_Action{
 	{
 		$adminModel = Ccc::getModel('Admin');
 		$admin = $adminModel;
-
-		$header = $this->getLayout()->getHeader();
-		$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-		$message = Ccc::getBlock('Core_Layout_Header_Message');
-		$header->addChild($menu)->addChild($message);
 
 		$content = $this->getLayout()->getContent();
 		$adminEdit = Ccc::getBlock('Admin_Edit');
@@ -95,12 +167,7 @@ class Controller_Admin extends Controller_Admin_Action{
 				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
 				throw new Exception('Invalid Request', 1);
 			}
-			
-			$header = $this->getLayout()->getHeader();
-			$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-			$message = Ccc::getBlock('Core_Layout_Header_Message');
-			$header->addChild($menu)->addChild($message);
-	
+				
 			$content = $this->getLayout()->getContent();
 			$adminEdit = Ccc::getBlock('Admin_Edit');
             Ccc::register('admin',$admin);
@@ -154,32 +221,6 @@ class Controller_Admin extends Controller_Admin_Action{
         }
 
 	}
-
-	public function deleteAction()
-	{
-		$adminModel = Ccc::getModel('Admin');
-		$request = $this->getRequest();
-		if(!$request->isPost()){
-			try {
-				if(!$request->getRequest('id')){
-					throw new Exception('Your Data can not be Deleted', 1);			
-				}
-				$adminId = $request->getRequest('id');
-				$result = $adminModel->load($adminId)->delete();
-				if(!$result){
-					throw new Exception('Your Data can not Deleted', 1);			
-				}
-				$this->getMessage()->addMessage('Your Data Delete Successfully');
-				$this->redirect('grid',null,['id' => null]);
-
-			}catch (Exception $e)
-	        {
-	            $this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-	            $this->redirect('grid','customer',['id' => null]);
-	        }	
-		}
-	}
-
 
 }
 
