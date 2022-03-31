@@ -10,7 +10,7 @@ class Block_Admin_Edit extends Block_Core_Edit
 		
 	public function getSaveUrl()
     {
-        return $this->getUrl('save1','admin');
+        return $this->getUrl('save','admin');
     }
 }
 ?>

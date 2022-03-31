@@ -26,14 +26,14 @@ class Controller_Customer_Price extends Controller_Admin_Action{
 
 	public function gridBlockAction()
 	{
-		$customerGrid = Ccc::getBlock('Customer_Price_Grid')->toHtml();
+		$customerPriceGrid = Ccc::getBlock('Customer_Price_Grid')->toHtml();
 		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 		$response = [
 			'status' => 'success',
 			'elements' => [
 				[
 					'element' => '#indexContent',
-					'content' => $customerGrid
+					'content' => $customerPriceGrid
 				],
 				[
 					'element' => '#adminMessage',
@@ -74,9 +74,11 @@ class Controller_Customer_Price extends Controller_Admin_Action{
 					}
 				}
 				$this->getMessage()->addMessage('Price set successfully');
-				$this->redirect('grid','customer_price',['id' => $customerId],true);
+				$this->gridBlockAction();
+
 			} catch (Exception $e) {
 				$this->redirect('grid','customer_price',['id' => $customerId],true);
+				$this->gridBlockAction();
 			}
 	}
 }

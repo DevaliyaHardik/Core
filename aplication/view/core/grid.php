@@ -75,7 +75,7 @@
         admin.load();
     });
 
-    $("#price").click(function(){
+    $(".price").click(function(){
         var data = $(this).val();
         admin.setData({'id' : data});
         admin.setUrl("<?php echo $this->getUrl('gridBlock','customer_price'); ?>");

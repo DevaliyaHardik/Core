@@ -8,7 +8,7 @@
             $file = explode("/", $filename);
             //print_r($file);
             $fileList = explode(".",$file[1]); ?>
-            <a href="index.php?c=<?php echo strtolower($fileList[0]); ?>&a=grid"><?php echo $fileList[0]; ?></a>
+            <a href="index.php?c=<?php echo strtolower($fileList[0]); ?>&a=index"><?php echo $fileList[0]; ?></a>
             <?php
         }   
     }
