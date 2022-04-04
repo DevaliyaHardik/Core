@@ -106,15 +106,12 @@ class Controller_cart extends Controller_Admin_Action{
 			$customerId = $request->getRequest('id');
 			if($this->getCart()->getCart()){
 				$this->editBlockAction();	
-				exit;
 			}
 			else{
 				$cartModel = Ccc::getModel('Cart');
 				$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
 				if($cart){
 					$this->getCart()->addCart($cart->cart_id);
-					$this->editBlockAction();	
-					exit;
 				}
 				else{
 					$cartModel->customer_id = $customerId;
