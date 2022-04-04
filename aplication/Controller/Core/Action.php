@@ -80,7 +80,8 @@ class Controller_Core_Action{
     public function getCart()
     {
         if(!$this->cart){
-            $this->cart = Ccc::getModel('Admin_Cart');
+            $cart = Ccc::getModel('Admin_Cart');
+            $this->setCart($cart);
         }
         return $this->cart;
     }

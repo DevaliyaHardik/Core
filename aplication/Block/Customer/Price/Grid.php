@@ -53,7 +53,7 @@ class Block_Customer_Price_Grid extends Block_Core_Template
             $salesman = $salesmanModel->fetchAll("SELECT * FROM `salesman` WHERE `salesman_id` = {$customer[0]->salesman_id}");
             if($salesman){
                 $product = $productModel->fetchAll("SELECT * FROM `product` WHERE `product_id` = {$productId}");
-                return $product[0]->price - $product[0]->price*$salesman[0]->discount/100;
+                return $product[0]->price - $product[0]->price*$salesman[0]->percentage/100;
             }
         }
     }

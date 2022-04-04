@@ -25,11 +25,6 @@ class Block_Config_Grid extends Block_Core_Grid
 		'key' =>'name'
 		],'Name');
 		$this->addColumn([
-		'title' => 'Last Name',
-		'type' => 'varchar',
-		'key' =>'lastName'
-		],'Last Name');
-		$this->addColumn([
 		'title' => 'Code',
 		'type' => 'varchar',
 		'key' =>'code'
@@ -71,6 +66,9 @@ class Block_Config_Grid extends Block_Core_Grid
         $this->getPager()->execute($totalCount,$current,$perPageCount);
         $configs = $configModel->fetchAll("SELECT * FROM `config` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");
         $configColumn = [];
+        if(!$configs){
+            return null;
+        }
         foreach ($configs as $config) {
             array_push($configColumn,$config);
         }        

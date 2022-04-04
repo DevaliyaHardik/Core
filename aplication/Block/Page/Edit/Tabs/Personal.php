@@ -1,15 +1,14 @@
-<?php Ccc::loadClass('Block_Core_Template');
-Ccc::loadClass('Block_Admin_Edit_Tab');
+<?php Ccc::loadClass('Block_Core_Edit_Tabs_Content');
 
-class Block_Admin_Edit_Tabs_Personal extends Block_Core_Template   
+class Block_Page_Edit_Tabs_Personal extends Block_Core_Edit_Tabs_Content   
 { 
     public function __construct()
     {
-        $this->setTemplate('view/admin/edit/tabs/personal.php');
+        $this->setTemplate('view/page/edit/tabs/personal.php');
     }
 
-    public function getAdmin()
+    public function getPage()
     {
-        return Ccc::getRegistry('admin');
+        return Ccc::getRegistry('page');
     }
 }

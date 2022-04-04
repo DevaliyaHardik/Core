@@ -95,14 +95,23 @@ class Block_Core_Grid extends Block_Core_Template
         }
         if($key == 'base'){
             $image = $collection->getBase()->getImagePath();
-            return "<img src='{$image}' alt='' width='50' height='50'>";
+            if($image){
+                return "<img src='{$image}' alt='No Image Found' width='50' height='50'>";
+            }
+            return "No Image Found";
         }
         if($key == 'thumb'){
             $image = $collection->getThumb()->getImagePath();
-            return "<img src='{$image}' alt='' width='50' height='50'>";
+            if($image){
+                return "<img src='{$image}' alt='No Image Found' width='50' height='50'>";
+            }
+            return "No Image Found";
         }if($key == 'small'){
             $image = $collection->getSmall()->getImagePath();
-            return "<img src='{$image}' alt='' width='50' height='50'>";
+            if($image){
+                return "<img src='{$image}' alt='No Image Found' width='50' height='50'>";
+            }
+            return "No Image Found";
         }
         return $collection->$key;
     }

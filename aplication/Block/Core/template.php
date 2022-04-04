@@ -7,7 +7,7 @@ class Block_Core_Template extends Model_Core_View{
 
     public function __construct()
     {
-
+        parent::__construct();
     }
 
     public function setChildren($children)

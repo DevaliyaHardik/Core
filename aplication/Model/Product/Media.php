@@ -36,7 +36,10 @@ class Model_Product_Media extends Model_Core_Row
 
 	public function getImagePath()
     {
-        return Ccc::getBaseUrl($this->mediaPath.$this->name);
+		if($this->name){
+			return Ccc::getBaseUrl($this->mediaPath.$this->name);
+		}
+		return null;
     }
 }
 

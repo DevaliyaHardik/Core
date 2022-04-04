@@ -10,34 +10,30 @@ class Controller_Order extends Controller_Admin_Action{
 			$this->redirect('login','Admin_login');
 		}
 	}
-	public function gridAction()
+	public function gridBlockAction()
 	{
-		$content = $this->getLayout()->getContent();
-		$orderGrid = Ccc::getBlock('Order_Grid');
-		$content->addChild($orderGrid);
+		$orderGrid = Ccc::getBlock('Order_Grid')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' => $orderGrid,
+					],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->randerJson($response);
+
 		
 		$this->randerLayout();
 	}
 
-	// public function addAction()
-	// {
-	// 	$OrderModel = Ccc::getModel('Order');
-	// 	$Order = $OrderModel;
-
-	// 	$header = $this->getLayout()->getHeader();
-	// 	$menu = Ccc::getBlock('Core_Layout_Header_Menu');
-	// 	$message = Ccc::getBlock('Core_Layout_Header_Message');
-	// 	$header->addChild($menu)->addChild($message);
-
-	// 	$content = $this->getLayout()->getContent();
-	// 	$OrderEdit = Ccc::getBlock('Order_Edit');
-	// 	$Order = $OrderEdit->Order = $Order;
-	// 	$content->addChild($OrderEdit);
-
-	// 	$this->randerLayout();
-	// }
-
-	public function editAction()
+	public function editBlockAction()
 	{
 		try {
 			$orderModel = Ccc::getModel("Order");
@@ -57,17 +53,55 @@ class Controller_Order extends Controller_Admin_Action{
 				throw new Exception('Invalid Request', 1);
 			}
 	
-			$content = $this->getLayout()->getContent();
-			$orderEdit = Ccc::getBlock('Order_Edit');
-			$orderEdit = Ccc::getBlock('Order_Edit')->setData(['order' => $order]);
-			$content->addChild($orderEdit);
-	
-			$this->randerLayout();
-	
+			Ccc::register('order',$order);
+			$orderEdit = Ccc::getBlock('Order_Edit')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $orderEdit,
+						],
+					[
+						'element' => '#adminMessage',
+						'content' => $messageBlock
+					]
+				]
+			];
+			$this->randerJson($response);
 		}catch (Exception $e)
 		{
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('grid','order');
+			$this->gridBlockAction();
+		}
+	}
+
+	public function statusUpdateAction()
+	{
+		try {
+			$request = $this->getRequest();
+			$orderId = $request->getRequest('id');
+			$order = Ccc::getModel('Order')->load($orderId);
+			$comment = $order->getComment();
+			$postData = $request->getPost('order');
+			$order->status = $postData['status'];
+			$order->state = $postData['state'];
+			$result = $order->save();
+			if(!$result){
+				throw new Exception("Status Not Updated.", 1);
+			}
+			$comment->setData($postData);
+			$comment->order_id = $orderId;
+			unset($comment->state);
+			$success = $comment->save();
+			if(!$success){
+				throw new Exception("Comment Not Saved", 1);
+			}
+			$this->editBlockAction();
+		} catch (Exception $e) {
+			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
+			$this->editBlockAction();
 		}
 	}
 }

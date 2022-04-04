@@ -30,17 +30,6 @@ class Model_Page extends Model_Core_Row
 		}
 		return $statuses[self::STATUS_DEFAULT];
 	}
-
-	public function getEditUrl()
-	{
-		return Ccc::getModel('Core_View')->getUrl('edit','page',['id'=>$this->page_id]);
-	}
-
-	public function getDeleteUrl()
-	{
-		return Ccc::getModel('Core_View')->getUrl('delete','page',['id'=>$this->page_id]);
-	}
-
 }
 
 ?>

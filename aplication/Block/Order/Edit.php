@@ -10,8 +10,7 @@ class Block_Order_Edit extends Block_Core_Template
 	
 	public function getOrder()
 	{
-		$order = $this->order;
-		return $order;
+		return Ccc::getRegistry('order');
 	}
 }
 ?>

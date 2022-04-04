@@ -5,8 +5,7 @@ if($messages){
         echo $message;
     }
 }
-
 ?>
 <div id="adminMessage">
-    
+
 </div>

@@ -1,7 +1,6 @@
-<?php Ccc::loadClass('Block_Core_Template');
-Ccc::loadClass('Block_Category_Edit_Tab');
+<?php Ccc::loadClass('Block_Core_Edit_Tabs_Content');
 
-class Block_Category_Edit_Tabs_Personal extends Block_Core_Template   
+class Block_Category_Edit_Tabs_Personal extends Block_Core_Edit_Tabs_Content
 { 
     public function __construct()
     {

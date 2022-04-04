@@ -1,82 +1,76 @@
 <?php
-
 $products = $this->getProducts();
 ?>
-<table align="center">
-    <tr>
-        <td>
-        <script type="text/javascript"> 
-			function ppc() {
-				const ppcValue = document.getElementById('ppc').selectedOptions[0].value;
-				let language = window.location.href;
-				if(!language.includes('ppc'))
-				{
-				  	language+='&ppc=20';
-				}
-				const myArray = language.split("&");
-				for (i = 0; i < myArray.length; i++)
-				{
-					if(myArray[i].includes('p='))
-					{
-					  	myArray[i]='p=1';
-					}
-					if(myArray[i].includes('ppc='))
-					{
-					  	myArray[i]='ppc='+ppcValue;
-					}
-				}
- 				const str = myArray.join("&");
- 				location.replace(str);
-			}
-        </script>
-        <select onchange="ppc()" id="ppc">
-            <?php foreach($this->pager->getPerPageCountOption() as $perPageCount) :?>	
-            <option value="<?php echo $perPageCount ?>" <?php echo ($perPageCount == $this->getPager()->getPerPageCount() ? 'selected' : '') ?>> <?php echo $perPageCount ?> </a></option>
-            <?php endforeach;?>
-        </select>
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Price Information</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Product Id</th>
+                    <th>Name</th>
+                    <th>SKU</th>
+                    <th>Price</th>
+                    <th>Salesman Price</th>
+                    <th>Customer Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if(!$products): ?>
+                <tr>
+                    <td colspan = "6">No Salesman Assign</td>
+                </tr>
+                <?php else: ?>
+                <?php $i = 0; ?>
+                <?php foreach($products as $product): ?>
+                <tr>
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <input type="hidden" class="form-control" name="product[<?php echo $i ?>][product_id]" value="<?php echo $product->product_id; ?>">
+                            <input type="hidden" class="form-control" name="product[<?php echo $i ?>][salesmanPrice]" value="<?php echo $this->getSalesmanPrice($product->product_id); ?>">
+                            <td><?php echo $product->product_id ?></td>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <td><?php echo $product->name ?></td>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <td><?php echo $product->sku ?></td>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <td><?php echo $product->price ?></td>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <td><?php echo $this->getSalesmanPrice($product->product_id); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <td><input type="text" class="form-control" name="product[<?php echo $i ?>][price]" value="<?php echo $this->getCustomerPrice($product->product_id) ?>"></td>
+                        </div>
+                    </div>
+                </tr>
+                <?php $i++; ?>
+                <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+        <button type="button" class="btn btn-info" id="customerPriceSubmitBtn" <?php echo (!$products) ? 'disabled' : ''; ?>>Save</button>
+        <button type="button" class="btn btn-info" id="customerPriceGridBlockBtn">Cancel</button>
+    </div>
+</div>
 
-        </td>
-        <td><a href="<?php echo $this->getUrl(null,null,['p' => $this->getPager()->getStart()]) ?>" style="pointer-events: <?php echo (!$this->getPager()->getStart()) ? 'none' : ''?>"><button>Start</button></a></td>
-        <td><a href="<?php echo $this->getUrl(null,null,['p' => $this->getPager()->getPrev()]) ?>" style="pointer-events: <?php echo (!$this->getPager()->getPrev()) ? 'none' : ''?>"><button>Prev</button></a></td>
-        <td><a href="<?php echo $this->getUrl(null,null,['p' => $this->getPager()->getCurrent()]) ?>" style="pointer-events: none "><button><?php echo $this->getPager()->getCurrent(); ?></button></a></td>
-        <td><a href="<?php echo $this->getUrl(null,null,['p' => $this->getPager()->getNext()]) ?>" style="pointer-events: <?php echo (!$this->getPager()->getNext()) ? 'none' : ''?>"><button>Next</button></a></td>
-        <td><a href="<?php echo $this->getUrl(null,null,['p' => $this->getPager()->getEnd()]) ?>" style="pointer-events: <?php echo (!$this->getPager()->getEnd()) ? 'none' : ''?>"><button>End</button></a></td>
-    </tr>
-</table>
-
-    <input type="button" id="customerPriceSubmitBtn" value="save">
-    <button type="button" id="customerPriceGridBlockBtn">Cancel</button>
-    <table border="1" width="100%">
-        <tr>
-            <th>Product Id</th>
-            <th>sku</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Salesman Price</th>
-            <th>Coustomer Price</th>
-        </tr>
-        <?php if(!$products): ?>
-            <tr>
-                <td colspan = "7">Salesman not assign</td>
-            </tr>
-        <?php else: ?>
-        <?php $i = 0; ?>
-        <?php foreach($products as $product): ?>
-        <tr>
-            <input type="hidden" name="product[<?php echo $i ?>][product_id]" value="<?php echo $product->product_id; ?>">
-            <input type="hidden" name="product[<?php echo $i ?>][slaesmanPrice]" value="<?php echo $this->getSalesmanPrice($product->product_id); ?>">
-            <td><?php echo $product->product_id ?></td>
-            <td><?php echo $product->sku ?></td>
-            <td><?php echo $product->name ?></td>
-            <td><?php echo $product->price ?></td>
-            <td><?php echo $this->getSalesmanPrice($product->product_id); ?>
-            <td><input type="text" name="product[<?php echo $i ?>][price]" value="<?php echo $this->getCustomerPrice($product->product_id) ?>"></td>
-        </tr>
-        <?php $i++; ?>
-        <?php endforeach; ?>
-        <?php endif; ?>
-    </table>
-<!-- </form> -->
 <script>
     $("#customerPriceSubmitBtn").click(function(){
         admin.setForm($("#indexForm"));
@@ -85,7 +79,7 @@ $products = $this->getProducts();
     });
 
     $("#customerPriceGridBlockBtn").click(function(){
-        admin.setUrl("<?php echo $this->getUrl('gridBlock','customer'); ?>");
+        admin.setUrl("<?php echo $this->getUrl('gridBlock','customer',['id'=>null]); ?>");
         admin.load();
     });
 </script>

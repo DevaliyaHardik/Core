@@ -8,8 +8,6 @@ class Block_Order_Grid extends Block_Core_Template
     {
         $this->setTemplate("view/order/grid.php");
     }
-
-
 }
 
 ?>

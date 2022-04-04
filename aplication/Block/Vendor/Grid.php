@@ -86,6 +86,9 @@ class Block_Vendor_Grid extends Block_Core_Grid
         $this->getPager()->execute($totalCount,$current,$perPageCount);
         $vendors = $vendorModel->fetchAll("SELECT * FROM `vendor` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");
         $vendorColumn = [];
+        if(!$vendors){
+            return null;
+        }
         foreach ($vendors as $vendor) {
             $address = null;
             foreach($vendor->getAddress()->getData() as $key => $value){
@@ -97,19 +100,6 @@ class Block_Vendor_Grid extends Block_Core_Grid
             array_push($vendorColumn,$vendor);
         }        
         return $vendorColumn;
-    }
-
-    public function getAddress()
-    {
-        $addressModel = Ccc::getModel('Vendor');
-        $request = Ccc::getModel('Core_Request');
-        $this->setPager(Ccc::getModel('Core_Pager'));
-        $current = $request->getRequest('p',1);
-        $perPageCount = $request->getRequest('ppc',20);
-        $totalCount = $this->getAdapter()->fetchOne("SELECT COUNT('address_id') FROM `vendor_address`");
-        $this->getPager()->execute($totalCount,$current,$perPageCount);
-        $address = $addressModel->fetchAll("SELECT * FROM `vendor_address` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");
-        return $address;
     }
 
     public function setPager($pager)

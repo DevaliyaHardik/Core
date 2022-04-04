@@ -60,9 +60,6 @@ class Block_Category_Grid extends Block_Core_Grid
 		$this->addAction([
             'title' => 'edit','method' => 'getEditUrl','class' => 'category' 
         ],'Edit');
-        $this->addAction([
-            'title' => 'media','method' => 'getMediaUrl','class' => 'category_media' 
-        ],'Media');
         $this->prepareCollectionContent();       
     }
 
@@ -84,33 +81,15 @@ class Block_Category_Grid extends Block_Core_Grid
         $this->getPager()->execute($totalCount,$current,$perPageCount);
         $categories = $categoryModel->fetchAll("SELECT * FROM `category` ORDER BY `path` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");
         $categoryColumn = [];
+        if(!$categories){
+            return null;
+        }
         foreach ($categories as $category) {
             array_push($categoryColumn,$category);
         }        
 
         return $categoryColumn;
     }
-
-    // public function getBase($baseId)
-    // {
-    //     $categoryModel = Ccc::getModel('Category');
-    //     $base = $categoryModel->getBase($baseId);
-    //     return $base;
-    // }
-
-    // public function getThumb($thumbId)
-    // {
-    //     $categoryModel = Ccc::getModel('Category');
-    //     $thumb = $categoryModel->getThumb($thumbId);
-    //     return $thumb;
-    // }
-
-    // public function getSmall($smallId)
-    // {
-    //     $categoryModel = Ccc::getModel('Category');
-    //     $small = $categoryModel->getSmall($smallId);
-    //     return $small;
-    // }
 
     public function setPager($pager)
     {

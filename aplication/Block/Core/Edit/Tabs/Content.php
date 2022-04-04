@@ -20,8 +20,6 @@ class Block_Core_Edit_Tabs_Content extends Block_Core_Template{
     {
         return $this->edit;
     }
-
-
 }
 
 ?>

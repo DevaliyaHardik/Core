@@ -80,13 +80,13 @@ var admin = {
                 self.setData({});
                 self.setType('GET');
                 self.load();
-                //jQuery(element.element).addClass(element.classAdd);
             }
             else{
                 jQuery(element.element).html(element.content);
                 if(element.classAdd != undefined){
-                jQuery(element.element).addClass(element.classAdd);
-            }            }
+                    jQuery(element.element).addClass(element.classAdd);
+                }
+            }
         });
     }
 

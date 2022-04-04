@@ -1,6 +1,6 @@
 <?php Ccc::loadClass('Block_Core_Edit_Tab');
 
-class Block_Admin_Edit_Tab extends Block_Core_Edit_Tab   
+class Block_Vendor_Edit_Tab extends Block_Core_Edit_Tab   
 {
     public function __construct()
     {
@@ -12,8 +12,13 @@ class Block_Admin_Edit_Tab extends Block_Core_Edit_Tab
     {
         $this->addTab([
             'title' => 'Personal Info',
-            'block' => 'Admin_Edit_Tabs_Personal',
+            'block' => 'Vendor_Edit_Tabs_Personal',
             'url' => $this->getUrl(null,null,['tab' => 'personal'])
         ],'personal');
+        $this->addTab([
+            'title' => 'Address Info',
+            'block' => 'Vendor_Edit_Tabs_Address',
+            'url' => $this->getUrl(null,null,['tab' => 'address'])
+        ],'address');
     }
 }

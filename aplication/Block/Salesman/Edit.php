@@ -1,17 +1,16 @@
-<?php Ccc::loadClass('Block_Core_Template'); ?>
+<?php Ccc::loadClass('Block_Core_Edit'); ?>
 <?php
 
-class Block_Salesman_Edit extends Block_Core_Template
+class Block_Salesman_Edit extends Block_Core_Edit
 {
     public function __construct()
     {
-        $this->setTemplate("view/salesman/edit.php");
+        parent::__construct();
     }
 
-    public function getSalesman()
+	public function getSaveUrl()
     {
-        $salesman = $this->salesman;
-		return $salesman;
+        return $this->getUrl('save','salesman');
     }
 }
 

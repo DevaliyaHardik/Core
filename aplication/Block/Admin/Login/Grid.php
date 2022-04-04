@@ -7,7 +7,6 @@ class Block_Admin_Login_Grid extends Block_Core_Template
     {
         $this->setTemplate("view/admin/login/grid.php");
     }
-
 }
 
 ?>

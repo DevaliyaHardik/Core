@@ -7,10 +7,5 @@ class Block_Admin_Index extends Block_Core_Template
 	{
 		$this->setTemplate('view/admin/index.php');
 	}
-		
-	// public function getEditUrl()
- //    {
- //        return $this->getUrl('save','admin');
- //    }
 }
 ?>

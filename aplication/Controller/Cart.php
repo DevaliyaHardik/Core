@@ -10,24 +10,93 @@ class Controller_cart extends Controller_Admin_Action{
 			$this->redirect('login','admin_login');
 		}
 	}
-	public function gridAction()
-	{
-		$this->getCart()->unsetCart();
 
+	public function indexAction()
+	{
 		$content = $this->getLayout()->getContent();
-		$cartGrid = Ccc::getBlock('Cart_Grid');
-		$content->addChild($cartGrid);
-		
+		$cartIndex = Ccc::getBlock('Cart_Index');
+		$content->addChild($cartIndex);
+
 		$this->randerLayout();
 	}
 
-	public function editAction()
+	public function indexBlockAction()
 	{
-		$content = $this->getLayout()->getContent();
-		$cartEdit = Ccc::getBlock('Cart_Edit');
-		$content->addChild($cartEdit);
-		
-		$this->randerLayout();
+		$cartEditAddress = Ccc::getBlock('Cart_Edit_Address')->toHtml();
+		$cartEditItem = Ccc::getBlock('Cart_Edit_Item')->toHtml();
+		$cartEditPaymentShiping = Ccc::getBlock('Cart_Edit_PaymentShiping')->toHtml();
+		$cartEditSubTotal = Ccc::getBlock('Cart_Edit_SubTotal')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#cartAddress',
+					'content' => $cartEditAddress,
+				],
+				[
+					'element' => '#paymentShiping',
+					'content' => $cartEditPaymentShiping,
+				],
+				[
+					'element' => '#cartProduct',
+					'content' => $cartEditItem,
+				],
+				[
+					'element' => '#cartSubTotal',
+					'content' => $cartEditSubTotal,
+				],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->randerJson($response);
+
+
+	}
+
+	public function gridBlockAction()
+	{
+		$this->getCart()->unsetCart();
+
+		$cartGrid = Ccc::getBlock('Cart_Grid')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' => $cartGrid,
+					],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->randerJson($response);
+	}
+
+	public function editBlockAction()
+	{
+		$cartEdit = Ccc::getBlock('Cart_Edit')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' => $cartEdit,
+					],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->randerJson($response);
 	}
 
 	public function addCartAction()
@@ -36,14 +105,16 @@ class Controller_cart extends Controller_Admin_Action{
 			$request = $this->getRequest();
 			$customerId = $request->getRequest('id');
 			if($this->getCart()->getCart()){
-				$this->redirect('edit');
+				$this->editBlockAction();	
+				exit;
 			}
 			else{
 				$cartModel = Ccc::getModel('Cart');
 				$cart = $cartModel->fetchRow("SELECT * FROM `cart` WHERE `customer_id` = {$customerId}");
 				if($cart){
 					$this->getCart()->addCart($cart->cart_id);
-					$this->redirect('edit');
+					$this->editBlockAction();	
+					exit;
 				}
 				else{
 					$cartModel->customer_id = $customerId;
@@ -55,12 +126,12 @@ class Controller_cart extends Controller_Admin_Action{
 					$this->saveAddressAction($cart);
 					$this->getCart()->addCart($cart->cart_id);
 				}
-				$this->redirect('edit',null,[],true);	
+				$this->editBlockAction();	
 			}
 		}catch (Exception $e)
 		{
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('edit',null,[],true);
+			$this->editBlockAction();	
 		}
 		
 	}
@@ -97,11 +168,12 @@ class Controller_cart extends Controller_Admin_Action{
 				if(!$shipingAddress){
 					throw new Exception("Shiping address not saved.", 1);
 				}
+				return $shipingAddress;
 			}		
 		}catch (Exception $e)
 		{
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('edit');
+			$this->editBlockAction();	
 		}
 	}
 
@@ -142,11 +214,31 @@ class Controller_cart extends Controller_Admin_Action{
 					throw new Exception("Customer shiping address not saved.", 1);
 				}
 			}
-			$this->redirect('edit');
+			$cartEditAddress = Ccc::getBlock('Cart_Edit_Address')->toHtml();
+			$cartEditSubTotal = Ccc::getBlock('Cart_Edit_SubTotal')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#cartAddress',
+						'content' => $cartEditAddress,
+					],
+					[
+						'element' => '#cartSubTotal',
+						'content' => $cartEditSubTotal,
+					],
+					[
+						'element' => '#adminMessage',
+						'content' => $messageBlock
+					]
+				]
+			];
+			$this->randerJson($response);
 			}catch (Exception $e)
 			{
 				$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-				$this->redirect('edit');
+				$this->editBlockAction();
 			}
 	}
 
@@ -164,11 +256,26 @@ class Controller_cart extends Controller_Admin_Action{
 				throw new Exception("Payment method not saved.", 1);
 			}
 			$this->getMessage()->addMessage("Payment method saved.");
-			$this->redirect('edit');
+			$cartEditPaymentShiping = Ccc::getBlock('Cart_Edit_PaymentShiping')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#paymentShiping',
+						'content' => $cartEditPaymentShiping,
+						],
+					[
+						'element' => '#adminMessage',
+						'content' => $messageBlock
+					]
+				]
+			];
+			$this->randerJson($response);
 		}catch (Exception $e)
 		{
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('edit');
+			$this->editBlockAction();
 		}
 	}
 
@@ -195,30 +302,51 @@ class Controller_cart extends Controller_Admin_Action{
 				throw new Exception("Shiping method not saved.", 1);
 			}
 			$this->getMessage()->addMessage("Shiping method saved.");
-			$this->redirect('edit');
+			$cartEditAddress = Ccc::getBlock('Cart_Edit_Address')->toHtml();
+			$cartEditSubTotal = Ccc::getBlock('Cart_Edit_SubTotal')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#cartAddress',
+						'content' => $cartEditAddress,
+					],
+					[
+						'element' => '#cartSubTotal',
+						'content' => $cartEditSubTotal,
+					],
+					[
+						'element' => '#adminMessage',
+						'content' => $messageBlock
+					]
+				]
+			];
+			$this->randerJson($response);
 		}catch (Exception $e)
 		{
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('edit');
+			$this->editBlockAction();
 		}
 	}
 
 	public function addCartItemAction()
 	{
 		try {
+			$taxAmount = null;
+			$discount = null;
 			$request = $this->getRequest();
 			$cartId = $this->getCart()->getCart()['cart_id'];
 			$cartModel = Ccc::getModel('Cart');
 			$cart = $cartModel->load($cartId);
 			$productModel = Ccc::getModel('Product');
-			$cartData = $request->getPost('cartItem');
-			$item = $cart->getItem();
+			$cartData = $request->getPost('cartProduct');
+			$item = Ccc::getModel('Cart_Item');
 			$item->cart_id = $cart->cart_id;
 			foreach($cartData as $cartItem){
 				if(array_key_exists('product_id',$cartItem)){
 					$product = $productModel->load($cartItem['product_id']);
 					if($product->quntity >= $cartItem['quantity']){
-						unset($item->item_id);
 						$item->setData($cartItem);
 						$item->itemTotal = $product->price * $cartItem['quantity'];
 						$item->tax = $product->tax;
@@ -240,7 +368,27 @@ class Controller_cart extends Controller_Admin_Action{
 				throw new Exception("subTotal not updated", 1);
 			}
 			$this->getMessage()->addMessage("Cart Item added successfully.");
-			$this->redirect('edit');
+			$cartEditItem = Ccc::getBlock('Cart_Edit_Item')->toHtml();
+			$cartEditSubTotal = Ccc::getBlock('Cart_Edit_SubTotal')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#cartProduct',
+						'content' => $cartEditItem,
+					],		
+					[
+						'element' => '#cartSubTotal',
+						'content' => $cartEditSubTotal,
+					],
+					[
+						'element' => '#adminMessage',
+						'content' => $messageBlock
+					]
+				]
+			];
+			$this->randerJson($response);
 		}catch (Exception $e)
 		{
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
@@ -252,7 +400,7 @@ class Controller_cart extends Controller_Admin_Action{
 	{
 		try {
 			$request = $this->getRequest();
-			$itemId = $request->getRequest('item_id');
+			$itemId = $request->getRequest('id');
 			$item = Ccc::getModel('Cart_Item')->load($itemId);
 			$cart = $item->getCart();
 			$cart->subTotal = $cart->subTotal - $item->itemTotal;
@@ -264,17 +412,39 @@ class Controller_cart extends Controller_Admin_Action{
 				throw new Exception("Cart item not deleted.", 1);
 			}
 			$this->getMessage()->addMessage("Cart item deleted successfully.");
-			$this->redirect('edit',null,['item_id' => null]);
+			$cartEditItem = Ccc::getBlock('Cart_Edit_Item')->toHtml();
+			$cartEditSubTotal = Ccc::getBlock('Cart_Edit_SubTotal')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#cartProduct',
+						'content' => $cartEditItem,
+					],		
+					[
+						'element' => '#cartSubTotal',
+						'content' => $cartEditSubTotal,
+					],
+					[
+						'element' => '#adminMessage',
+						'content' => $messageBlock
+					]
+				]
+			];
+			$this->randerJson($response);
 		}catch (Exception $e)
 		{
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('edit',null,['item_id' => null]);
+			$this->editBlockAction();
 		}
 	}
 
 	public function cartItemUpdateAction()
 	{
 		try {
+			$taxAmount = null;
+			$discount = null;
 			$request = $this->getRequest();
 			$cartId = $this->getCart()->getCart()['cart_id'];
 			$cartModel = Ccc::getModel('Cart');
@@ -304,11 +474,31 @@ class Controller_cart extends Controller_Admin_Action{
 				throw new Exception("subTotal not updated", 1);
 			}
 			$this->getMessage()->addMessage("Cart item updated successfully.");
-			$this->redirect('edit');
+			$cartEditItem = Ccc::getBlock('Cart_Edit_Item')->toHtml();
+			$cartEditSubTotal = Ccc::getBlock('Cart_Edit_SubTotal')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#cartProduct',
+						'content' => $cartEditItem,
+					],
+					[
+						'element' => '#cartSubTotal',
+						'content' => $cartEditSubTotal,
+					],
+					[
+						'element' => '#adminMessage',
+						'content' => $messageBlock
+					]
+				]
+			];
+			$this->randerJson($response);
 		}catch (Exception $e)
 		{
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('edit');
+			$this->editBlockAction();
 		}
 	}
 
@@ -392,11 +582,11 @@ class Controller_cart extends Controller_Admin_Action{
 			}
 			
 			$this->getMessage()->addMessage("Order placed successfully.");
-			$this->redirect('grid',null,[],true);
+			$this->gridBlockAction();
 			}catch (Exception $e)
 		{
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('grid',null,[],true);
+			$this->gridBlockAction();
 		}
 	}
 }

@@ -93,6 +93,9 @@ class Block_Customer_Grid extends Block_Core_Grid {
         $this->getPager()->execute($totalCount,$current,$perPageCount);
         $customers = $customerModel->fetchAll("SELECT * FROM `customer` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");
         $customerColumn = [];
+        if(!$customers){
+            return null;
+        }
         foreach ($customers as $customer) {
             $biling = null;
             $shiping = null; 

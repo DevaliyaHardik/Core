@@ -52,6 +52,7 @@ class Model_Vendor extends Model_Core_Row
 
 		return $this->address;
 	}
+
 	public function setAddress($address)
 	{
 		$this->address = $address;

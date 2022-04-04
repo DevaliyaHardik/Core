@@ -1,20 +1,20 @@
 <?php 
-
 $order = $this->getOrder();
 $bilingAddress = $order->getBilingAddress();
 $shipingAddress = $order->getShipingAddress();
 $items = $order->getItems();
+$comment = $order->getComment();
 
 ?>
-</table>
-<table border="1">
+
+<table class="table table-bordered table-striped">
     <tr>
         <th>Biling Address</th>
         <th>Shiping Address</th>
     </tr>
     <tr>
         <td>
-            <table border="1">
+            <table class="table table-bordered table-striped">
                 <tr>
                     <td>First Name</td>
                     <td><?php echo $bilingAddress->firstName; ?></td>
@@ -54,7 +54,7 @@ $items = $order->getItems();
             </table>
         </td>
         <td>
-            <table border="1">
+            <table class="table table-bordered table-striped">
                     <tr>
                         <td>First Name</td>
                         <td><?php echo $shipingAddress->firstName; ?></td>
@@ -96,7 +96,7 @@ $items = $order->getItems();
     </tr>
 </table>
 
-<table border="1">
+<table class="table table-bordered table-striped">
     <tr>
         <th>Item Id</th>
         <th>Order Id</th>
@@ -140,3 +140,96 @@ $items = $order->getItems();
         <td align="right" colspan="9"><?php echo $order->grandTotal; ?></td>
     </tr>
 </table>
+
+<div id="orderStatus">
+    <section class="content">
+        <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="card card-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="exampleInputNote1">Note</label>
+                                <input type="text" name="order[note]" value="<?php echo $comment->note ?>" class="form-control" id="exampleInputNote1" placeholder="Enter Note">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                    <div class="col-sm-12">
+                        <!-- select -->
+                        <div class="form-group">
+                        <label>Status</label>
+                        <select class="form-control" name="order[status]">
+                            <option value="1" <?php echo ($order->getStatus($order->status)=='Pending')?'selected':'' ?>>Pending</option>
+                            <option value="2" <?php echo ($order->getStatus($order->status)=='Processing')?'selected':'' ?>>Processing</option>
+                            <option value="3" <?php echo ($order->getStatus($order->status)=='Completed')?'selected':'' ?>>Completed</option>
+                            <option value="4" <?php echo ($order->getStatus($order->status)=='Cancelled')?'selected':'' ?>>Cancelled</option>
+                        </select>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                    <div class="col-sm-12">
+                        <!-- select -->
+                        <div class="form-group">
+                        <label>state</label>
+                        <select class="form-control" name="order[state]">
+                            <option value="1" <?php echo ($order->getState($order->state)=='Pending')?'selected':'' ?>>Pending</option>
+                            <option value="2" <?php echo ($order->getState($order->state)=='Packaging')?'selected':'' ?>>Packaging</option>
+                            <option value="3" <?php echo ($order->getState($order->state)=='Shipped')?'selected':'' ?>>Shipped</option>
+                            <option value="4" <?php echo ($order->getState($order->state)=='Delivery')?'selected':'' ?>>Delivery</option>
+                            <option value="5" <?php echo ($order->getState($order->state)=='Dispatched')?'selected':'' ?>>Dispatched</option>
+                            <option value="6" <?php echo ($order->getState($order->state)=='Completed')?'selected':'' ?>>Completed</option>
+                        </select>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                    <div class="col-sm-12">
+                        <!-- select -->
+                        <div class="form-group">
+                        <label>Status</label>
+                        <select class="form-control" name="order[customerNotified]">
+                            <option value="1" <?php echo ($comment->customerNotified == 1)?'selected':'' ?>>Yes</option>
+                            <option value="2" <?php echo ($comment->customerNotified == 2)?'selected':'' ?>>No</option>
+                        </select>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="button" id="orderStatusUpdateBtn" class="btn btn-primary" name="submit" value="<?php echo $order->order_id ?>">Update</button>
+                    <button type="button" id="orderCancelBtn" class="btn btn-primary">Cancel</button>
+                </div>
+            </div>
+            <!-- /.card -->
+            </div>
+        </div>
+        <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+</div>
+
+<script type="text/javascript">
+    $("#orderStatusUpdateBtn").click(function(){
+        admin.setForm(jQuery("#indexForm"));
+        admin.setUrl("<?php echo $this->getUrl('statusUpdate','order'); ?>");
+        admin.setType('POST');
+        admin.load();
+    });
+
+    $("#orderCancelBtn").click(function(){
+        admin.setUrl("<?php echo $this->getUrl('gridBlock','cart',['id' => null]); ?>");
+        admin.load();
+    })
+</script>

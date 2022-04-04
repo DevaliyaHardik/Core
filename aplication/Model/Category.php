@@ -38,7 +38,7 @@ class Model_Category extends Model_Core_Row
 			$this->path = $this->category_id;
 			$result = $this->save();
 			
-			throw new Exception("This is root category", 1);
+			return true;
 		}
 
 		$request = Ccc::getFront()->getRequest();
@@ -90,7 +90,7 @@ class Model_Category extends Model_Core_Row
 			return $this->media;
 		}
 
-		$media = $mediaModel->fetchRow("SELECT * FROM `category_media` WHERE `category_id` = {$this->category_id}");
+		$media = $mediaModel->fetchAll("SELECT * FROM `category_media` WHERE `category_id` = {$this->category_id}");
 		if(!$media){
 			return $mediaModel;
 		}
@@ -164,22 +164,6 @@ class Model_Category extends Model_Core_Row
         }
         return $finalPath;
     }
-
-	public function getEditUrl()
-	{
-		return Ccc::getModel('Core_View')->getUrl('edit','category',['id'=>$this->category_id]);
-	}
-
-	public function getDeleteUrl()
-	{
-		return Ccc::getModel('Core_View')->getUrl('delete','category',['id'=>$this->category_id]);
-	}
-
-	public function getMediaUrl()
-	{
-		return Ccc::getModel('Core_View')->getUrl('grid','category_media',['id'=>$this->category_id]);
-	}
-
 }
 
 ?>

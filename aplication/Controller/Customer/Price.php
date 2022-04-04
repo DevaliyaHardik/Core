@@ -60,11 +60,11 @@ class Controller_Customer_Price extends Controller_Admin_Action{
 					$customerData = $request->getPost('product');
 					$customerPriceModel->customer_id = $customerId;
 					foreach($customerData as $customer){
-						if($customer['slaesmanPrice'] <= $customer['price']){
+						if($customer['salesmanPrice'] <= $customer['price']){
 							$customerPriceModel->price = $customer['price'];
 						}
 						else{
-							$customerPriceModel->price = $customer['slaesmanPrice'];
+							$customerPriceModel->price = $customer['salesmanPrice'];
 						}
 						if($customer['price']){
 							$customerPriceModel->product_id = $customer['product_id'];

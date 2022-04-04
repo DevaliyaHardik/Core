@@ -254,86 +254,104 @@ $bilingAddress = $this->getBilingAddress();
 $shipingAddress = $this->getShipingAddress();
 ?>
 
-<table border="1" width="100%" cellspacing="4">
-    <tr>
-        <td colspan="2"><b>Biling Address</b></td>
-    </tr>
-    <tr>
-        <td width="10%">Address</td>
-        <td><input type="text" id = "address" name="bilingAddress[address]" value=<?php echo $bilingAddress->address; ?>></td>
-    </tr> 
-    <tr>
-        <td width="10%">City</td>
-        <td><input type="text" id="city" name="bilingAddress[city]" value=<?php echo $bilingAddress->city; ?>></td>
-    </tr>
-    <tr>
-        <td width="10%">State</td>
-        <td><input type="text" id="state" name="bilingAddress[state]" value=<?php echo $bilingAddress->state; ?>></td>
-    </tr>
-    <tr>
-        <td width="10%">Postal Code</td>
-        <td><input type="text" id="postalCode" name="bilingAddress[postalCode]" value=<?php echo $bilingAddress->postalCode; ?>></td>
-        <input type="hidden" name="bilingAddress[biling]" value="1">
-        <input type="hidden" name="bilingAddress[shiping]" value="2">
-    </tr>
-    <tr>
-        <td width="10%">Country</td>
-        <td>
-            <select  id="country" name="bilingAddress[country]">
-                <option>select</option>
-                <?php for($i=0;$i<=count($countryList)-1;$i++){ ?>
+<section class="content">
+    <div class="container-fluid">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="card card-primary">
+            <div class="card-header">
+            <h3 class="card-title">Biling Address</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="form-group">
+                <label for="exampleInputAddress1">Address</label>
+                <input type="text" name="bilingAddress[address]" id="address" value="<?php echo $bilingAddress->address ?>" class="form-control" id="exampleInputAddress1" placeholder="Enter First Name">
+                </div>
+                <div class="form-group">
+                <label for="exampleInputCity1">City</label>
+                <input type="text" name="bilingAddress[city]" id="city" value="<?php echo $bilingAddress->city ?>" class="form-control" id="exampleInputCity1" placeholder="Enter Last Name">
+                </div>
+                <div class="form-group">
+                <label for="exampleInputState1">State</label>
+                <input type="text" name="bilingAddress[state]" id="state" value="<?php echo $bilingAddress->state ?>" class="form-control" id="exampleInputState1" placeholder="Enter Email">
+                </div>
+                <div class="form-group">
+                <label for="exampleInputPosatalCode1">Postal Code</label>
+                <input type="number" name="bilingAddress[postalCode]" id="postalCode" value="<?php echo $bilingAddress->postalCode ?>" class="form-control" id="exampleInputPosatalCode1" placeholder="Enter Email">
+                </div>
+                <div class="row">
+                <div class="col-sm-12">
+                    <!-- select -->
+                    <div class="form-group">
+                    <label>Country</label>
+                    <select class="form-control" name="bilingAddress[country]" id="country">
+                    <option>select</option>
+                    <?php for($i=0;$i<=count($countryList)-1;$i++): ?>
                         <?php $select = ($countryList[$i] == $bilingAddress->country) ? 'selected' : ''; ?>
                         <option value=<?php echo $countryList[$i]; ?> <?php echo $select; ?>><?php echo $countryList[$i]; ?></option>
-                <?php } ?>
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td><input type="checkbox" id="hardik" onclick="same()">same as Biling</td>
-    </tr>
-    
-    <tr>
-        <td colspan="2"><b>Shiping Address</b></td>
-    </tr>
-    <tr>
-            <td width="10%">Address</td>
-            <td><input type="text" id = "address1" name="shipingAddress[address]" value=<?php echo $shipingAddress->address; ?>></td>
-    </tr>
-    
-    <tr>
-            <td width="10%">City</td>
-            <td><input type="text" id="city1" name="shipingAddress[city]" value=<?php echo $shipingAddress->city; ?>></td>
-    </tr>
-    <tr>
-            <td width="10%">State</td>
-            <td><input type="text" id="state1" name="shipingAddress[state]" value=<?php echo $shipingAddress->state; ?>></td>
-    </tr>
-    <tr>
-            <td width="10%">Postal Code</td>
-            <td><input type="text" id="postalCode1" name="shipingAddress[postalCode]" value=<?php echo $shipingAddress->postalCode; ?>></td>
-            <input type="hidden" name="shipingAddress[shiping]" value="1">
-            <input type="hidden" name="shipingAddress[biling]" value="2">
-    </tr>
-    <tr>
-            <td width="10%">Country</td>
-            <td>
-                    <select id="country1" name="shipingAddress[country]">
-                            <option>select</option>
-                            <?php for($i=0;$i<=count($countryList)-1;$i++){ ?>
-                                    <?php $select = ($countryList[$i] == $shipingAddress->country) ? 'selected' : ''; ?>
-                                    <option value=<?php echo $countryList[$i]; ?> <?php echo $select; ?>><?php echo $countryList[$i]; ?></option>
-                            <?php } ?>
+                    <?php endfor; ?>
                     </select>
-            </td>
-    </tr>
-    <tr>
-        <td width="10%">&nbsp;</td>
-        <td>
-            <input type="button" id="customerAddressSubmitBtn" name="submit" value="save">
-            <button type="button" id="customerGridBlockBtn">Cancel</button>
-        </td>
-    </tr>
-</table>	
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <input type="checkbox" name="hardik" id="hardik" onclick="same()">Same as Biling Address
+            </div>
+            <div class="card-header">
+            <h3 class="card-title">Shiping Address</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="form-group">
+                <label for="exampleInputAddress1">Address</label>
+                <input type="text" name="shipingAddress[address]" id="address1" value="<?php echo $shipingAddress->address ?>" class="form-control" id="exampleInputAddress1" placeholder="Enter First Name">
+                </div>
+                <div class="form-group">
+                <label for="exampleInputCity1">City</label>
+                <input type="text" name="shipingAddress[city]" id="city1" value="<?php echo $shipingAddress->city ?>" class="form-control" id="exampleInputCity1" placeholder="Enter Last Name">
+                </div>
+                <div class="form-group">
+                <label for="exampleInputState1">State</label>
+                <input type="text" name="shipingAddress[state]" id="state1" value="<?php echo $shipingAddress->state ?>" class="form-control" id="exampleInputState1" placeholder="Enter Email">
+                </div>
+                <div class="form-group">
+                <label for="exampleInputPosatalCode1">Postal Code</label>
+                <input type="number" name="shipingAddress[postalCode]" id="postalCode1" value="<?php echo $shipingAddress->postalCode ?>" class="form-control" id="exampleInputPosatalCode1" placeholder="Enter Email">
+                </div>
+                <div class="row">
+                <div class="col-sm-12">
+                    <!-- select -->
+                    <div class="form-group">
+                    <label>Country</label>
+                    <select class="form-control" name="shipingAddress[country]" id="country1">
+                    <option>select</option>
+                    <?php for($i=0;$i<=count($countryList)-1;$i++): ?>
+                        <?php $select = ($countryList[$i] == $shipingAddress->country) ? 'selected' : ''; ?>
+                        <option value=<?php echo $countryList[$i]; ?> <?php echo $select; ?>><?php echo $countryList[$i]; ?></option>
+                    <?php endfor; ?>
+                    </select>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+                <input type="button" id="customerAddressSubmitBtn" class="btn btn-primary" name="submit" value="save">
+                <button type="button" id="customerGridBlockBtn" class="btn btn-primary" >Cancel</button>
+            </div>
+        </div>
+        <!-- /.card -->
+        </div>
+    </div>
+    <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+
 <script type="text/javascript">
     function same() {
             var checkedBox = document.getElementById("hardik");

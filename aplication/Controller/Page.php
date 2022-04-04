@@ -11,29 +11,59 @@ class Controller_Page extends Controller_Admin_Action{
 		}
 	}
 
-	public function gridAction()
+	public function indexAction()
 	{
 		$content = $this->getLayout()->getContent();
-		$pageGrid = Ccc::getBlock('Page_Grid');
+		$pageGrid = Ccc::getBlock('Page_Index');
 		$content->addChild($pageGrid);
 
 		$this->randerLayout();
 	}
 
-	public function addAction()
+	public function gridBlockAction()
 	{
-		$pageModel = Ccc::getModel('Page');
-		$page = $pageModel;
-
-		$content = $this->getLayout()->getContent();
-		$pageEdit = Ccc::getBlock('Page_Edit');
-		$page = $pageEdit->page = $page;
-		$content->addChild($pageEdit);
-
-		$this->randerLayout();
+		$pageGrid = Ccc::getBlock('Page_Grid')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' => $pageGrid,
+				],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->randerJson($response);
 	}
 
-	public function editAction()
+	public function addBlockAction()
+	{
+		$pageModel = Ccc::getModel('Page');
+
+		Ccc::register('page',$pageModel);
+		$pageEdit = Ccc::getBlock('Page_Edit')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' => $pageEdit,
+				],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->randerJson($response);
+	}
+
+	public function editBlockAction()
 	{
 		try {
 			$pageModel = Ccc::getModel("Page");
@@ -53,15 +83,26 @@ class Controller_Page extends Controller_Admin_Action{
 				throw new Exception("Error Processing Request", 1);			
 			}
 	
-			$content = $this->getLayout()->getContent();
-			$pageEdit = Ccc::getBlock('Page_Edit');
-			$page = $pageEdit->page = $page;
-			$content->addChild($pageEdit);
-	
-			$this->randerLayout();		
-		}catch (Exception $e){
+			Ccc::register('page',$page);
+			$pageEdit = Ccc::getBlock('Page_Edit')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $pageEdit,
+					],
+					[
+						'element' => '#adminMessage',
+						'content' => $messageBlock
+					]
+				]
+			];
+			$this->randerJson($response);
+			}catch (Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('grid','customer');
+			$this->redirect('grid','page');
 		}	
 		
 	}
@@ -94,11 +135,11 @@ class Controller_Page extends Controller_Admin_Action{
 					throw new Exception('Page con not be saved', 1);			
 				}
 				$this->getMessage()->addMessage('Page save successfully');
-		}
-			$this->redirect('grid',null,['id' => null]);
+			}
+			$this->gridBlockAction();
 		}catch (Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('grid','customer',['id' => null]);
+			$this->gridBlockAction();
 		}	
 	}
 
@@ -117,16 +158,14 @@ class Controller_Page extends Controller_Admin_Action{
 					throw new Exception('Your Data can not be Deleted', 1);			
 				}
 				$this->getMessage()->addMessage('Your Data Delete Successfully');
-				$this->redirect('grid',null,['id' => null]);
+				$this->gridBlockAction();
 
 			}catch (Exception $e){
 				$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-				$this->redirect('grid','customer',['id' => null]);
+				$this->gridBlockAction();
 			}	
 		}
 	}
-
-
 }
 
 ?>

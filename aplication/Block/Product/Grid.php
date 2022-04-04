@@ -95,9 +95,6 @@ class Block_Product_Grid extends Block_Core_Grid
 		$this->addAction([
             'title' => 'edit','method' => 'getEditUrl','class' => 'category' 
         ],'Edit');
-        $this->addAction([
-            'title' => 'media','method' => 'getMediaUrl','class' => 'product_media' 
-        ],'Media');
         $this->prepareCollectionContent();       
     }
 
@@ -119,18 +116,14 @@ class Block_Product_Grid extends Block_Core_Grid
         $this->getPager()->execute($totalCount,$current,$perPageCount);
         $products = $productModel->fetchAll("SELECT * FROM `product` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");
         $productColumn = [];
+        if(!$products){
+            return null;
+        }
         foreach ($products as $product) {
             array_push($productColumn,$product);
         } 
         return $productColumn;       
     }
-
-    // public function getMedia($mediaId)
-    // {
-    //     $mediaModel = Ccc::getModel('Product_Media');
-    //     $media = $mediaModel->fetchAll("SELECT * FROM `product_media` WHERE `media_id` = '$mediaId'");
-    //     return $media[0]->getData();
-    // }
 
     public function setPager($pager)
     {
@@ -144,11 +137,6 @@ class Block_Product_Grid extends Block_Core_Grid
             $this->setPager(Ccc::getModel('Core_Pager'));
         }
         return $this->pager;
-    }
-
-    public function getMediaUrl()
-    {
-        return Ccc::getModel('Core_View')->getUrl('grid','product_media');
     }
 }
 

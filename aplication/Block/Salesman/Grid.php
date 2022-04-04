@@ -89,6 +89,9 @@ class Block_Salesman_Grid extends Block_Core_Grid
         $this->getPager()->execute($totalCount,$current,$perPageCount);
         $salesmans = $salesmanModel->fetchAll("SELECT * FROM `salesman` LIMIT {$this->getPager()->getStartLimit()},{$this->getPager()->getPerPageCount()}");
         $salesmanCloumn = [];
+        if(!$salesmans){
+            return null;
+        }
         foreach ($salesmans as $salesman) {
             array_push($salesmanCloumn,$salesman);
         }

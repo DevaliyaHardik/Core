@@ -20,7 +20,6 @@ class Model_Core_Request{
         return $_FILES;
     }
 
-
     public function getActionName()
     {
         return $this->getRequest('a','grid').'Action';

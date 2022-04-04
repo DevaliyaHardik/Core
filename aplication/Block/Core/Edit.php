@@ -1,8 +1,13 @@
-<?php Ccc::loadClass('Block_Core_Template');
+<?php 
+Ccc::loadClass('Block_Core_Template');
 Ccc::loadClass('Block_Customer_Edit_Tab');
 Ccc::loadClass('Block_Admin_Edit_Tab');
 Ccc::loadClass('Block_Category_Edit_Tab');
 Ccc::loadClass('Block_Config_Edit_Tab');
+Ccc::loadClass('Block_Page_Edit_Tab');
+Ccc::loadClass('Block_Product_Edit_Tab');
+Ccc::loadClass('Block_Salesman_Edit_Tab');
+Ccc::loadClass('Block_Vendor_Edit_Tab');
 
 class Block_Core_Edit extends Block_Core_Template  
 {

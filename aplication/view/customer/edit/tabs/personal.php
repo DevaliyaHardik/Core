@@ -1,44 +1,61 @@
 <?php $customer = $this->getCustomer(); ?>
-<p id="done"></p>
-<table border="1" width="100%" cellspacing="4">
-    <tr>
-        <td colspan="2"><b>Personal Information</b></td>
-    </tr>
-    <tr>
-        <td width="10%">First Name</td>
-        <td><input type="text" name="customer[firstName]" value=<?php echo $customer->firstName ?>></td>
-    </tr>
-    
-    <tr>
-        <td width="10%">Last Name</td>
-        <td><input type="text" name="customer[lastName]" value=<?php echo $customer->lastName ?>></td>
-    </tr>
-    <tr>
-        <td width="10%">Email</td>
-        <td><input type="text" name="customer[email]" value=<?php echo $customer->email ?>></td>
-    </tr>
-    <tr>
-        <td width="10%" >Mobile</td>
-        <td><input type="text" name="customer[mobile]" id="mobile" value=<?php echo $customer->mobile ?>></td>
-    </tr>
-    <tr>
-        <td width="10%">Status</td>
-        <td>
-            <select name="customer[status]">
-                <option value="1" <?php echo ($customer->getStatus($customer->status)=='Enabel')?'selected':'' ?>>Enabel</option>
-                <option value="2" <?php echo ($customer->getStatus($customer->status)=='Disabled')?'selected':'' ?>>Disabled</option>
-            </select>			
-        </td>
-    </tr>
-    <tr>
-        <td width="10%">&nbsp;</td>
-        <td>
-            <input type="button" id="customerSubmitBtn" name="submit" value="save & continue">
-            <button type="button" id="customerGridBlockBtn">Cancel</button>
-        </td>
-    </tr>
 
-</table>
+
+<section class="content">
+    <div class="container-fluid">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="card card-primary">
+            <div class="card-header">
+            <h3 class="card-title">Personal Information</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="form-group">
+                <label for="exampleInputFirstName1">First Name</label>
+                <input type="text" name="customer[firstName]" value="<?php echo $customer->firstName ?>" class="form-control" id="exampleInputFirstName1" placeholder="Enter First Name">
+                </div>
+                <div class="form-group">
+                <label for="exampleInputLastName1">Last Name</label>
+                <input type="text" name="customer[lastName]" value="<?php echo $customer->lastName ?>" class="form-control" id="exampleInputLastName1" placeholder="Enter Last Name">
+                </div>
+                <div class="form-group">
+                <label for="exampleInputEmail1">Email</label>
+                <input type="email" name="customer[email]" value="<?php echo $customer->email ?>" class="form-control" id="exampleInputEmail1" placeholder="Enter Email">
+                </div>
+                <div class="form-group">
+                <label for="exampleInputMobile1">Mobile</label>
+                <input type="text" name="customer[mobile]" value="<?php echo $customer->mobile ?>" class="form-control" id="exampleInputMobile1" placeholder="Enter Email">
+                </div>
+                <div class="row">
+                <div class="col-sm-12">
+                    <!-- select -->
+                    <div class="form-group">
+                    <label>Status</label>
+                    <select class="form-control" name="customer[status]">
+                        <option value="1" <?php echo ($customer->getStatus($customer->status)=='Enabel')?'selected':'' ?>>Enabel</option>
+                        <option value="2" <?php echo ($customer->getStatus($customer->status)=='Disabled')?'selected':'' ?>>Disabled</option>
+                    </select>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+                <input type="button" id="customerSubmitBtn" class="btn btn-primary" name="submit" value="save">
+                <button type="button" id="customerGridBlockBtn" class="btn btn-primary" >Cancel</button>
+            </div>
+        </div>
+        <!-- /.card -->
+        </div>
+    </div>
+    <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+
 
 <script>
     $("#customerSubmitBtn").click(function(){

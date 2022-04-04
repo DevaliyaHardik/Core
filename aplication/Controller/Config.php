@@ -11,29 +11,60 @@ class Controller_Config extends Controller_Admin_Action{
 		}
 	}
 
-	public function gridAction()
+	public function indexAction()
 	{
 		$content = $this->getLayout()->getContent();
-		$configGrid = Ccc::getBlock('Config_Grid');
-		$content->addChild($configGrid);
+		$pageGrid = Ccc::getBlock('Config_Index');
+		$content->addChild($pageGrid);
 
 		$this->randerLayout();
 	}
 
-	public function addAction()
+	public function gridBlockAction()
+	{
+		$configGrid = Ccc::getBlock('Config_Grid')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' => $configGrid,
+					],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->randerJson($response);
+	}
+
+	public function addBlockAction()
 	{
 		$configModel = Ccc::getModel('config');
 		$config = $configModel;
 
-		$content = $this->getLayout()->getContent();
-		$configEdit = Ccc::getBlock('Config_Edit');
 		Ccc::register('config',$config);
-		$content->addChild($configEdit);
-
-		$this->randerLayout();
+		$configEdit = Ccc::getBlock('Config_Edit')->toHtml();
+		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+		$response = [
+			'status' => 'success',
+			'elements' => [
+				[
+					'element' => '#indexContent',
+					'content' => $configEdit,
+					],
+				[
+					'element' => '#adminMessage',
+					'content' => $messageBlock
+				]
+			]
+		];
+		$this->randerJson($response);
 	}
 
-	public function editAction()
+	public function editBlockAction()
 	{
 		try {
 			$configModel = Ccc::getModel("config");
@@ -53,16 +84,42 @@ class Controller_Config extends Controller_Admin_Action{
 				throw new Exception("Error Processing Request", 1);			
 			}
 	
-			$content = $this->getLayout()->getContent();
-			$configEdit = Ccc::getBlock('Config_Edit');
             Ccc::register('config',$config);
-			$content->addChild($configEdit);
-	
-			$this->randerLayout();
-		}catch (Exception $e){
+			$configEdit = Ccc::getBlock('Config_Edit')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $configEdit,
+						],
+					[
+						'element' => '#adminMessage',
+						'content' => $messageBlock
+					]
+				]
+			];
+			$this->randerJson($response);
+			}catch (Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('grid','customer');
-		}	
+			$configEdit = Ccc::getBlock('Config_Edit')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $configEdit,
+						],
+					[
+						'element' => '#adminMessage',
+						'content' => $messageBlock
+					]
+				]
+			];
+			$this->randerJson($response);
+			}	
 	}
 
 	public function saveAction()
@@ -95,10 +152,10 @@ class Controller_Config extends Controller_Admin_Action{
 				}
 				$this->getMessage()->addMessage('Config saved successfully');
 			}
-			$this->redirect('grid',null,['id' => null]);
+			$this->gridBlockAction();
 		}catch (Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('grid','customer',['id' => null]);
+			$this->gridBlockAction();
 		}	
 	}
 
@@ -117,16 +174,14 @@ class Controller_Config extends Controller_Admin_Action{
 					throw new Exception("System is unable to delete data.", 1);	
 				}
 				$this->getMessage()->addMessage('Your Data Delete Successfully');
-				$this->redirect('grid',null,['id' => null]);
+				$this->gridBlockAction();
 
 			}catch (Exception $e){
 				$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-				$this->redirect('grid','customer',['id' => null]);
+				$this->gridBlockAction();
 			}	
-			}
+		}
 	}
-
-
 }
 
 ?>
