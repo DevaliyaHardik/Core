@@ -26,11 +26,11 @@
                 </div>
                 <div class="form-group">
                 <label for="exampleInputMobile1">Mobile</label>
-                <input type="text" name="salesman[mobile]" value="<?php echo $salesman->mobile ?>" class="form-control" id="exampleInputMobile1" placeholder="Enter Email">
+                <input type="text" name="salesman[mobile]" value="<?php echo $salesman->mobile ?>" class="form-control" id="exampleInputMobile1" placeholder="Enter Mobile">
                 </div>
                 <div class="form-group">
-                <label for="exampleInputMobile1">Persantage</label>
-                <input type="text" name="salesman[percentage]" value="<?php echo $salesman->percentage ?>" class="form-control" id="exampleInputMobile1" placeholder="Enter Email">
+                <label for="exampleInputPercentage1">Persantage</label>
+                <input type="text" name="salesman[percentage]" value="<?php echo $salesman->percentage ?>" class="form-control" id="exampleInputPercentage1" placeholder="Enter Percentage">
                 </div>
                 <div class="row">
                 <div class="col-sm-12">

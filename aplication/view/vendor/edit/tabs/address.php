@@ -267,19 +267,19 @@ $address = $this->getAddress();
             <div class="card-body">
                 <div class="form-group">
                 <label for="exampleInputAddress1">Address</label>
-                <input type="text" name="address[address]" id="address" value="<?php echo $address->address ?>" class="form-control" id="exampleInputAddress1" placeholder="Enter First Name">
+                <input type="text" name="address[address]" id="address" value="<?php echo $address->address ?>" class="form-control" id="exampleInputAddress1" placeholder="Enter Address">
                 </div>
                 <div class="form-group">
                 <label for="exampleInputCity1">City</label>
-                <input type="text" name="address[city]" id="city" value="<?php echo $address->city ?>" class="form-control" id="exampleInputCity1" placeholder="Enter Last Name">
+                <input type="text" name="address[city]" id="city" value="<?php echo $address->city ?>" class="form-control" id="exampleInputCity1" placeholder="Enter City">
                 </div>
                 <div class="form-group">
                 <label for="exampleInputState1">State</label>
-                <input type="text" name="address[state]" id="state" value="<?php echo $address->state ?>" class="form-control" id="exampleInputState1" placeholder="Enter Email">
+                <input type="text" name="address[state]" id="state" value="<?php echo $address->state ?>" class="form-control" id="exampleInputState1" placeholder="Enter State">
                 </div>
                 <div class="form-group">
                 <label for="exampleInputPosatalCode1">Postal Code</label>
-                <input type="number" name="address[postalCode]" id="postalCode" value="<?php echo $address->postalCode ?>" class="form-control" id="exampleInputPosatalCode1" placeholder="Enter Email">
+                <input type="number" name="address[postalCode]" id="postalCode" value="<?php echo $address->postalCode ?>" class="form-control" id="exampleInputPosatalCode1" placeholder="Enter Postal Code">
                 </div>
                 <div class="row">
                 <div class="col-sm-12">

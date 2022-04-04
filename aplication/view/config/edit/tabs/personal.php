@@ -15,16 +15,16 @@ $config=$this->getConfig();
 		<!-- /.card-header -->
 		<div class="card-body">
 			<div class="form-group">
-			<label for="exampleInputFirstName1">Name</label>
-			<input type="text" name="config[name]" value="<?php echo $config->name ?>" class="form-control" id="exampleInputFirstName1" placeholder="Enter First Name">
+			<label for="exampleInputName1">Name</label>
+			<input type="text" name="config[name]" value="<?php echo $config->name ?>" class="form-control" id="exampleInputName1" placeholder="Enter Name">
 			</div>
 			<div class="form-group">
-			<label for="exampleInputLastName1">Code</label>
-			<input type="text" name="config[code]" value="<?php echo $config->code ?>" class="form-control" id="exampleInputLastName1" placeholder="Enter Last Name">
+			<label for="exampleInputCode1">Code</label>
+			<input type="text" name="config[code]" value="<?php echo $config->code ?>" class="form-control" id="exampleInputCode1" placeholder="Enter Code">
 			</div>
 			<div class="form-group">
-			<label for="exampleInputEmail1">Value</label>
-			<input type="email" name="config[value]" value="<?php echo $config->value ?>" class="form-control" id="exampleInputEmail1" placeholder="Enter Email">
+			<label for="exampleInputValue1">Value</label>
+			<input type="email" name="config[value]" value="<?php echo $config->value ?>" class="form-control" id="exampleInputValue1" placeholder="Enter Value">
 			</div>
 			<div class="row">
 			<div class="col-sm-6">

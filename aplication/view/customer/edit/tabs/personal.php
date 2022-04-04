@@ -27,7 +27,7 @@
                 </div>
                 <div class="form-group">
                 <label for="exampleInputMobile1">Mobile</label>
-                <input type="text" name="customer[mobile]" value="<?php echo $customer->mobile ?>" class="form-control" id="exampleInputMobile1" placeholder="Enter Email">
+                <input type="text" name="customer[mobile]" value="<?php echo $customer->mobile ?>" class="form-control" id="exampleInputMobile1" placeholder="Enter Mobile">
                 </div>
                 <div class="row">
                 <div class="col-sm-12">

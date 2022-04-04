@@ -13,34 +13,34 @@
             <!-- /.card-header -->
             <div class="card-body">
                 <div class="form-group">
-                <label for="exampleInputFirstName1">sku</label>
-                <input type="text" name="product[sku]" value="<?php echo $product->sku ?>" class="form-control" id="exampleInputFirstName1" placeholder="Enter First Name">
+                <label for="exampleInputSku1">sku</label>
+                <input type="text" name="product[sku]" value="<?php echo $product->sku ?>" class="form-control" id="exampleInputSku1" placeholder="Enter Sku">
                 </div>
                 <div class="form-group">
-                <label for="exampleInputLastName1">Name</label>
-                <input type="text" name="product[name]" value="<?php echo $product->name ?>" class="form-control" id="exampleInputLastName1" placeholder="Enter Last Name">
+                <label for="exampleInputName1">Name</label>
+                <input type="text" name="product[name]" value="<?php echo $product->name ?>" class="form-control" id="exampleInputName1" placeholder="Enter Name">
                 </div>
                 <div class="form-group">
-                <label for="exampleInputEmail1">Price</label>
-                <input type="float" name="product[price]" value="<?php echo $product->price ?>" class="form-control" id="exampleInputEmail1" placeholder="Enter Email">
+                <label for="exampleInputPrice1">Price</label>
+                <input type="float" name="product[price]" value="<?php echo $product->price ?>" class="form-control" id="exampleInputPrice1" placeholder="Enter Price">
                 </div>
                 <div class="form-group">
-                <label for="exampleInputEmail1">Cost</label>
-                <input type="float" name="product[cost]" value="<?php echo $product->cost ?>" class="form-control" id="exampleInputEmail1" placeholder="Enter Email">
+                <label for="exampleInputCost1">Cost</label>
+                <input type="float" name="product[cost]" value="<?php echo $product->cost ?>" class="form-control" id="exampleInputCost1" placeholder="Enter Cost">
                 </div>
                 <div class="form-group">
-                <label for="exampleInputEmail1">Discount</label>
-                <input type="float" name="product[discount]" value="<?php echo $product->discount ?>" class="form-control" id="exampleInputEmail1" placeholder="Enter Email">
+                <label for="exampleInputDiscount1">Discount</label>
+                <input type="float" name="product[discount]" value="<?php echo $product->discount ?>" class="form-control" id="exampleInputDiscount1" placeholder="Enter Discount">
                 In Percentage:<input type="radio" name="discountMethod" value="1">&nbsp;&nbsp;&nbsp;
                 In Money:<input type="radio" name="discountMethod" value="2" checked>
                 </div>
                 <div class="form-group">
-                <label for="exampleInputEmail1">Tax</label>
-                <input type="float" name="product[tax]" value="<?php echo $product->tax ?>" class="form-control" id="exampleInputEmail1" placeholder="Enter Email">
+                <label for="exampleInputTax1">Tax</label>
+                <input type="float" name="product[tax]" value="<?php echo $product->tax ?>" class="form-control" id="exampleInputTax1" placeholder="Enter Tax">
                 </div>
                 <div class="form-group">
-                <label for="exampleInputEmail1">Quntity</label>
-                <input type="number" name="product[quntity]" value="<?php echo $product->quntity ?>" class="form-control" id="exampleInputEmail1" placeholder="Enter Email">
+                <label for="exampleInputQuantiry1">Quantity</label>
+                <input type="number" name="product[quntity]" value="<?php echo $product->quntity ?>" class="form-control" id="exampleInputQuantiry1" placeholder="Enter Quantity">
                 </div>
                 <div class="row">
                 <div class="col-sm-6">

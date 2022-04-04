@@ -392,7 +392,7 @@ class Controller_cart extends Controller_Admin_Action{
 		}catch (Exception $e)
 		{
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('edit');
+			$this->editBlockAction();
 		}
 	}
 

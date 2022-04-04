@@ -13,16 +13,16 @@
             <!-- /.card-header -->
             <div class="card-body">
                 <div class="form-group">
-                <label for="exampleInputFirstName1">Name</label>
-                <input type="text" name="page[name]" value="<?php echo $page->name ?>" class="form-control" id="exampleInputFirstName1" placeholder="Enter First Name">
+                <label for="exampleInputName1">Name</label>
+                <input type="text" name="page[name]" value="<?php echo $page->name ?>" class="form-control" id="exampleInputName1" placeholder="Enter Name">
                 </div>
                 <div class="form-group">
-                <label for="exampleInputLastName1">Code</label>
-                <input type="text" name="page[code]" value="<?php echo $page->code ?>" class="form-control" id="exampleInputLastName1" placeholder="Enter Last Name">
+                <label for="exampleInputCode1">Code</label>
+                <input type="text" name="page[code]" value="<?php echo $page->code ?>" class="form-control" id="exampleInputCode1" placeholder="Enter Code">
                 </div>
                 <div class="form-group">
-                <label for="exampleInputEmail1">Content</label>
-                <input type="email" name="page[content]" value="<?php echo $page->content ?>" class="form-control" id="exampleInputEmail1" placeholder="Enter Email">
+                <label for="exampleInputContent1">Content</label>
+                <input type="email" name="page[content]" value="<?php echo $page->content ?>" class="form-control" id="exampleInputContent1" placeholder="Enter Content">
                 </div>
                 <div class="row">
 					<div class="col-sm-6">
