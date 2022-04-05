@@ -22,7 +22,7 @@ class Controller_Salesman_SalesmanCustomer extends Controller_Admin_Action{
 					'content' => $salesmanGrid,
 					],
 				[
-					'element' => '#adminMessage',
+					'element' => 'message',
 					'content' => $messageBlock
 				]
 			]
@@ -47,23 +47,8 @@ class Controller_Salesman_SalesmanCustomer extends Controller_Admin_Action{
                     throw new Exception("Error Processing Request", 1);
                 }
             }
-            $salesmanGrid = Ccc::getBlock("Salesman_Grid")->toHtml();
-            $messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
-            $response = [
-                'status' => 'success',
-                'elements' => [
-                    [
-                        'element' => '#indexContent',
-                        'content' => $salesmanGrid,
-                        ],
-                    [
-                        'element' => '#adminMessage',
-                        'content' => $messageBlock
-                    ]
-                ]
-            ];
-            $this->randerJson($response);
-            }
+            $this->gridBlockAction();
+        }
     }
 
 }

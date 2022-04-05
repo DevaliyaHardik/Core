@@ -8,7 +8,7 @@
     <thead>
     <tr>
         <th>Image Id</th>
-        <th>Category Id</th>
+        <th>Product Id</th>
         <th>Name</th>
         <th>Base</th>
         <th>Thumb</th>
@@ -26,8 +26,8 @@
     <?php foreach ($medias as $media): ?>
     <tr>
         <td><?php echo $media->media_id ?></td>
-        <td><?php echo $media->category_id ?></td>
-        <td><?php echo $media->name ?></td>
+        <td><?php echo $media->product_id; ?></td>
+        <td><img src="<?php echo $media->getImagePath() ?>" alt="No Image Found" width="50" height="50"></td>
         <td>
             <input type="radio" name="media[base]" value = "<?php echo $media->media_id ?>" <?php echo $this->selected($media->media_id,'base'); ?> >
         </td>

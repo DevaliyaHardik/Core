@@ -22,6 +22,7 @@ class Controller_Config extends Controller_Admin_Action{
 
 	public function gridBlockAction()
 	{
+		$this->getMessage()->addMessage('Config');
 		$configGrid = Ccc::getBlock('Config_Grid')->toHtml();
 		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 		$response = [
@@ -32,8 +33,9 @@ class Controller_Config extends Controller_Admin_Action{
 					'content' => $configGrid,
 					],
 				[
-					'element' => '#adminMessage',
-					'content' => $messageBlock
+					'element' => 'message',
+					'content' => $messageBlock,
+					'type' => 'success'
 				]
 			]
 		];
@@ -46,6 +48,7 @@ class Controller_Config extends Controller_Admin_Action{
 		$config = $configModel;
 
 		Ccc::register('config',$config);
+		$this->getMessage()->addMessage('Config Add');
 		$configEdit = Ccc::getBlock('Config_Edit')->toHtml();
 		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 		$response = [
@@ -56,8 +59,9 @@ class Controller_Config extends Controller_Admin_Action{
 					'content' => $configEdit,
 					],
 				[
-					'element' => '#adminMessage',
-					'content' => $messageBlock
+					'element' => 'message',
+					'content' => $messageBlock,
+					'type' => 'success'
 				]
 			]
 		];
@@ -71,20 +75,18 @@ class Controller_Config extends Controller_Admin_Action{
 			$request = $this->getRequest();
 			$configId = $request->getRequest('id');
 			if(!$configId){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
+				throw new Exception("Config data con not be fetch", 1);			
 			}
 			if(!(int)$configId){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
+				throw new Exception("Config data con not be fetch", 1);			
 			}
 			$config = $configModel->load($configId);
 			if(!$config){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
+				throw new Exception("Config data con not be fetch", 1);			
 			}
 	
             Ccc::register('config',$config);
+			$this->getMessage()->addMessage('Config Edit');
 			$configEdit = Ccc::getBlock('Config_Edit')->toHtml();
 			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 			$response = [
@@ -95,26 +97,28 @@ class Controller_Config extends Controller_Admin_Action{
 						'content' => $configEdit,
 						],
 					[
-						'element' => '#adminMessage',
-						'content' => $messageBlock
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'success'
 					]
 				]
 			];
 			$this->randerJson($response);
 			}catch (Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$configEdit = Ccc::getBlock('Config_Edit')->toHtml();
+			$configGrid = Ccc::getBlock('Config_Grid')->toHtml();
 			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 			$response = [
 				'status' => 'success',
 				'elements' => [
 					[
 						'element' => '#indexContent',
-						'content' => $configEdit,
+						'content' => $configGrid,
 						],
 					[
-						'element' => '#adminMessage',
-						'content' => $messageBlock
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'error'
 					]
 				]
 			];
@@ -132,7 +136,7 @@ class Controller_Config extends Controller_Admin_Action{
 				$postData = $request->getPost('config');
 				if(!$postData)
 				{
-					$this->getMessage()->addMessage('Your data con not be updated', Model_Core_Message::MESSAGE_ERROR);
+					$this->getMessage()->addMessage('Config data con not be updated', Model_Core_Message::MESSAGE_ERROR);
 					throw new Exception("Error Processing Request", 1);			
 				}
 
@@ -152,10 +156,42 @@ class Controller_Config extends Controller_Admin_Action{
 				}
 				$this->getMessage()->addMessage('Config saved successfully');
 			}
-			$this->gridBlockAction();
+			$configGrid = Ccc::getBlock('Config_Grid')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $configGrid,
+						],
+					[
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'success'
+					]
+				]
+			];
+			$this->randerJson($response);
 		}catch (Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->gridBlockAction();
+			$configGrid = Ccc::getBlock('Config_Grid')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $configGrid,
+						],
+					[
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'error'
+					]
+				]
+			];
+			$this->randerJson($response);
 		}	
 	}
 
@@ -166,19 +202,50 @@ class Controller_Config extends Controller_Admin_Action{
 		if(!$request->isPost()){
 			try {
 				if(!$request->getRequest('id')){
-					throw new Exception('Your Data can not be Deleted', 1);			
+					throw new Exception('Config Data can not be Deleted', 1);			
 				}
 				$configId = $request->getRequest('id');
 				$result = $configModel->load($configId)->delete();
 				if(!$result){
 					throw new Exception("System is unable to delete data.", 1);	
 				}
-				$this->getMessage()->addMessage('Your Data Delete Successfully');
-				$this->gridBlockAction();
-
+				$this->getMessage()->addMessage('Config Data Delete Successfully');
+				$configGrid = Ccc::getBlock('Config_Grid')->toHtml();
+				$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+				$response = [
+					'status' => 'success',
+					'elements' => [
+						[
+							'element' => '#indexContent',
+							'content' => $configGrid,
+							],
+						[
+							'element' => 'message',
+							'content' => $messageBlock,
+							'type' => 'success'
+						]
+					]
+				];
+				$this->randerJson($response);		
 			}catch (Exception $e){
 				$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-				$this->gridBlockAction();
+				$configGrid = Ccc::getBlock('Config_Grid')->toHtml();
+				$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+				$response = [
+					'status' => 'success',
+					'elements' => [
+						[
+							'element' => '#indexContent',
+							'content' => $configGrid,
+							],
+						[
+							'element' => 'message',
+							'content' => $messageBlock,
+							'type' => 'error'
+						]
+					]
+				];
+				$this->randerJson($response);
 			}	
 		}
 	}

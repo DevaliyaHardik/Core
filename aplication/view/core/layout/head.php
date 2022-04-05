@@ -15,6 +15,15 @@
     <link rel="stylesheet" href="skin/admin/assets/dist/css/adminlte.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="skin/admin/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="skin/assets/plugins/sweetalert2/sweetalert2.min.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="skin/admin/assets/plugins/toastr/toastr.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="skin/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="skin/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="skin/assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
 
     <script src="skin/admin/js/jquery-3.6.0.min.js"></script>
     <script src="skin/admin/js/admin.js"></script>

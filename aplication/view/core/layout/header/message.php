@@ -6,6 +6,3 @@ if($messages){
     }
 }
 ?>
-<div id="adminMessage">
-
-</div>

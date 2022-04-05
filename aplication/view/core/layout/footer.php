@@ -14,7 +14,6 @@
 <script src="skin/admin/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="skin/admin/assets/dist/js/adminlte.js"></script>
-
 <!-- PAGE PLUGINS -->
 <!-- jQuery Mapael -->
 <script src="skin/admin/assets/plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
@@ -23,8 +22,9 @@
 <script src="skin/admin/assets/plugins/jquery-mapael/maps/usa_states.min.js"></script>
 <!-- ChartJS -->
 <script src="skin/admin/assets/plugins/chart.js/Chart.min.js"></script>
-
 <!-- AdminLTE for demo purposes -->
 <script src="skin/admin/assets/dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="skin/admin/assets/dist/js/pages/dashboard2.js"></script>
+<!-- Toastr -->
+<script src="skin/admin/assets/plugins/toastr/toastr.min.js"></script>

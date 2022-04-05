@@ -16,6 +16,11 @@ class Model_Core_Row_Resource
 		return $adapter;
 	}
 
+	public function getConnect()
+	{
+		return $this->getAdapter()->connect();
+	}
+
 	public function getTableName()
 	{
 		return $this->tableName;
@@ -40,17 +45,16 @@ class Model_Core_Row_Resource
 
 	public function insert(array $insertArray)
 	{
-
 		$columnName = [];
 		$columnValue = [];
 		foreach ($insertArray as $columnKey => $value) 
 		{
 			if($value != null) 
 			{
+				$value = mysqli_real_escape_string($this->getConnect(),$value);
 				array_push($columnName, $columnKey);
 				array_push($columnValue, $value);
-			}
-			
+			}	
 		}
 		$columnNames = implode(',', $columnName);
 		$columnValues = "'". implode("','", $columnValue) . "'";
@@ -77,6 +81,7 @@ class Model_Core_Row_Resource
 			}
 			else 
 			{
+				$columnValue = mysqli_real_escape_string($this->getConnect(),$columnValue);
 				$valueArray[] = "$columnName='$columnValue'";
 			}
 			

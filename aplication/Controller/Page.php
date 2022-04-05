@@ -22,6 +22,7 @@ class Controller_Page extends Controller_Admin_Action{
 
 	public function gridBlockAction()
 	{
+		$this->getMessage()->addMessage('Page');
 		$pageGrid = Ccc::getBlock('Page_Grid')->toHtml();
 		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 		$response = [
@@ -32,8 +33,9 @@ class Controller_Page extends Controller_Admin_Action{
 					'content' => $pageGrid,
 				],
 				[
-					'element' => '#adminMessage',
-					'content' => $messageBlock
+					'element' => 'message',
+					'content' => $messageBlock,
+					'type' => 'success'
 				]
 			]
 		];
@@ -45,6 +47,7 @@ class Controller_Page extends Controller_Admin_Action{
 		$pageModel = Ccc::getModel('Page');
 
 		Ccc::register('page',$pageModel);
+		$this->getMessage()->addMessage('Page Add');
 		$pageEdit = Ccc::getBlock('Page_Edit')->toHtml();
 		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 		$response = [
@@ -55,8 +58,9 @@ class Controller_Page extends Controller_Admin_Action{
 					'content' => $pageEdit,
 				],
 				[
-					'element' => '#adminMessage',
-					'content' => $messageBlock
+					'element' => 'message',
+					'content' => $messageBlock,
+					'type' => 'success'
 				]
 			]
 		];
@@ -70,20 +74,18 @@ class Controller_Page extends Controller_Admin_Action{
 			$request = $this->getRequest();
 			$pageId = $request->getRequest('id');
 			if(!$pageId){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
+				throw new Exception("Page data con not be fetch", 1);			
 			}
 			if(!(int)$pageId){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
+				throw new Exception("Page data con not be fetch", 1);			
 			}
 			$page = $pageModel->load($pageId);
 			if(!$page){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
+				throw new Exception("Page data con not be fetch", 1);			
 			}
 	
 			Ccc::register('page',$page);
+			$this->getMessage()->addMessage('Page Edit');
 			$pageEdit = Ccc::getBlock('Page_Edit')->toHtml();
 			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 			$response = [
@@ -94,15 +96,32 @@ class Controller_Page extends Controller_Admin_Action{
 						'content' => $pageEdit,
 					],
 					[
-						'element' => '#adminMessage',
-						'content' => $messageBlock
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'success'
 					]
 				]
 			];
 			$this->randerJson($response);
 			}catch (Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->redirect('grid','page');
+			$pageGrid = Ccc::getBlock('Page_Grid')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $pageGrid,
+					],
+					[
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'error'
+					]
+				]
+			];
+			$this->randerJson($response);
 		}	
 		
 	}
@@ -117,7 +136,7 @@ class Controller_Page extends Controller_Admin_Action{
 				$postData = $request->getPost('page');
 				if(!$postData)
 				{
-					throw new Exception('Your data con not be updated', 1);			
+					throw new Exception('Page data con not be updated', 1);			
 				}
 
 				$pageData = $pageModel->setData($postData);
@@ -136,10 +155,42 @@ class Controller_Page extends Controller_Admin_Action{
 				}
 				$this->getMessage()->addMessage('Page save successfully');
 			}
-			$this->gridBlockAction();
+			$pageGrid = Ccc::getBlock('Page_Grid')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $pageGrid,
+					],
+					[
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'success'
+					]
+				]
+			];
+			$this->randerJson($response);
 		}catch (Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->gridBlockAction();
+			$pageGrid = Ccc::getBlock('Page_Grid')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $pageGrid,
+					],
+					[
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'error'
+					]
+				]
+			];
+			$this->randerJson($response);
 		}	
 	}
 
@@ -150,19 +201,50 @@ class Controller_Page extends Controller_Admin_Action{
 		if(!$request->isPost()){
 			try {
 				if(!$request->getRequest('id')){
-					throw new Exception('Your Data can not be Deleted', 1);			
+					throw new Exception('Page Data can not be Deleted', 1);			
 				}
 				$pageId = $request->getRequest('id');
 				$result = $pageModel->load($pageId)->delete();
 				if(!$result){
-					throw new Exception('Your Data can not be Deleted', 1);			
+					throw new Exception('Page Data can not be Deleted', 1);			
 				}
-				$this->getMessage()->addMessage('Your Data Delete Successfully');
-				$this->gridBlockAction();
-
+				$this->getMessage()->addMessage('Page Data Delete Successfully');
+				$pageGrid = Ccc::getBlock('Page_Grid')->toHtml();
+				$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+				$response = [
+					'status' => 'success',
+					'elements' => [
+						[
+							'element' => '#indexContent',
+							'content' => $pageGrid,
+						],
+						[
+							'element' => 'message',
+							'content' => $messageBlock,
+							'type' => 'success'
+						]
+					]
+				];
+				$this->randerJson($response);		
 			}catch (Exception $e){
 				$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-				$this->gridBlockAction();
+				$pageGrid = Ccc::getBlock('Page_Grid')->toHtml();
+				$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+				$response = [
+					'status' => 'success',
+					'elements' => [
+						[
+							'element' => '#indexContent',
+							'content' => $pageGrid,
+						],
+						[
+							'element' => 'message',
+							'content' => $messageBlock,
+							'type' => 'error'
+						]
+					]
+				];
+				$this->randerJson($response);
 			}	
 		}
 	}

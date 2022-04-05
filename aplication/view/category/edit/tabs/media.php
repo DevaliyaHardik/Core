@@ -29,7 +29,7 @@ $medias = $this->getMedia();
     <tr>
         <td><?php echo $media->media_id ?></td>
         <td><?php echo $media->category_id ?></td>
-        <td><?php echo $media->name ?></td>
+        <td><img src="<?php echo $media->getImagePath() ?>" alt="No Image Found" width="50" height="50"></td>
         <td>
             <input type="radio" name="media[base]" value = "<?php echo $media->media_id ?>" <?php echo $this->selected($media->media_id,'base'); ?> >
         </td>

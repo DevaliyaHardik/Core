@@ -22,6 +22,7 @@ class Controller_Category extends Controller_Admin_Action{
 
 	public function gridBlockAction()
 	{
+		$this->getMessage()->addMessage('Category');
 		$categoryGrid = Ccc::getBlock('Category_Grid')->toHtml();
 		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 		$response = [
@@ -32,8 +33,9 @@ class Controller_Category extends Controller_Admin_Action{
 					'content' => $categoryGrid,
 					],
 				[
-					'element' => '#adminMessage',
-					'content' => $messageBlock
+					'element' => 'message',
+					'content' => $messageBlock,
+					'type' => 'success'
 				]
 			]
 		];
@@ -47,6 +49,8 @@ class Controller_Category extends Controller_Admin_Action{
 
 		Ccc::register('category',$category);
 		Ccc::register('media',$media);
+
+		$this->getMessage()->addMessage('Category Add');
 		$categoryEdit = Ccc::getBlock('Category_Edit')->toHtml();
 		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 		$response = [
@@ -57,8 +61,9 @@ class Controller_Category extends Controller_Admin_Action{
 					'content' => $categoryEdit,
 					],
 				[
-					'element' => '#adminMessage',
-					'content' => $messageBlock
+					'element' => 'message',
+					'content' => $messageBlock,
+					'type' => 'success'
 				]
 			]
 		];
@@ -72,16 +77,16 @@ class Controller_Category extends Controller_Admin_Action{
 			$request = $this->getRequest();
 			$categoryId = $request->getRequest('id');
 			if(!$categoryId){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				$this->getMessage()->addMessage('Category data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
 				throw new Exception("Error Processing Request", 1);			
 			}
 			if(!(int)$categoryId){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				$this->getMessage()->addMessage('Category data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
 				throw new Exception("Error Processing Request", 1);			
 			}
 			$category = $categoryModel->load($categoryId);
 			if(!$category){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
+				$this->getMessage()->addMessage('Category data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
 				throw new Exception("Error Processing Request", 1);			
 			}
 			$media = $category->getMedia();
@@ -89,6 +94,7 @@ class Controller_Category extends Controller_Admin_Action{
 			Ccc::register('category',$category);
 			Ccc::register('media',$media);
 
+			$this->getMessage()->addMessage('Category Edit');
 			$categoryEdit = Ccc::getBlock('Category_Edit')->toHtml();
 			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 			$response = [
@@ -99,26 +105,28 @@ class Controller_Category extends Controller_Admin_Action{
 						'content' => $categoryEdit,
 						],
 					[
-						'element' => '#adminMessage',
-						'content' => $messageBlock
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'success'
 					]
 				]
 			];
 			$this->randerJson($response);	
 		}catch (Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$categoryEdit = Ccc::getBlock('Category_Edit')->toHtml();
+			$categoryGrid = Ccc::getBlock('Category_Grid')->toHtml();
 			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 			$response = [
 				'status' => 'success',
 				'elements' => [
 					[
 						'element' => '#indexContent',
-						'content' => $categoryEdit,
+						'content' => $categoryGrid,
 						],
 					[
-						'element' => '#adminMessage',
-						'content' => $messageBlock
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'error'
 					]
 				]
 			];
@@ -147,10 +155,10 @@ class Controller_Category extends Controller_Admin_Action{
 				}
 				$category = $categoryModel->save();
 				if(!$category){
-					throw new Exception('Your data con not be updated', 1);			
+					throw new Exception('Category data con not be updated', 1);			
 				}
 				$category->savePath($categoryData);
-				$this->getMessage()->addMessage('Your Data Updated Successfully');
+				$this->getMessage()->addMessage('Category Data Updated Successfully');
 				$categoryGrid = Ccc::getBlock('Category_Grid')->toHtml();
 				$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 				$url = Ccc::getModel('Core_View')->getUrl('editBlock',null,['id' => $category->category_id,'tab'=>'media']);
@@ -158,8 +166,9 @@ class Controller_Category extends Controller_Admin_Action{
 					'status' => 'success',
 					'elements' => [
 						[
-							'element' => '#adminMessage',
-							'content' => $messageBlock
+							'element' => 'message',
+							'content' => $messageBlock,
+							'type' => 'success'
 						],
 						[
 							'element' => '#indexContent',
@@ -172,9 +181,25 @@ class Controller_Category extends Controller_Admin_Action{
 			}
 		}catch (Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->gridBlockAction();
-		}	
-	}
+			$categoryGrid = Ccc::getBlock('Category_Grid')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $categoryGrid,
+						],
+					[
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'error'
+					]
+				]
+			];
+			$this->randerJson($response);
+		}
+	}	
 
 	public function deleteAction()
 	{
@@ -183,7 +208,7 @@ class Controller_Category extends Controller_Admin_Action{
 			$mediaModel = Ccc::getModel('Category_Media');
             $request = $this->getRequest();
 			if(!$request->getRequest('id')){
-				throw new Exception('Your Data can not be Deleted', 1);			
+				throw new Exception('Category Data can not be Deleted', 1);			
 			}
 		    $categoryId = $request->getRequest('id');
 			
@@ -195,13 +220,45 @@ class Controller_Category extends Controller_Admin_Action{
 			}
 		    $result = $categoryModel->load($categoryId)->delete();
 		    if(!$result){
-				throw new Exception('Your Data can not Deleted', 1);			
+				throw new Exception('Category Data can not Deleted', 1);			
 		    }
-			$this->getMessage()->addMessage('Your Data Delete Successfully');
-			$this->gridBlockAction();
+			$this->getMessage()->addMessage('Category Data Delete Successfully');
+			$categoryGrid = Ccc::getBlock('Category_Grid')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $categoryGrid,
+						],
+					[
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'success'
+					]
+				]
+			];
+			$this->randerJson($response);
 		}catch (Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->gridBlockAction();
+			$categoryGrid = Ccc::getBlock('Category_Grid')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $categoryGrid,
+						],
+					[
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'error'
+					]
+				]
+			];
+			$this->randerJson($response);
 		}	
 	}
 
@@ -227,12 +284,12 @@ class Controller_Category extends Controller_Admin_Action{
 					if(in_array($fileExt, $extension)){
 						$result = $mediaModel->save();
 						if(!$result){
-							$this->getMessage()->addMessage('Your media not saved', Model_Core_Message::MESSAGE_ERROR);
+							$this->getMessage()->addMessage('Category media not saved', Model_Core_Message::MESSAGE_ERROR);
 							throw new Exception("Error Processing Request", 1);
 						}	
 						move_uploaded_file($file['name']['tmp_name'],Ccc::getBlock('Admin_Grid')->getBaseUrl("Media/category/").$fileName);
 					}
-					$this->getMessage()->addMessage('Your Media saved successfully');
+					$this->getMessage()->addMessage('Category Media saved successfully');
 				}
 				else{
 					$mediaData = $mediaModel;
@@ -259,13 +316,13 @@ class Controller_Category extends Controller_Admin_Action{
 									unset($postData['media']['thumb']);
 								}
 							}
-							if(array_key_exists('thumb',$postData['media'])){
+							if(array_key_exists('small',$postData['media'])){
 								if($postData['media']['small'] == $remove){
 									unset($postData['media']['small']);
 								}
 							}
 						}
-						$this->getMessage()->addMessage('Your Media removed');
+						$this->getMessage()->addMessage('Category Media removed');
 					}
 	
 					if(array_key_exists('gallery',$postData['media'])){
@@ -281,7 +338,7 @@ class Controller_Category extends Controller_Admin_Action{
 							}
 						}
 						unset($mediaData->media_id);
-						$this->getMessage()->addMessage('Your Gallery Sellected');
+						$this->getMessage()->addMessage('Category Gallery Sellected');
 					}
 					else{
 						$mediaData->gallery = 2;
@@ -327,7 +384,7 @@ class Controller_Category extends Controller_Admin_Action{
 		}catch (Exception $e) {
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
 			$this->editBlockAction();
-			}	
+		}	
 	}
 
 }

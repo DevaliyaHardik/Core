@@ -22,6 +22,7 @@ class Controller_Product extends Controller_Admin_Action{
 
 	public function gridBlockAction()
 	{
+		$this->getMessage()->addMessage('product');
 		$productGrid = Ccc::getBlock('Product_Grid')->toHtml();
 		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 		$response = [
@@ -32,8 +33,9 @@ class Controller_Product extends Controller_Admin_Action{
 					'content' => $productGrid,
 				],
 				[
-					'element' => '#adminMessage',
-					'content' => $messageBlock
+					'element' => 'message',
+					'content' => $messageBlock,
+					'type' => 'success'
 				]
 			]
 		];
@@ -48,6 +50,7 @@ class Controller_Product extends Controller_Admin_Action{
 
 		Ccc::register('product',$product);
 		Ccc::register('media',$media);
+		$this->getMessage()->addMessage('product Add');
 		$productEdit = Ccc::getBlock('Product_Edit')->toHtml();
 		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 		$response = [
@@ -58,8 +61,9 @@ class Controller_Product extends Controller_Admin_Action{
 					'content' => $productEdit,
 				],
 				[
-					'element' => '#adminMessage',
-					'content' => $messageBlock
+					'element' => 'message',
+					'content' => $messageBlock,
+					'type' => 'success'
 				]
 			]
 		];
@@ -73,23 +77,21 @@ class Controller_Product extends Controller_Admin_Action{
 			$request = $this->getRequest();
 			$productId = $request->getRequest('id');
 			if(!$productId){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
+				throw new Exception("Product data con not be fetch", 1);			
 			}
 			if(!(int)$productId){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
+				throw new Exception("Product data con not be fetch", 1);			
 			}
 	
 			$product = $productModel->load($productId);
 			if(!$product){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
+				throw new Exception("Product data con not be fetch", 1);			
 			}
 	
 			$media = $product->getMedia();	
 			Ccc::register('product',$product);
 			Ccc::register('media',$media);
+			$this->getMessage()->addMessage('product Edit');
 			$productEdit = Ccc::getBlock('Product_Edit')->toHtml();
 			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 			$response = [
@@ -100,8 +102,9 @@ class Controller_Product extends Controller_Admin_Action{
 						'content' => $productEdit,
 					],
 					[
-						'element' => '#adminMessage',
-						'content' => $messageBlock
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'success'
 					]
 				]
 			];
@@ -118,13 +121,14 @@ class Controller_Product extends Controller_Admin_Action{
 						'content' => $productGrid,
 					],
 					[
-						'element' => '#adminMessage',
-						'content' => $messageBlock
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'error'
 					]
 				]
 			];
 			$this->randerJson($response);
-			}	
+		}	
 	}
 
 	public function saveAction()
@@ -140,7 +144,7 @@ class Controller_Product extends Controller_Admin_Action{
 				$postData = $request->getPost('product');
 				if($postData){
 					if(!$postData){
-						throw new Exception('Your data con not be updated', 1);			
+						throw new Exception('Product data con not be updated', 1);			
 					}
 					$productData = $productModel->setData($postData);
 					if($type == 1){
@@ -192,8 +196,9 @@ class Controller_Product extends Controller_Admin_Action{
 							'url' => $url
 						],
 						[
-							'element' => '#adminMessage',
-							'content' => $messageBlock
+							'element' => 'message',
+							'content' => $messageBlock,
+							'type' => 'success'
 						]
 					]
 				];
@@ -201,7 +206,23 @@ class Controller_Product extends Controller_Admin_Action{
 			} 			
 		}catch (Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->gridBlockAction();
+			$productGrid = Ccc::getBlock('Product_Grid')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $productGrid,
+					],
+					[
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'error'
+					]
+				]
+			];
+			$this->randerJson($response);
 		}	
 	}
 
@@ -212,7 +233,7 @@ class Controller_Product extends Controller_Admin_Action{
 			$mediaModel = Ccc::getModel('Product_Media');
 			$request = $this->getRequest();
 			if(!$request->getRequest('id')){
-				throw new Exception('Your Data can not be Deleted', 1);			
+				throw new Exception('Product Data can not be Deleted', 1);			
 			}
 			$productId = $request->getRequest('id');
 
@@ -224,13 +245,45 @@ class Controller_Product extends Controller_Admin_Action{
 			}
 			$result = $productModel->load($productId)->delete();
 			if(!$result){
-				throw new Exception('Your Data can not be Deleted', 1);			
+				throw new Exception('Product Data can not be Deleted', 1);			
 			}
-			$this->getMessage()->addMessage('Your Data Delete Successfully');
-			$this->gridBlockAction();
+			$this->getMessage()->addMessage('Product Data Delete Successfully');
+			$productGrid = Ccc::getBlock('Product_Grid')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $productGrid,
+					],
+					[
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'success'
+					]
+				]
+			];
+			$this->randerJson($response);
 		}catch (Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->gridBlockAction();
+			$productGrid = Ccc::getBlock('Product_Grid')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $productGrid,
+					],
+					[
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'error'
+					]
+				]
+			];
+			$this->randerJson($response);
 		}	
 	}
 
@@ -256,12 +309,12 @@ class Controller_Product extends Controller_Admin_Action{
 					if(in_array($fileExt, $extension)){
 						$result = $mediaModel->save();
 						if(!$result){
-							$this->getMessage()->addMessage('Your media not saved', Model_Core_Message::MESSAGE_ERROR);
+							$this->getMessage()->addMessage('Product media not saved', Model_Core_Message::MESSAGE_ERROR);
 							throw new Exception("Error Processing Request", 1);
 						}	
 						move_uploaded_file($file['name']['tmp_name'],Ccc::getBlock('Admin_Grid')->getBaseUrl("Media/product/").$fileName);
 					}
-					$this->getMessage()->addMessage('Your Media saved successfully');
+					$this->getMessage()->addMessage('Product Media saved successfully');
 				}
 				else{
 					$mediaData = $mediaModel;
@@ -294,7 +347,7 @@ class Controller_Product extends Controller_Admin_Action{
 								}
 							}
 						}
-						$this->getMessage()->addMessage('Your Media removed');
+						$this->getMessage()->addMessage('Product Media removed');
 					}
 	
 					if(array_key_exists('gallery',$postData['media'])){
@@ -310,7 +363,7 @@ class Controller_Product extends Controller_Admin_Action{
 							}
 						}
 						unset($mediaData->media_id);
-						$this->getMessage()->addMessage('Your Gallery Sellected');
+						$this->getMessage()->addMessage('Product Gallery Sellected');
 					}
 					else{
 						$mediaData->gallery = 2;
@@ -356,7 +409,7 @@ class Controller_Product extends Controller_Admin_Action{
 		}catch (Exception $e) {
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
 			$this->editBlockAction();
-			}	
+		}	
 	}
 
 }

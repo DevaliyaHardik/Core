@@ -65,8 +65,6 @@ var admin = {
             type: this.getType(),
             data: this.getData(),
             success: function(data){
-                // jQuery("#indexContent").html(data.content);
-                // jQuery("#adminMessage").html(data.message);
                 self.manageElemants(data.elements);
             }             
         });
@@ -82,9 +80,25 @@ var admin = {
                 self.load();
             }
             else{
-                jQuery(element.element).html(element.content);
-                if(element.classAdd != undefined){
-                    jQuery(element.element).addClass(element.classAdd);
+                if(element.element == 'message'){
+                    if(element.type == 'success')
+                    {
+                        toastr.success(element.content)
+                    }
+                    if(element.type == 'warning')
+                    {
+                        toastr.warning(element.content)
+                    }
+                    if(element.type == 'error')
+                    {
+                        toastr.error(element.content)
+                    }   
+                }
+                else{
+                    jQuery(element.element).html(element.content);
+                    if(element.classAdd != undefined){
+                        jQuery(element.element).addClass(element.classAdd);
+                    }
                 }
             }
         });

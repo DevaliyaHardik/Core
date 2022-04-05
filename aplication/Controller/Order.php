@@ -22,15 +22,13 @@ class Controller_Order extends Controller_Admin_Action{
 					'content' => $orderGrid,
 					],
 				[
-					'element' => '#adminMessage',
-					'content' => $messageBlock
+					'element' => 'message',
+					'content' => $messageBlock,
+					'type' => 'success'
 				]
 			]
 		];
 		$this->randerJson($response);
-
-		
-		$this->randerLayout();
 	}
 
 	public function editBlockAction()
@@ -64,8 +62,9 @@ class Controller_Order extends Controller_Admin_Action{
 						'content' => $orderEdit,
 						],
 					[
-						'element' => '#adminMessage',
-						'content' => $messageBlock
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'success'
 					]
 				]
 			];
@@ -73,7 +72,23 @@ class Controller_Order extends Controller_Admin_Action{
 		}catch (Exception $e)
 		{
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->gridBlockAction();
+			$orderGrid = Ccc::getBlock('Order_Grid')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $orderGrid,
+						],
+					[
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'error'
+					]
+				]
+			];
+			$this->randerJson($response);
 		}
 	}
 
@@ -98,6 +113,7 @@ class Controller_Order extends Controller_Admin_Action{
 			if(!$success){
 				throw new Exception("Comment Not Saved", 1);
 			}
+			$this->getMessage()->addMessage('Order Status Saved');
 			$this->editBlockAction();
 		} catch (Exception $e) {
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);

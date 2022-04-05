@@ -22,6 +22,7 @@ class Controller_Salesman extends Controller_Admin_Action{
 
 	public function gridBlockAction()
 	{
+		$this->getMessage()->addMessage('Salesman');
 		$salesmanGrid = Ccc::getBlock('Salesman_Grid')->toHtml();
 		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 		$response = [
@@ -32,8 +33,9 @@ class Controller_Salesman extends Controller_Admin_Action{
 					'content' => $salesmanGrid,
 					],
 				[
-					'element' => '#adminMessage',
-					'content' => $messageBlock
+					'element' => 'message',
+					'content' => $messageBlock,
+					'type' => 'success'
 				]
 			]
 		];
@@ -46,6 +48,7 @@ class Controller_Salesman extends Controller_Admin_Action{
 		$salesman = $salesmanModel;
 
 		Ccc::register('salesman',$salesman);
+		$this->getMessage()->addMessage('Salesman Add');
 		$salesmanEdit = Ccc::getBlock('Salesman_Edit')->toHtml();
 		$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 		$response = [
@@ -56,8 +59,9 @@ class Controller_Salesman extends Controller_Admin_Action{
 					'content' => $salesmanEdit,
 					],
 				[
-					'element' => '#adminMessage',
-					'content' => $messageBlock
+					'element' => 'message',
+					'content' => $messageBlock,
+					'type' => 'success'
 				]
 			]
 		];
@@ -71,20 +75,18 @@ class Controller_Salesman extends Controller_Admin_Action{
 			$request = $this->getRequest();
 			$salesmanId = $request->getRequest('id');
 			if(!$salesmanId){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
+				throw new Exception("Salesman data con not be fetch", 1);			
 			}
 			if(!(int)$salesmanId){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
+				throw new Exception("Salesman data con not be fetch", 1);			
 			}
 			$salesman = $salesmanModel->load($salesmanId);
 			if(!$salesman){
-				$this->getMessage()->addMessage('Your data con not be fetch', Model_Core_Message::MESSAGE_ERROR);
-				throw new Exception("Error Processing Request", 1);			
+				throw new Exception("Salesman data con not be fetch", 1);			
 			}
 	
 			Ccc::register('salesman',$salesman);
+			$this->getMessage()->addMessage('Salesman Edit');
 			$salesmanEdit = Ccc::getBlock('Salesman_Edit')->toHtml();
 			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 			$response = [
@@ -95,26 +97,28 @@ class Controller_Salesman extends Controller_Admin_Action{
 						'content' => $salesmanEdit,
 						],
 					[
-						'element' => '#adminMessage',
-						'content' => $messageBlock
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'success'
 					]
 				]
 			];
 			$this->randerJson($response);
 		}catch (Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$salesmanEdit = Ccc::getBlock('Salesman_Edit')->toHtml();
+			$salesmanGrid = Ccc::getBlock('Salesman_Grid')->toHtml();
 			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
 			$response = [
 				'status' => 'success',
 				'elements' => [
 					[
 						'element' => '#indexContent',
-						'content' => $salesmanEdit,
+						'content' => $salesmanGrid,
 						],
 					[
-						'element' => '#adminMessage',
-						'content' => $messageBlock
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'error'
 					]
 				]
 			];
@@ -131,7 +135,7 @@ class Controller_Salesman extends Controller_Admin_Action{
 			$salesmanId = $request->getRequest('id');
 			if($request->isPost()){
 				if(!$request->getPost()){
-					throw new Exception('Your data con not be inserted', 1);	
+					throw new Exception('Salesman data con not be inserted', 1);	
 				}
 				$postData = $request->getPost('salesman');
 				$salesmanData = $salesmanModel->setData($postData);
@@ -149,10 +153,42 @@ class Controller_Salesman extends Controller_Admin_Action{
 				}
 				$this->getMessage()->addMessage('Salesman Saved Successfully');
 			}
-			$this->gridBlockAction();
+			$salesmanGrid = Ccc::getBlock('Salesman_Grid')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $salesmanGrid,
+						],
+					[
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'success'
+					]
+				]
+			];
+			$this->randerJson($response);
 		}catch (Exception $e){
 			$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-			$this->gridBlockAction();
+			$salesmanGrid = Ccc::getBlock('Salesman_Grid')->toHtml();
+			$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+			$response = [
+				'status' => 'success',
+				'elements' => [
+					[
+						'element' => '#indexContent',
+						'content' => $salesmanGrid,
+						],
+					[
+						'element' => 'message',
+						'content' => $messageBlock,
+						'type' => 'error'
+					]
+				]
+			];
+			$this->randerJson($response);
 		}	
 	}
 
@@ -165,7 +201,7 @@ class Controller_Salesman extends Controller_Admin_Action{
 		if(!$request->isPost()){
 			try {
 				if(!$request->getRequest('id')){
-					throw new Exception('Your Data can not be Deleted', 1);
+					throw new Exception('Salesman Data can not be Deleted', 1);
 				}
 				
 				$salesmanId=$request->getRequest('id');
@@ -173,23 +209,56 @@ class Controller_Salesman extends Controller_Admin_Action{
 				if($customers){
 					foreach($customers as $customer){
 						$customerPrices = $customerPriceModel->fetchAll("SELECT `entity_id` FROM `customer_price` WHERE `customer_id` = {$customer->customer_id}");
-						foreach ($customerPrices as $customerPrice) {
-							$customerPriceModel->load($customerPrice->entity_id)->delete();
+						if($customerPrices){
+							foreach ($customerPrices as $customerPrice) {
+								$customerPriceModel->load($customerPrice->entity_id)->delete();
+							}
 						}
 					}
 				}
 
 				$result = $salesmanModel->load($salesmanId)->delete();
 				if(!$result){
-					throw new Exception('Your Data can not Saved', 1);
+					throw new Exception('Salesman Data can not Saved', 1);
 				}
 
-				$this->getMessage()->addMessage('Your Data Saved Successfully');
-				$this->gridBlockAction();
-
+				$this->getMessage()->addMessage('Salesman Data Saved Successfully');
+				$salesmanGrid = Ccc::getBlock('Salesman_Grid')->toHtml();
+				$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+				$response = [
+					'status' => 'success',
+					'elements' => [
+						[
+							'element' => '#indexContent',
+							'content' => $salesmanGrid,
+							],
+						[
+							'element' => 'message',
+							'content' => $messageBlock,
+							'type' => 'success'
+						]
+					]
+				];
+				$this->randerJson($response);		
 			}catch (Exception $e){
 				$this->getMessage()->addMessage($e->getMessage(),Model_Core_Message::MESSAGE_ERROR);
-				$this->gridBlockAction();
+				$salesmanGrid = Ccc::getBlock('Salesman_Grid')->toHtml();
+				$messageBlock = Ccc::getBlock('Core_Layout_Header_Message')->toHtml();
+				$response = [
+					'status' => 'success',
+					'elements' => [
+						[
+							'element' => '#indexContent',
+							'content' => $salesmanGrid,
+							],
+						[
+							'element' => 'message',
+							'content' => $messageBlock,
+							'type' => 'error'
+						]
+					]
+				];
+				$this->randerJson($response);
 			}	
 		}
 	}
